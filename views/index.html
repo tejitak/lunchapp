@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title><%=title%></title>
+    </head>
+    <body>
+        <% _.each(groups,function(group, key, arr) { %>
+            <div><%-group.name%></div>
+        <% }); %>
+    </body>
+</html>
