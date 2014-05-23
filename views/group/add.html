@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title><%=title%></title>
+    </head>
+    <body>
+        <form method="POST", action="/group/add">
+            <div>
+                Group name: <input type="text" name="name">
+            </div>
+            <div>
+                Members: <textarea name="members"></textarea>
+            </div>
+            <div>
+                Restaurants: <textarea name="restaurants"></textarea>
+            </div>
+            <input type="submit">
+        </form>
+    </body>
+</html>

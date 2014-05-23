@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var groupRoutes = require('./routes/group');
 
 var Datastore = require('nedb');
 
@@ -29,7 +29,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // create data collection
 var db = {};
 db.groups = new Datastore({filename: 'data/groups.db', autoload: true});
-// db.groups.insert({name: 'test2'}, function(err, newDoc){});
 // Make our db accessible to our router
 app.use(function(req,res,next){
     req.db = db;
@@ -37,7 +36,7 @@ app.use(function(req,res,next){
 });
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/group', groupRoutes);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {

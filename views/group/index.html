@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title><%=title%></title>
+    </head>
+    <body>
+    <a href="/group/ui/add">Add</a>
+        <% _.each(groups, function(group, key, arr) { %>
+            <div>
+                <span><%-group.name%></span>
+                <a href="/group/ui/edit/<%=group._id%>">Edit</a>
+                <a href="/group/delete/<%=group._id%>">Delete</a>
+            </div>
+        <% }); %>
+    </body>
+</html>
