@@ -3,9 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <title><%=title%></title>
+        <link rel="stylesheet" href="/js/lib/bootstrap/bootstrap.css">
+        <script data-main="/dist/teji.lunch.main.js" src="/js/lib/requirejs/require.js"></script>
     </head>
     <body>
-    <a href="/group/ui/add">Add</a>
+        <button type="button" class="btn btn-default" onclick="location.href='/group/ui/add';">Add</button>
         <% _.each(groups, function(group, key, arr) { %>
             <div>
                 <span><%-group.name%></span>
