@@ -32,9 +32,9 @@ module.exports = function (grunt) {
                 options: {
 //                    livereload: true
                 },
-                tasks: ['jshint', 'requirejs:dev'],
+                tasks: ['jshint', 'requirejs:main', 'requirejs:admin'],
                 files: [
-                    './**/*.html',
+//                    './**/*.html',
                     './**/*.js'
 //                    './**/*.css',
 //                    './**/*.scss'
@@ -54,7 +54,7 @@ module.exports = function (grunt) {
             ]
         },
         requirejs: {
-            dev: {
+            main: {
                 options: {
                     baseUrl: 'public/js',
                     name: 'teji/lunch/main',
@@ -63,12 +63,13 @@ module.exports = function (grunt) {
                     optimize: 'none'
                 }
             },
-            production: {
+            admin: {
                 options: {
                     baseUrl: 'public/js',
-                    name: 'teji/lunch/main',
-                    mainConfigFile: 'public/js/teji/lunch/main.js',
-                    out: 'public/dist/teji.lunch.main.js'
+                    name: 'teji/lunch/admin',
+                    mainConfigFile: 'public/js/teji/lunch/admin.js',
+                    out: 'public/dist/teji.lunch.admin.js',
+                    optimize: 'none'
                 }
             }
         }
@@ -77,7 +78,8 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [
         'bower:install',
         'jshint',
-        'requirejs:dev',
+        'requirejs:main',
+        'requirejs:admin',
         'shell:start',
         'watch'
     ]);

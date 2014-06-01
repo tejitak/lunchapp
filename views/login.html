@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title><%=title%></title>
+</head>
+<body>
+    <script>
+        function fbStatusChangeCallback(response) {
+            if (response.status === 'connected') {
+                // redirect to index.html
+                location.href = "/";
+            }
+        }
+    </script>
+    <script src="/js/teji/lunch/fbInit.js"></script>
+    <fb:login-button size="large" scope="public_profile" onlogin="fbCheckLoginState();"></fb:login-button>
+</body>
+</html>

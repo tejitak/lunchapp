@@ -11160,5 +11160,5 @@ requirejs.config({
 require(["jquery", "bootstrap"], function($, bootstrap) {
     console.log("loaded");
 });
-define("teji/lunch/main", function(){});
+define("teji/lunch/admin", function(){});
 
