@@ -1,13 +1,70 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title><%=title%></title>
-        <link rel="stylesheet" href="/js/lib/bootstrap/bootstrap.css">
-        <script data-main="/dist/teji.lunch.main.js" src="/js/lib/requirejs/require.js"></script>
-    </head>
-    <body>
-    Main
-
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title><%=title%></title>
+    <link rel="stylesheet" href="/js/lib/bootstrap/bootstrap.css">
+    <script src="/js/lib/holderjs/holder.js"></script>
+    <script data-main="/dist/teji.lunch.main.js" src="/js/lib/requirejs/require.js"></script>
+</head>
+<body>
+<script src="/js/teji/lunch/fbInit.js"></script>
+<header class="navbar navbar-default navbar-static-top" role="banner">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">LunchTimer</a>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/getting-started.html">Getting started</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" id="loginBtnMenu" style="display:none;">
+                <li style="margin-top: 12px;">
+                    <fb:login-button size="large" scope="public_profile" onlogin="fbCheckLoginState();"></fb:login-button>
+                <li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" id="loginUserMenu" style="display:none;">
+                <li class="dropdown open">
+                <a data-toggle="dropdown" class="dropdown-toggle" role="button" href="#"><span id="dropDownLoginName"></span><b class="caret"></b></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem" onclick="fbLogout();">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<div class="container">
+    <div class="jumbotron">
+        <div class="bs-docs-section">
+            <span>本日のランチ</span>
+            <div class="row">
+              <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                  <img data-src="holder.js/300x200" alt="photo">
+                  <div class="caption">
+                    <h3>Thumbnail label</h3>
+                    <p>...</p>
+                    <p><a href="#" class="btn btn-primary" role="button">Button</a></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="bs-docs-footer" role="contentinfo">
+    <div class="container">
+        <p>Designed and built with all the love in the world by <a href="http://twitter.com/tejitak" target="_blank">@tejitak</a>.</p>
+    </div>
+</footer>
+</body>
 </html>

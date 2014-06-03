@@ -1,6 +1,27 @@
+function fbStatusChangeCallback(response) {
+    if (response.status === 'connected') {
+        // show logged in user name and logout button
+        $("#loginBtnMenu").css({display: "none"});
+        $("#loginUserMenu").css({display: ""});
+        FB.api('/me', function(response) {
+          $('#dropDownLoginName').html(response.name);
+        });
+    }else{
+        // show login button
+        $("#loginBtnMenu").css({display: ""});
+        $("#loginUserMenu").css({display: "none"});
+    }
+}
+
 function fbCheckLoginState() {
     FB.getLoginStatus(function(response) {
         fbStatusChangeCallback(response);
+    });
+}
+
+function fbLogout(){
+    FB.logout(function(response) {
+        fbStatusChangeCallback(response);        
     });
 }
 
