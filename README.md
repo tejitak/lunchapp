@@ -8,6 +8,7 @@ Setup
 e.g. for mac
  /etc/private/hosts
  127.0.0.1       localhost dev.tejitak.com
+
 3. Run "dscacheutil -flushcache" for reloading host file settings.
 
 4. Run "npm install" (just for once to initialize dev environment)
