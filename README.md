@@ -8,9 +8,10 @@ Setup
 e.g. for mac
  /etc/private/hosts
  127.0.0.1       localhost dev.tejitak.com
+3. Run "dscacheutil -flushcache" for reloading host file settings.
 
-3. Run "npm install" (just for once to initialize dev environment)
+4. Run "npm install" (just for once to initialize dev environment)
 
-4. Run "grunt"
+5. Run "grunt"
 
 5. Access to http://dev.tejitak.com:3000/
