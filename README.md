@@ -14,4 +14,4 @@ e.g. for mac
 
 5. Run "grunt"
 
-5. Access to http://dev.tejitak.com:3000/
+6. Access to http://dev.tejitak.com:3000/
