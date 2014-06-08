@@ -7,13 +7,34 @@
         <script data-main="/dist/teji.lunch.main.js" src="/js/lib/requirejs/require.js"></script>
     </head>
     <body>
+        <div>  
+            <p class="bg-primary">My Group</p>
+        </div> 
+        <div class="container">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Group Name</th>
+                        <th>Group Member</th>
+                        <th>Restaurants</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% _.each(groups, function(group, key, arr) { %>
+                        <tr>
+                            <td><span><%-group.name%></span></td>
+                            <td><span><%-group.members%></span></td>
+                            <td><span><%-group.restaurants%></span></td>
+                            <td>
+                                <a href="/group/ui/edit/<%=group._id%>">Edit</a>
+                                <a href="/group/delete/<%=group._id%>">Delete</a>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
         <button type="button" class="btn btn-default" onclick="location.href='/group/ui/add';">Add</button>
-        <% _.each(groups, function(group, key, arr) { %>
-            <div>
-                <span><%-group.name%></span>
-                <a href="/group/ui/edit/<%=group._id%>">Edit</a>
-                <a href="/group/delete/<%=group._id%>">Delete</a>
-            </div>
-        <% }); %>
     </body>
 </html>

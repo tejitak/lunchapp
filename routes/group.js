@@ -23,7 +23,7 @@ router.get('/ui/edit/:id', function(req, res) {
 router.post('/add', function(req, res) {
     var entry = req.body;
     if(entry.name){
-        req.db.groups.insert({name: entry.name}, function(err, newDoc){});
+        req.db.groups.insert({name: entry.name,members: entry.members,restaurants: entry.restaurants}, function(err, newDoc){});
     }
     renderList(req, res);
 });
