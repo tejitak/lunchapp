@@ -1,12 +1,20 @@
 var express = require('express');
-
+var fs = require('fs');
 var router = express.Router();
+
+// load templates
+var _templates = {};
+fs.readFile('./views/_templates/header.html', 'UTF-8', function (err, data) {
+    if (err){ throw err; }
+    _templates.header = data;
+});
 
 /* GET users listing. */
 var renderList = function(req, res) {
     var db = req.db, groups = db.groups;
+
     groups.find({}, function(err, items){
-       res.render('admin/index', {title: 'Lunch Timer!', groups: items});
+       res.render('admin/index', {title: 'Lunch Timer!', header: _templates.header, groups: items});
     });
 };
 

@@ -1,0 +1,34 @@
+<script src="/js/teji/lunch/fbInit.js"></script>
+<header class="navbar navbar-default navbar-static-top" role="banner">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">LunchTimer</a>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/getting-started.html">Getting started</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" id="loginBtnMenu" style="display:none;">
+                <li style="margin-top: 12px;">
+                    <fb:login-button size="large" scope="public_profile" onlogin="fbCheckLoginState();"></fb:login-button>
+                <li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" id="loginUserMenu" style="display:none;">
+                <li class="dropdown open">
+                <a data-toggle="dropdown" class="dropdown-toggle" role="button" href="#"><span id="dropDownLoginName"></span><b class="caret"></b></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem" onclick="fbLogout();">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
