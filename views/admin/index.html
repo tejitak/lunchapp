@@ -8,46 +8,34 @@
 </head>
 <body>
 <%=header%>
-<div>  
-    <p class="bg-primary">Admin Group</p>
-</div> 
-<div class="container">
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Group Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% _.each(groups, function(group, key, arr) { %>
-                <tr>
-                    <td><span><%-group.name%></span></td>
-                </tr>
-            <% }); %>
-        </tbody>
-    </table>
-</div>
-<div>  
-    <p class="bg-primary">My Group</p>
-</div> 
-<div class="container">
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Group Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% _.each(groups, function(group, key, arr) { %>
-                <tr>
-                    <td><span><%-group.name%></span></td>
-                </tr>
-            <% }); %>
-        </tbody>
-    </table>
-</div>
-<section>
-    <button type="button" class="btn btn-default" onclick="location.href='/group/ui/add';">New Group</button>
-</section>
-</body>
+       <div>  
+            <p class="bg-primary">My Group</p>
+        </div> 
+        <div class="container">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Group Name</th>
+                        <th>Group Member</th>
+                        <th>Restaurants</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% _.each(groups, function(group, key, arr) { %>
+                        <tr>
+                            <td><span><%-group.name%></span></td>
+                            <td><span><%-group.members%></span></td>
+                            <td><span><%-group.restaurants%></span></td>
+                            <td>
+                                <a href="/admin/ui/edit/<%=group._id%>">Edit</a>
+                                <a href="/admin/delete/<%=group._id%>">Delete</a>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        <button type="button" class="btn btn-default" onclick="location.href='/admin/ui/add';">Add</button>
+    </body>
 </html>
