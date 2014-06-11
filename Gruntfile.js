@@ -9,6 +9,11 @@ module.exports = function (grunt) {
 
     // Define the configuration for all the tasks
     grunt.initConfig({
+        constants: {
+            baseDir: 'public/js',
+            distDir: 'public/dist',
+            namespace: 'teji/lunch'
+        },
         shell: {
             start: {
                 command: 'npm start'
@@ -17,7 +22,7 @@ module.exports = function (grunt) {
         bower: {
             install: {
                 options: {
-                    targetDir: 'public/js/lib',
+                    targetDir: '<%=constants.baseDir%>/lib',
                     layout: 'byType',
                     install: true,
                     verbose: false,
@@ -43,44 +48,41 @@ module.exports = function (grunt) {
                 reporter: require('jshint-stylish'),
                 ignores: []
             },
-            all: [
-                'Gruntfile.js',
-                'public/js/{,*/}*.js'
-            ]
+            all: ['Gruntfile.js', 'public/js/{,*/}*.js']
         },
         requirejs: {
             main: {
                 options: {
-                    baseUrl: 'public/js',
-                    name: 'teji/lunch/main',
-                    mainConfigFile: 'public/js/teji/lunch/main.js',
-                    out: 'public/dist/teji.lunch.main.js',
+                    baseUrl: '<%=constants.baseDir%>',
+                    name: '<%=constants.namespace%>/main',
+                    mainConfigFile: '<%=constants.baseDir%>/<%=constants.namespace%>/main.js',
+                    out: '<%=constants.distDir%>/teji.lunch.main.js',
                     optimize: 'none'
                 }
             },
             main_compressed: {
                 options: {
-                    baseUrl: 'public/js',
-                    name: 'teji/lunch/main',
-                    mainConfigFile: 'public/js/teji/lunch/main.js',
-                    out: 'public/dist/teji.lunch.main.js'
+                    baseUrl: '<%=constants.baseDir%>',
+                    name: '<%=constants.namespace%>/main',
+                    mainConfigFile: '<%=constants.baseDir%>/<%=constants.namespace%>/main.js',
+                    out: '<%=constants.distDir%>/teji.lunch.main.js',
                 }
             },
             admin: {
                 options: {
-                    baseUrl: 'public/js',
-                    name: 'teji/lunch/admin',
-                    mainConfigFile: 'public/js/teji/lunch/admin.js',
-                    out: 'public/dist/teji.lunch.admin.js',
+                    baseUrl: '<%=constants.baseDir%>',
+                    name: '<%=constants.namespace%>/admin',
+                    mainConfigFile: '<%=constants.baseDir%>/<%=constants.namespace%>/admin.js',
+                    out: '<%=constants.distDir%>/teji.lunch.admin.js',
                     optimize: 'none'
                 }
             },
             admin_compressed: {
                 options: {
-                    baseUrl: 'public/js',
-                    name: 'teji/lunch/admin',
-                    mainConfigFile: 'public/js/teji/lunch/admin.js',
-                    out: 'public/dist/teji.lunch.admin.js',
+                    baseUrl: '<%=constants.baseDir%>',
+                    name: '<%=constants.namespace%>/admin',
+                    mainConfigFile: '<%=constants.baseDir%>/<%=constants.namespace%>/admin.js',
+                    out: '<%=constants.distDir%>/teji.lunch.admin.js',
                 }
             }
         }
