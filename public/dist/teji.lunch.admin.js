@@ -11158,6 +11158,8 @@ requirejs.config({
 });
 
 require(["jquery", "bootstrap"], function($, bootstrap) {
+    // initial login check
+    window.fbCheckLoginState();
     // prevent keep opening dropdown after page load
     $('.dropdown-menu').dropdown('toggle');
 });

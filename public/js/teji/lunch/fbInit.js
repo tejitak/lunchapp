@@ -4,12 +4,18 @@ function fbStatusChangeCallback(response) {
         $("#loginBtnMenu").css({display: "none"});
         $("#loginUserMenu").css({display: ""});
         FB.api('/me', function(response) {
-          $('#dropDownLoginName').html(response.name);
+            $('#dropDownLoginName').html(response.name);
         });
+        if(typeof fbLoginSuccessCallback !== "undefined"){
+            fbLoginSuccessCallback(response);
+        }
     }else{
         // show login button
         $("#loginBtnMenu").css({display: ""});
         $("#loginUserMenu").css({display: "none"});
+        if(typeof fbLoginFailCallback !== "undefined"){
+            fbLoginFailCallback(response);
+        }
     }
 }
 
@@ -21,7 +27,7 @@ function fbCheckLoginState() {
 
 function fbLogout(){
     FB.logout(function(response) {
-        fbStatusChangeCallback(response);        
+        fbStatusChangeCallback(response);
     });
 }
 
@@ -32,8 +38,6 @@ window.fbAsyncInit = function() {
         xfbml      : true,
         version    : 'v2.0'
     });
-
-    fbCheckLoginState();
 };
 
 (function(d, s, id) {
