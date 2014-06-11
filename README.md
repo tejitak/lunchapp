@@ -1,13 +1,19 @@
-Lunch Timer Application
+##Lunch Timer Application
+ * Lunch Timer is a web application to coordinate your every day lunch group
+   * Vote a restaurant by a configured lunch time
+   * Show a vote result when users access to the group
+ * Admin application for your groups is also provided
+   * Manage restaurants for each group
+   * Manage facebook users in your group
 
-Development setup
+
+####Development setup
 
 1. git clone https://github.com/tejitak/lunchapp.git
 
-2. To develop with Facebook auth, modify your hosts file because localhost is not allowed as callback host name. (Currently a domain tejitak.com is configured.)
-e.g. for mac
- /etc/private/hosts
- 127.0.0.1       localhost dev.tejitak.com
+2. To develop with Facebook auth, modify your hosts file because localhost is not allowed as callback host name. (Currently a domain tejitak.com is configured.)  
+e.g. "/etc/private/hosts" for mac  
+127.0.0.1       localhost dev.tejitak.com
 
 3. Run "dscacheutil -flushcache" for reloading host file settings.
 
