@@ -17,7 +17,10 @@ requirejs.config({
     }
 });
 
-require(["teji/lunch/view/ShopListView", "teji/lunch/collection/ShopCollection"], function(ShopListView, ShopCollection) {
+require([
+    "bootstrap",
+    "teji/lunch/view/ShopListView",
+    "teji/lunch/collection/ShopCollection"], function(bootstrap, ShopListView, ShopCollection) {
     var shopCollection = new ShopCollection();
     var shopListView = new ShopListView({el: ".fnResultViewList", collection: shopCollection});
     // temp for demo data

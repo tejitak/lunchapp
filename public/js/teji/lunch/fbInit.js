@@ -33,9 +33,7 @@ window.fbAsyncInit = function() {
         version    : 'v2.0'
     });
 
-    FB.getLoginStatus(function(response) {
-        fbStatusChangeCallback(response);
-    });
+    fbCheckLoginState();
 };
 
 (function(d, s, id) {

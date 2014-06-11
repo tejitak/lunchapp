@@ -1,6 +1,6 @@
 Lunch Timer Application
 
-Setup
+Development setup
 
 1. git clone https://github.com/tejitak/lunchapp.git
 
@@ -13,6 +13,8 @@ e.g. for mac
 
 4. Run "npm install" (just for once to initialize dev environment)
 
-5. Run "grunt"
+5. Run "grunt serve"
 
 6. Access to http://dev.tejitak.com:3000/
+
+7. Run "grunt" to run watch task

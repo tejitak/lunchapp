@@ -30,15 +30,10 @@ module.exports = function (grunt) {
         watch: {
             src: {
                 options: {
-//                    livereload: true
+                   livereload: true
                 },
                 tasks: ['jshint', 'requirejs:main', 'requirejs:admin'],
-                files: [
-//                    './**/*.html',
-                    './**/*.js'
-//                    './**/*.css',
-//                    './**/*.scss'
-                ]
+                files: ['./**/*.html', './**/*.js']
             }
         },
         // Make sure code styles are up to par and there are no obvious mistakes
@@ -63,6 +58,14 @@ module.exports = function (grunt) {
                     optimize: 'none'
                 }
             },
+            main_compressed: {
+                options: {
+                    baseUrl: 'public/js',
+                    name: 'teji/lunch/main',
+                    mainConfigFile: 'public/js/teji/lunch/main.js',
+                    out: 'public/dist/teji.lunch.main.js'
+                }
+            },
             admin: {
                 options: {
                     baseUrl: 'public/js',
@@ -71,22 +74,32 @@ module.exports = function (grunt) {
                     out: 'public/dist/teji.lunch.admin.js',
                     optimize: 'none'
                 }
+            },
+            admin_compressed: {
+                options: {
+                    baseUrl: 'public/js',
+                    name: 'teji/lunch/admin',
+                    mainConfigFile: 'public/js/teji/lunch/admin.js',
+                    out: 'public/dist/teji.lunch.admin.js',
+                }
             }
         }
     });
 
-    grunt.registerTask('default', [
+    grunt.registerTask('default', ['watch']);
+
+    grunt.registerTask('serve', [
         'bower:install',
         'jshint',
         'requirejs:main',
         'requirejs:admin',
-        'shell:start',
-        'watch'
+        'shell:start'
     ]);
 
-    grunt.registerTask('built', [
-    ]);
-
-    grunt.registerTask('deploy', [
+    grunt.registerTask('product', [
+        'bower:install',
+        'jshint',
+        'requirejs:main_compressed',
+        'requirejs:admin_compressed'
     ]);
 };
