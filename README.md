@@ -1,7 +1,7 @@
 ##Lunch Timer Application
  * Lunch Timer is a web application to coordinate your every day lunch group
    * Vote a restaurant by a configured lunch time
-   * Show a vote result when users access to the group
+   * Show a vote result when users access to the group after a configured lunch time
  * Admin application for your groups is also provided
    * Manage restaurants for each group
    * Manage facebook users in your group
