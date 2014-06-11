@@ -1,24 +1,29 @@
 {
-  "name": "lunchapp",
-  "version": "0.0.0",
-  "homepage": "https://github.com/tejitak/lunchapp",
-  "authors": [
+    "name": "lunchapp",
+    "version": "0.0.0",
+    "homepage": "https://github.com/tejitak/lunchapp",
+    "authors": [
     "tejitak"
-  ],
-  "license": "MIT",
-  "ignore": [
+    ],
+    "license": "MIT",
+    "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
     "test",
     "tests"
-  ],
-  "dependencies": {
-    "jquery": "~2.1.1",
-    "requirejs": "~2.1.13",
-    "requirejs-text": "~2.0.12",
-    "bootstrap": "~3.1.1",
-    "holderjs": "~2.3.2",
-    "backbone": "~1.1.2"
-  }
-}
+    ],
+    "dependencies": {
+        "jquery": "~2.1.1",
+        "requirejs": "~2.1.13",
+        "requirejs-text": "~2.0.12",
+        "bootstrap": "~3.1.1",
+        "holderjs": "~2.3.2",
+        "backbone": "~1.1.2"
+        },
+        "exportsOverride": {
+            "bootstrap": {
+                "": ["dist/js/bootstrap.js", "dist/css/bootstrap.min.css"]
+            }
+        }
+    }

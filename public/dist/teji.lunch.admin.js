@@ -11158,7 +11158,8 @@ requirejs.config({
 });
 
 require(["jquery", "bootstrap"], function($, bootstrap) {
-    console.log("loaded");
+    // prevent keep opening dropdown after page load
+    $('.dropdown-menu').dropdown('toggle');
 });
 define("teji/lunch/admin", function(){});
 
