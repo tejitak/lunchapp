@@ -88,13 +88,14 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('default', ['watch']);
-
-    grunt.registerTask('serve', [
-        'bower:install',
+    grunt.registerTask('default', [
         'jshint',
         'requirejs:main',
         'requirejs:admin',
+        'watch'
+    ]);
+
+    grunt.registerTask('server', [
         'shell:start'
     ]);
 

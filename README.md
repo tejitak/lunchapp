@@ -22,7 +22,7 @@ e.g. "/etc/private/hosts" for mac
     Note: If you get an EACCES warning, use sudo chown -R <username> ~/.npm
     See https://github.com/npm/npm/issues/3537 and https://github.com/npm/npm/pull/3506.
 
-5. Run "grunt serve"
+5. Run "grunt server"
 
 6. Access to http://dev.tejitak.com:3000/
 
