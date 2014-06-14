@@ -1,8 +1,51 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
 }
+
+.bs-docs-section {
+    text-align: center;
+}
+
+.sectionTitle {
+    width: 100%;
+    font-weight: bold;
+    font-size: 20px;
+    padding-bottom: 8px;
+}
+
+/*** flipsnap start ***/
+.viewport {
+    width: 320px;
+    overflow: hidden;
+    margin: 0 auto;
+    -webkit-transform: translateZ(0); /* Optional: When heavy at iOS6+ */
+}
+
+.flipsnap {
+    /* width: 960px; (220px(item width) * 3(item count) + 45px (padding left) + 50px) */
+    padding-left: 45px;
+}
+
+.flipsnap:after {
+    content: '';
+    display: block;
+    clear: both;
+    height: 0;
+}
+
+.flipsnapItem {
+    float: left;
+    width: 200px;
+    margin: 0 10px;
+    text-align: center;
+    /*font-size: 50px;*/
+    /*padding: 50px 0;*/
+    /*background: #EFEFEF;*/
+    /*border: 5px solid #999;*/
+    /*color: #666;*/
+}
+/*** flipsnap end ***/

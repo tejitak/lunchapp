@@ -4,15 +4,24 @@
     <meta charset="UTF-8">
     <title><%=title%></title>
     <link rel="stylesheet" href="/js/lib/bootstrap/bootstrap.min.css">
-    <script data-main="/dist/teji.lunch.main.js" src="/js/lib/requirejs/require.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <%=header%>
 <div class="container">
     <div class="jumbotron">
         <div class="bs-docs-section">
-            <span>本日のランチ</span>
-            <div class="fnResultViewList row"></div>
+            <div class="sectionTitle fnResultViewTitle" style="display: none;">本日のランチ</div>
+            <div class="viewport fnResultViewList"></div>
+            <div class="fnDefaultContent" style="display: none;">
+                <div class="sectionTitle">Lunch Timer</div>
+                <p class="lead">Lunch Timerは毎日のランチグループメンバーとのお店を調整するアプリです</p>
+                <ul>
+                    <li>ランチの時間までに投票をしてください</li>
+                    <li>ランチ時間になったら本日のランチのお店が決定されます！</li>
+                </ul>
+                <div>まずはFacebookログインをしてはじめましょう</div>
+            </div>
         </div>
     </div>
 </div>
@@ -21,5 +30,6 @@
         <p>Designed and built with all the love in the world by <a href="http://twitter.com/tejitak" target="_blank">@tejitak</a>, <a href="http://twitter.com/makinoy" target="_blank">@makinoy</a>.</p>
     </div>
 </footer>
+<script data-main="/dist/teji.lunch.main.js" src="/js/lib/requirejs/require.js"></script>
 </body>
 </html>

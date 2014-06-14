@@ -2,7 +2,7 @@ define(["backbone", "underscore", "text!./templates/ShopView.html"], function(Ba
     var ShopView = Backbone.View.extend({
 
         tagName: "div",
-        className: "col-sm-6 col-md-4",
+        className: "flipsnapItem",
         template: _.template(tmpl),
         
         initialize: function() {
