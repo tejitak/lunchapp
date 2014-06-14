@@ -33,7 +33,7 @@ require([
         window.fbLoginSuccessCallback = function(response){
             console.log(response);
             // initial load
-            shopCollection.loadList();
+            shopCollection.loadList(response.authResponse);
             $(".fnDefaultContent").hide();
         };
         window.fbLogoutCallback = function(){
