@@ -5,6 +5,7 @@ var router = express.Router();
 
 var FACEBOOK_API_PATH = 'graph.facebook.com';
 
+var access_token;
 var params = {
   host: FACEBOOK_API_PATH,
   pathname: '/oauth/access_token',
@@ -15,15 +16,19 @@ var params = {
     'grant_type': 'client_credentials'
   }
 }
-
 var urlStr = url.format(params);
-
-var access_token;
-
 var req = http.get(urlStr, function(res) {
   res.setEncoding('utf8');
+
+  var body = '';
+
   res.on('data', function(chunk) {
-    access_token = chunk.split('=')[1];
+    body += chunk;
+  });
+
+  res.on('end', function() {
+    access_token = body.split('=')[1];
+    console.log('Access token: ' + access_token);
   });
 }).on('error', function(e) {
   console.log(e);
@@ -42,15 +47,26 @@ var checkAccessToken = function(inputToken){
         'access_token': access_token,
       }
     }
-    var urlStr = url.format(params);
-    console.log(urlStr);
 
+    var urlStr = url.format(params);
     var req = http.get(urlStr, function(res) {
+      res.setEncoding('utf8');
+
+      var body = '';
+
       res.on('data', function(chunk) {
-        console.log('' + chunk);
-      })
+        body += chunk;
+      });
+
+      res.on('end', function() {
+        var resJson = JSON.parse(body);
+        if (!resJson.data || !resJson.data.is_valid) {
+          throw new Error('Invalid access token');
+        }
+      });
     }).on('error', function(e) {
       console.log(e);
+      res.send('{"success":false}');
     });
 
     req.end();
@@ -58,9 +74,9 @@ var checkAccessToken = function(inputToken){
 
 router.get('/groups', function(req, res) {
     checkAccessToken(req.query.inputToken);
-    groups.find({}, function(err, items){
-        // TODO: return json
-    });
+    // req.db.groups.find({}, function(err, items){
+    //     // TODO: return json
+    // });
     res.contentType('application/json');
     res.send('{"success":true}');
 });
@@ -68,10 +84,9 @@ router.get('/groups', function(req, res) {
 router.get('/group/:id', function(req, res) {
     checkAccessToken(req.body.accessToken);
     var id = req.param("id");
-    groups.find({}, function(err, items){
-        // TODO: return json
-
-    });
+    // groups.find({}, function(err, items){
+    //     // TODO: return json
+    // });
 });
 
 module.exports = router;
