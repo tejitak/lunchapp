@@ -8,7 +8,7 @@ var FACEBOOK_API_PATH = 'graph.facebook.com';
 var params = {
   host: FACEBOOK_API_PATH,
   pathname: '/oauth/access_token',
-  protocol: 'https:',
+  protocol: 'https',
   query: {
     'client_id': '1437481033176694',
     'client_secret': 'd83c9d2cc573cf4431d195bb81f08629',
@@ -44,13 +44,16 @@ var checkAccessToken = function(inputToken){
     }
     var urlStr = url.format(params);
     console.log(urlStr);
-    http.get(urlStr, function(res) {
+
+    var req = http.get(urlStr, function(res) {
       res.on('data', function(chunk) {
         console.log('' + chunk);
       })
     }).on('error', function(e) {
       console.log(e);
     });
+
+    req.end();
 };
 
 router.get('/groups', function(req, res) {
@@ -58,6 +61,8 @@ router.get('/groups', function(req, res) {
     groups.find({}, function(err, items){
         // TODO: return json
     });
+    res.contentType('application/json');
+    res.send('{"success":true}');
 });
 
 router.get('/group/:id', function(req, res) {
