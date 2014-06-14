@@ -44,7 +44,9 @@ var checkAccessToken = function(inputToken){
     var urlStr = url.format(params);
     console.log(urlStr);
     http.get(urlStr, function(res) {
-
+      res.on('data', function(chunk) {
+        console.log('' + chunk);
+      })
     }).on('error', function(e) {
       console.log(e);
     });
