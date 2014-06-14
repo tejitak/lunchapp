@@ -12,9 +12,10 @@ requirejs.config({
     }
 });
 
-require(["jquery", "bootstrap"], function($, bootstrap) {
-    // initial login check
-    window.fbCheckLoginState();
+require(["jquery", 
+    "bootstrap",
+    "teji/lunch/fbInit"], function($, bootstrap) {
+    fbInit.load();
     // prevent keep opening dropdown after page load
     $('.dropdown-menu').dropdown('toggle');
 });

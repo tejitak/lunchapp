@@ -1,3 +1,4 @@
+/*** base style start ***/
 body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
@@ -5,17 +6,26 @@ body {
 a {
     color: #00B7FF;
 }
+/*** base style end ***/
 
+/*** bootstrap override start ***/
 .bs-docs-section {
     text-align: center;
 }
 
+.bs-docs-footer .container {
+    text-align: center;
+}
+/*** bootstrap override end ***/
+
+/*** modules start ***/
 .sectionTitle {
     width: 100%;
     font-weight: bold;
     font-size: 20px;
     padding-bottom: 8px;
 }
+/*** modules end ***/
 
 /*** flipsnap start ***/
 .viewport {
@@ -42,10 +52,5 @@ a {
     width: 200px;
     margin: 0 10px;
     text-align: center;
-    /*font-size: 50px;*/
-    /*padding: 50px 0;*/
-    /*background: #EFEFEF;*/
-    /*border: 5px solid #999;*/
-    /*color: #666;*/
 }
 /*** flipsnap end ***/

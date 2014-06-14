@@ -24,29 +24,26 @@ requirejs.config({
 require([
     "jquery",
     "bootstrap",
+    "teji/lunch/fbInit",
     "teji/lunch/view/ShopListView",
-    "teji/lunch/collection/ShopCollection"], function($, bootstrap, ShopListView, ShopCollection) {
+    "teji/lunch/collection/ShopCollection"], function($, bootstrap, fbInit, ShopListView, ShopCollection) {
         // initialize views
         var shopCollection = new ShopCollection();
         var shopListView = new ShopListView({el: ".fnResultViewList", collection: shopCollection});
-        // temp to call function from <fb:login-button> onlogin
-        window.fbLoginSuccessCallback = function(response){
-            console.log(response);
+        // set callback for initial FB sdk load and <fb:login-button>
+        fbInit.loginSuccessCallback = function(response){
             // initial load
             shopCollection.loadList(response.authResponse);
             $(".fnDefaultContent").hide();
         };
-        window.fbLoginFailCallback = function(response){
+        fbInit.loginFailCallback = function(response){
             $(".fnDefaultContent").show();
         };
-        window.fbLogoutCallback = function(){
+        fbInit.logoutCallback = function(){
             shopListView.clearView();
             $(".fnDefaultContent").show();
         };
-        // initial login check
-        // fbCheckLoginState();
-        // TODO: temp to avoid async error
-        setTimeout(fbCheckLoginState, 50);
+        fbInit.load();
         // prevent keep opening dropdown after page load
         $('.dropdown-menu').dropdown('toggle');
 });
