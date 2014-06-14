@@ -18,7 +18,8 @@
     "requirejs": "~2.1.13",
     "requirejs-text": "~2.0.12",
     "bootstrap": "~3.1.1",
-    "backbone": "~1.1.2"
+    "backbone": "~1.1.2",
+    "flipsnap": "~0.6.2"
   },
   "exportsOverride": {
     "bootstrap": {

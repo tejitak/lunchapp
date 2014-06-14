@@ -38,7 +38,7 @@ module.exports = function (grunt) {
                    livereload: true
                 },
                 tasks: ['jshint', 'requirejs:main', 'requirejs:admin'],
-                files: ['./**/*.html', './**/*.js']
+                files: ['public/**/*.html', 'public/**/*.js']
             }
         },
         // Make sure code styles are up to par and there are no obvious mistakes
