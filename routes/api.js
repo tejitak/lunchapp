@@ -35,7 +35,8 @@ var checkAccessToken = function(inputToken){
 
     var params = {
       host: FACEBOOK_API_PATH,
-      path: '/debug_token',
+      pathname: '/debug_token',
+      protocol: 'https',
       query: {
         'input_token': inputToken,
         'access_token': access_token,
