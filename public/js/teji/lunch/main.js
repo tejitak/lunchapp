@@ -33,7 +33,8 @@ require([
         // set callback for initial FB sdk load and <fb:login-button>
         fbInit.loginSuccessCallback = function(response){
             // initial load
-            shopCollection.loadList(response.authResponse);
+            fbInit.accessToken = response.authResponse.accessToken;
+            shopCollection.loadList();
             $(".fnDefaultContent").hide();
         };
         fbInit.loginFailCallback = function(response){

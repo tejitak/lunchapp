@@ -11157,6 +11157,7 @@ define('teji/lunch/fbInit',["jquery"], function($){
 
     var fbInit = window.fbInit = {
 
+        accessToken: "",
         loginSuccessCallback: null,
         loginFailCallback: null,
         logoutSuccesCallback: null,
@@ -14559,7 +14560,7 @@ define('text',['module'], function (module) {
 });
 
 
-define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail">\n    <img src="<%=imageURL%>" alt="photo" style="width: 300px; height: 200px;">\n    <div class="caption">\n        <h3><%=name%></h3>\n        <span><%=address%></span>\n        <p><a href="#" class="btn btn-primary" role="button">投票</a></p>\n    </div>\n</div>';});
+define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail">\n    <img src="<%=imageURL%>" alt="photo" style="width: 300px; height: 200px;">\n    <div class="caption">\n        <h3><%=name%></h3>\n        <span><%=address%></span>\n        <p><a href="#" class="btn btn-primary fnBtnVote" role="button">投票</a></p>\n    </div>\n</div>';});
 
 define('teji/lunch/view/ShopView',["backbone", "underscore", "text!./templates/ShopView.html"], function(Backbone, _, tmpl){
     var ShopView = Backbone.View.extend({
@@ -14574,7 +14575,17 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "text!./templates/S
         render: function() {
             var json = this.model.toJSON();
             this.$el.html(this.template(json));
+            this.$("fnBtnVote").click($.proxy(this.vote, this));
             return this;
+        },
+
+        vote: function(){
+            $.ajax({type: "GET",
+                url: "/api/vote?inputToken=" + fbInit.accessToken
+            }).done($.proxy(function(response){
+                // TODO: 
+            }, this));
+
         }
     });
     return ShopView;
@@ -15249,9 +15260,9 @@ define('teji/lunch/collection/ShopCollection',["jquery", "backbone", "teji/lunch
         initialize: function() {
         },
 
-        loadList: function(authData){
+        loadList: function(){
             $.ajax({type: "GET",　
-                url: "/api/groups?inputToken=" +　authData.accessToken
+                url: "/api/groups?inputToken=" + fbInit.accessToken
             }).done($.proxy(function(response){
             // TODO: temp for demo data, it should be XHR for /api/groups
             // with response.authResponse.accessToken
@@ -15310,7 +15321,8 @@ require([
         // set callback for initial FB sdk load and <fb:login-button>
         fbInit.loginSuccessCallback = function(response){
             // initial load
-            shopCollection.loadList(response.authResponse);
+            fbInit.accessToken = response.authResponse.accessToken;
+            shopCollection.loadList();
             $(".fnDefaultContent").hide();
         };
         fbInit.loginFailCallback = function(response){

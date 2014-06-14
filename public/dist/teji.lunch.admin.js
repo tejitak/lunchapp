@@ -11157,6 +11157,7 @@ define('teji/lunch/fbInit',["jquery"], function($){
 
     var fbInit = window.fbInit = {
 
+        accessToken: "",
         loginSuccessCallback: null,
         loginFailCallback: null,
         logoutSuccesCallback: null,

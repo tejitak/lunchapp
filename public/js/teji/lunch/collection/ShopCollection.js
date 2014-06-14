@@ -6,9 +6,9 @@ define(["jquery", "backbone", "teji/lunch/model/Shop"], function($, Backbone, Sh
         initialize: function() {
         },
 
-        loadList: function(authData){
+        loadList: function(){
             $.ajax({type: "GET",　
-                url: "/api/groups?inputToken=" +　authData.accessToken
+                url: "/api/groups?inputToken=" + fbInit.accessToken
             }).done($.proxy(function(response){
             // TODO: temp for demo data, it should be XHR for /api/groups
             // with response.authResponse.accessToken
