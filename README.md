@@ -12,7 +12,7 @@
 1. git clone https://github.com/tejitak/lunchapp.git
 
 2. To develop with Facebook auth, modify your hosts file because localhost is not allowed as callback host name. (Currently a domain tejitak.com is configured.)  
-e.g. "/etc/private/hosts" for mac  
+e.g. "/private/etc//hosts" for mac  
 127.0.0.1       localhost dev.tejitak.com
 
 3. Run "dscacheutil -flushcache" for reloading host file settings.
