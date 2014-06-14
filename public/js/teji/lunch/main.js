@@ -36,14 +36,17 @@ require([
             shopCollection.loadList(response.authResponse);
             $(".fnDefaultContent").hide();
         };
+        window.fbLoginFailCallback = function(response){
+            $(".fnDefaultContent").show();
+        };
         window.fbLogoutCallback = function(){
             shopListView.clearView();
             $(".fnDefaultContent").show();
         };
         // initial login check
         // fbCheckLoginState();
-        // TODO: temp to async error
-        setTimeout(fbCheckLoginState, 25);
+        // TODO: temp to avoid async error
+        setTimeout(fbCheckLoginState, 50);
         // prevent keep opening dropdown after page load
         $('.dropdown-menu').dropdown('toggle');
 });

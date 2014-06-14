@@ -9,7 +9,7 @@ define(["jquery", "backbone", "teji/lunch/model/Shop"], function($, Backbone, Sh
         loadList: function(authData){
             $.ajax({type: "GET",　
                 url: "/api/groups?inputToken=" +　authData.accessToken
-            }).done(function(response){
+            }).done($.proxy(function(response){
             // TODO: temp for demo data, it should be XHR for /api/groups
             // with response.authResponse.accessToken
                 var data = [
@@ -26,7 +26,7 @@ define(["jquery", "backbone", "teji/lunch/model/Shop"], function($, Backbone, Sh
                 });
                 // trigger
                 this.trigger("addCollection", models);
-            });
+            }, this));
         }        
     });
     return ShopCollection;

@@ -15181,7 +15181,7 @@ define('teji/lunch/collection/ShopCollection',["jquery", "backbone", "teji/lunch
         loadList: function(authData){
             $.ajax({type: "GET",　
                 url: "/api/groups?inputToken=" +　authData.accessToken
-            }).done(function(response){
+            }).done($.proxy(function(response){
             // TODO: temp for demo data, it should be XHR for /api/groups
             // with response.authResponse.accessToken
                 var data = [
@@ -15198,7 +15198,7 @@ define('teji/lunch/collection/ShopCollection',["jquery", "backbone", "teji/lunch
                 });
                 // trigger
                 this.trigger("addCollection", models);
-            });
+            }, this));
         }        
     });
     return ShopCollection;
@@ -15242,14 +15242,17 @@ require([
             shopCollection.loadList(response.authResponse);
             $(".fnDefaultContent").hide();
         };
+        window.fbLoginFailCallback = function(response){
+            $(".fnDefaultContent").show();
+        };
         window.fbLogoutCallback = function(){
             shopListView.clearView();
             $(".fnDefaultContent").show();
         };
         // initial login check
         // fbCheckLoginState();
-        // TODO: temp to async error
-        setTimeout(fbCheckLoginState, 25);
+        // TODO: temp to avoid async error
+        setTimeout(fbCheckLoginState, 50);
         // prevent keep opening dropdown after page load
         $('.dropdown-menu').dropdown('toggle');
 });
