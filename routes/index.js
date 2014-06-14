@@ -14,6 +14,9 @@ router.get('/', function(req, res) {
     res.render('index', { title: 'Lunch Timer!', header: _templates.header});
 });
 
+router.get('/getting-started', function(req, res) {
+    res.render('getting-started', { title: 'Lunch Timer - Getting Started -', header: _templates.header});
+});
 
 router.get('/login', function(req, res) {
     res.render('login', { title: 'Login page for Lunch Timer' });
