@@ -12075,6 +12075,66 @@ define("teji/lunch/fbInit", ["jquery"], function($){
 
         getImageURL: function(id){
             return "http://graph.facebook.com/" + id + "/picture?type=square";
+        },
+
+        autoCompleteInit: function($input, $addBtn, addCallback){
+            (function(){
+                var _selectedItem = "";
+                $input.autocomplete("https://graph.facebook.com/me/friends?access_token=" + fbInit.accessToken + "&callback=?", {
+                    height: 400,
+                    max: 10,
+                    dataType: 'jsonp',
+                    cacheLength: 10,
+                    minChars: 1,
+
+                    parse: function (data) {
+                        console.log(data);
+                        var rows = new Array();
+                        data = data.data;
+                        for (var i=0; i<data.length; i++) {
+                            rows[i] = {data: data[i], value: data[i].name, result: data[i].name};
+                        }
+                        return rows;
+                    },
+                    
+                    formatItem: function (data, i, n, value, text, a, b, c, d) {
+                        return "<div class='fbFriendAutoCompleteItem'>" + fbInit.getImageHTML(data.id) + "<span>" + data.name + "</span></div>";
+                    }
+                }).result(function (evnet, item) {
+                    _selectedItem = item;
+                    $addBtn.removeAttr("disabled");
+                });
+
+                $input.on("change keyup", function(){
+                    if(this.value !== "" && this.value === _selectedItem.name){
+                        $addBtn.removeAttr("disabled");     
+                    }else{
+                        $addBtn.attr("disabled", "disabled");     
+                    }
+                });
+
+                $addBtn.click(function(){
+                    $input.val("");
+                    $addBtn.attr("disabled", "disabled");     
+                    if(addCallback){ addCallback(_selectedItem);}
+                });
+            })();
+        },
+
+        addAutoCompleteResult: function($resultContainer, person, removeCallback){
+            // add me as a member
+            var $div = $("<div></div>").addClass("userContent");
+            var $li = $("<li></li>").addClass("userPresentation").append($div);
+            var $img = $(this.getImageHTML(person.id));
+            var $a = $("<a></a>").attr("href", "https://www.facebook.com/app_scoped_user_id/" + person.id).attr("target", "_blank").html(person.name);
+            if(removeCallback){
+                var $deleteNode = $("<span></span>").addClass("deleteIcon").html("x").click(function(){
+                    $li.remove();
+                    removeCallback(person);
+                });
+            }
+            $div.append($img).append($a).append($deleteNode);
+            $resultContainer.append($li);
         }
     };
     return fbInit;
@@ -15182,51 +15242,30 @@ require(["jquery",
         groupCollection.loadList();
         $(".fnDefaultContent").hide();
         $(".fnGroupList").show();
-
         // setup FB friends autocomplete
-        $("#friendAutoCompleteInput").autocomplete("https://graph.facebook.com/me/friends?access_token=" + fbInit.accessToken + "&callback=?", {
-            width: 250,
-            height: 400,
-            max: 10,
-            dataType: 'jsonp',
-            cacheLength: 10,
-            minChars: 1,
-
-            parse: function (data) {
-                console.log(data);
-                var rows = new Array();
-                data = data.data;
-                for (var i=0; i<data.length; i++) {
-                    rows[i] = {data: data[i], value: data[i].name, result: data[i].name};
+        var newGroup;
+        fbInit.autoCompleteInit($("#friendAutoCompleteInput"), $(".fnAddFriendAutoCompleteBtn"), function(personResult){
+            // callback when add button is clicked
+            var removeMemberCallback = function(removeItem){
+                var members = newGroup.get("members");
+                if(removeItem && members && members.length){
+                    newGroup.set("members", $.grep(members, function(value) {
+                        return value.id !== removeItem.id;
+                    }));
                 }
-                return rows;
-            },
-            
-            formatItem: function (data, i, n, value, text, a, b, c, d) {
-                var html = "<div class='test2'>" + fbInit.getImageHTML(data.id) + "<span>" + data.name + "</span></div>";
-                console.log(html);
-                return html;
-            }
-        }).result(function (evnet, item) {
-            alert(item.id);
+            };
+            fbInit.addAutoCompleteResult($(".friendsAutoCompletedResults .multiColumn"), personResult, removeMemberCallback);
+            newGroup.get("members").push(personResult);
         });
         // attach event to open a new group modal dialog
-        var newGroup;
         $('#addGroupModal').on('show.bs.modal', function(e){
-            // TODO: clear values
+            // clear values
             newGroup = new Group({id: "", name: "", members: [], shops: []});
+            var personResult = {id: fbInit.me.id, name: fbInit.me.name};
             var $resultContainer = $(".friendsAutoCompletedResults .multiColumn");
             $resultContainer.empty();
-            // add me as a member
-            var me = fbInit.me;
-            $div = $("<div></div>").addClass("userContent");
-            $img = $(fbInit.getImageHTML(me.id));
-            $a = $("<a></a>").attr("href", me.link).attr("target", "_blank").html(me.name);
-            $deleteNode = $("<span></span>").addClass("deleteIcon").html("x");
-            $div.append($img).append($a).append($deleteNode);
-            var $li = $("<li></li>").addClass("userPresentation").append($div);
-            $resultContainer.append($li);
-            newGroup.get("members").push({id: me.id, name: me.name});
+            fbInit.addAutoCompleteResult($resultContainer, personResult);
+            newGroup.get("members").push(personResult);
         });
         // attach event to save group    
         $(".fnSaveGroupBtn").click(function(){
@@ -15236,9 +15275,7 @@ require(["jquery",
             }
             newGroup.set("name", groupName);
             var callback = function(){
-                // reload data
-                // TODO: render with view
-                location.href = "/admin"
+                location.href = "/admin";
             };
             groupCollection.postGroup(newGroup, callback);
             // TODO: for edit

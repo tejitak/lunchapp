@@ -35,50 +35,30 @@ require(["jquery",
         groupCollection.loadList();
         $(".fnDefaultContent").hide();
         $(".fnGroupList").show();
-
         // setup FB friends autocomplete
-        $("#friendAutoCompleteInput").autocomplete("https://graph.facebook.com/me/friends?access_token=" + fbInit.accessToken + "&callback=?", {
-            width: 250,
-            height: 400,
-            max: 10,
-            dataType: 'jsonp',
-            cacheLength: 10,
-            minChars: 1,
-
-            parse: function (data) {
-                console.log(data);
-                var rows = new Array();
-                data = data.data;
-                for (var i=0; i<data.length; i++) {
-                    rows[i] = {data: data[i], value: data[i].name, result: data[i].name};
+        var newGroup;
+        fbInit.autoCompleteInit($("#friendAutoCompleteInput"), $(".fnAddFriendAutoCompleteBtn"), function(personResult){
+            // callback when add button is clicked
+            var removeMemberCallback = function(removeItem){
+                var members = newGroup.get("members");
+                if(removeItem && members && members.length){
+                    newGroup.set("members", $.grep(members, function(value) {
+                        return value.id !== removeItem.id;
+                    }));
                 }
-                return rows;
-            },
-            
-            formatItem: function (data, i, n, value, text, a, b, c, d) {
-                var html = "<div class='fbFriendAutoCompleteItem'>" + fbInit.getImageHTML(data.id) + "<span>" + data.name + "</span></div>";
-                return html;
-            }
-        }).result(function (evnet, item) {
-            alert(item.id);
+            };
+            fbInit.addAutoCompleteResult($(".friendsAutoCompletedResults .multiColumn"), personResult, removeMemberCallback);
+            newGroup.get("members").push(personResult);
         });
         // attach event to open a new group modal dialog
-        var newGroup;
         $('#addGroupModal').on('show.bs.modal', function(e){
-            // TODO: clear values
+            // clear values
             newGroup = new Group({id: "", name: "", members: [], shops: []});
+            var personResult = {id: fbInit.me.id, name: fbInit.me.name};
             var $resultContainer = $(".friendsAutoCompletedResults .multiColumn");
             $resultContainer.empty();
-            // add me as a member
-            var me = fbInit.me;
-            $div = $("<div></div>").addClass("userContent");
-            $img = $(fbInit.getImageHTML(me.id));
-            $a = $("<a></a>").attr("href", me.link).attr("target", "_blank").html(me.name);
-            $deleteNode = $("<span></span>").addClass("deleteIcon").html("x");
-            $div.append($img).append($a).append($deleteNode);
-            var $li = $("<li></li>").addClass("userPresentation").append($div);
-            $resultContainer.append($li);
-            newGroup.get("members").push({id: me.id, name: me.name});
+            fbInit.addAutoCompleteResult($resultContainer, personResult);
+            newGroup.get("members").push(personResult);
         });
         // attach event to save group    
         $(".fnSaveGroupBtn").click(function(){
@@ -88,9 +68,7 @@ require(["jquery",
             }
             newGroup.set("name", groupName);
             var callback = function(){
-                // reload data
-                // TODO: render with view
-                location.href = "/admin"
+                location.href = "/admin";
             };
             groupCollection.postGroup(newGroup, callback);
             // TODO: for edit
