@@ -12007,7 +12007,6 @@ define("teji/lunch/fbInit", ["jquery"], function($){
     };
 
     var fbInit = window.fbInit = {
-
         me: {},
         accessToken: "",
         loginSuccessCallback: null,
@@ -12030,7 +12029,7 @@ define("teji/lunch/fbInit", ["jquery"], function($){
         },
 
         statusChangeCallback: function(response) {
-            if (response.status === 'connected') {
+            if(response.status === 'connected'){
                 // show logged in user name and logout button
                 $("#loginBtnMenu").css({display: "none"});
                 $("#loginUserMenu").css({display: ""});
@@ -15204,7 +15203,9 @@ require(["jquery",
             },
             
             formatItem: function (data, i, n, value, text, a, b, c, d) {
-                return "<div class='test2'>" + fbInit.getImageHTML(data.id) + "<span>" + data.name + "</span></div>";
+                var html = "<div class='test2'>" + fbInit.getImageHTML(data.id) + "<span>" + data.name + "</span></div>";
+                console.log(html);
+                return html;
             }
         }).result(function (evnet, item) {
             alert(item.id);

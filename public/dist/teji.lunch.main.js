@@ -11156,7 +11156,6 @@ define("teji/lunch/fbInit", ["jquery"], function($){
     };
 
     var fbInit = window.fbInit = {
-
         me: {},
         accessToken: "",
         loginSuccessCallback: null,
@@ -11179,7 +11178,7 @@ define("teji/lunch/fbInit", ["jquery"], function($){
         },
 
         statusChangeCallback: function(response) {
-            if (response.status === 'connected') {
+            if(response.status === 'connected'){
                 // show logged in user name and logout button
                 $("#loginBtnMenu").css({display: "none"});
                 $("#loginUserMenu").css({display: ""});
@@ -15205,7 +15204,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
         addItems: function(models){
             models = models || [];
             // clear node
-            this._clear();
+            this.clear();
             if(models.length == 0){
                 // show no groups messages
                 this.$el.append($('<div class="alert alert-info"></div>').html("No Groups - Please create a new group or join to an existing group."));
@@ -15216,7 +15215,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
                     $("<option></option>").val(i).html(models[i].get("name")).appendTo(this.$groupSelect);
                 }
                 this.$groupSelect.change($.proxy(function(){
-                    this._clear();
+                    this.clear();
                     this._renderGroup(models[this.$groupSelect.val()]);
                 }, this));
             }
@@ -15244,12 +15243,8 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
             return $div;
         },
         
-        _clear: function(){
+        clear: function(){
             this.$el.empty();
-        },
-
-        clearView: function(){
-            this._clear();
         }
     });
     return ShopListView;

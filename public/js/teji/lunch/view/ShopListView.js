@@ -48,7 +48,7 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
             return $div;
         },
         
-        clear function(){
+        clear: function(){
             this.$el.empty();
         }
     });

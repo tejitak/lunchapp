@@ -56,7 +56,9 @@ require(["jquery",
             },
             
             formatItem: function (data, i, n, value, text, a, b, c, d) {
-                return "<div class='test2'>" + fbInit.getImageHTML(data.id) + "<span>" + data.name + "</span></div>";
+                var html = "<div class='test2'>" + fbInit.getImageHTML(data.id) + "<span>" + data.name + "</span></div>";
+                console.log(html);
+                return html;
             }
         }).result(function (evnet, item) {
             alert(item.id);
