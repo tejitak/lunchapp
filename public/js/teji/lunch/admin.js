@@ -56,8 +56,7 @@ require(["jquery",
             },
             
             formatItem: function (data, i, n, value, text, a, b, c, d) {
-                var html = "<div class='test2'>" + fbInit.getImageHTML(data.id) + "<span>" + data.name + "</span></div>";
-                console.log(html);
+                var html = "<div class='fbFriendAutoCompleteItem'>" + fbInit.getImageHTML(data.id) + "<span>" + data.name + "</span></div>";
                 return html;
             }
         }).result(function (evnet, item) {
