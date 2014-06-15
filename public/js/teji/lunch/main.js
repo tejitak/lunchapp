@@ -26,14 +26,14 @@ require([
     "bootstrap",
     "teji/lunch/fbInit",
     "teji/lunch/view/ShopListView",
-    "teji/lunch/collection/ShopCollection"], function($, bootstrap, fbInit, ShopListView, ShopCollection) {
+    "teji/lunch/collection/GroupCollection"], function($, bootstrap, fbInit, ShopListView, GroupCollection) {
         // initialize views
-        var shopCollection = new ShopCollection();
-        var shopListView = new ShopListView({el: ".fnResultViewList", collection: shopCollection});
+        var groupCollection = new GroupCollection();
+        var shopListView = new ShopListView({el: ".fnResultViewList", collection: groupCollection});
         // set callback for initial FB sdk load and <fb:login-button>
         fbInit.loginSuccessCallback = function(response){
             // initial load
-            shopCollection.loadList();
+            groupCollection.loadList();
             $(".fnDefaultContent").hide();
         };
         fbInit.loginFailCallback = function(response){

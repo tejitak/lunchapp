@@ -15200,24 +15200,46 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
         initialize: function() {
             this.listenTo(this.collection, "addCollection", this.addItems);
             this.$viewTitle = $(".fnResultViewTitle");
+            this.$groupSelect = $(".fnGroupSelect");
         },
 
         addItems: function(models){
             models = models || [];
             // clear node
             this._clear();
+            if(models.length == 0){
+                // show no groups messages
+                this.$el.html("No Groups");
+            }else{
+                this._renderGroup(models[0]);
+                if(models.length > 1){
+                    // show group selector
+                    for(var i=0, len=models.length; i<len; i++){
+                        $("<option></option>").val(i).html(models[i].get("name")).appendTo(this.$groupSelect);
+                    }
+                    this.$groupSelect.change($.proxy(function(){
+                        this._clear();
+                        this._renderGroup(models[this.$groupSelect.val()]);
+                    }, this));
+                    $(".fnGroupSelectContainer").show();
+                }
+            }
+        },
+
+        _renderGroup: function(model){
             // show title
             this.$viewTitle.show();
-            var w = (models.length * 220/*item width*/) + 95/* padding */;
-            var $node = this._renderItems(models).addClass("flipsnap").width(w + "px");
+            var shops = model.get("shops");
+            var w = (shops.length * 220/*item width*/) + 95/* padding */;
+            var $node = this._renderShops(shops).addClass("flipsnap").width(w + "px");
             this.$el.append($node);
             flipsnap('.flipsnap', {distance: 230});
         },
 
-        _renderItems: function(models){
+        _renderShops: function(shops){
             var $div = $("<div></div>");
-            _.each(models, function(model){
-                var shopView = new ShopView({model: model});
+            _.each(shops, function(shop){
+                var shopView = new ShopView({model: shop});
                 var el = shopView.render().el;
                 $div.append(el);
             }, this);
@@ -15269,10 +15291,39 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
     return Shop;
 });
 
-define('teji/lunch/collection/ShopCollection',["jquery", "backbone", "teji/lunch/model/Shop"], function($, Backbone, Shop){
-    var ShopCollection = Backbone.Collection.extend({
+define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Shop){
+    var Group = Backbone.Model.extend({
 
-        model: Shop,
+        defaults: {
+            id: "",
+            name: "",
+            members: [],
+            shops: []
+        },
+
+        initialize: function(obj){
+            if(!obj){ 
+                // default will be used
+                return;
+            }
+            obj.members = obj.members || [];
+            obj.shops = obj.shops || [];
+            // change json to Shop model
+            this.set("shops", $.map(obj.shops, function(n, i){
+                return new Shop(n);
+            }));
+        },
+
+        validate: function(attrs){
+        }
+    });
+    return Group;
+});
+
+define('teji/lunch/collection/GroupCollection',["jquery", "backbone", "teji/lunch/model/Group"], function($, Backbone, Group){
+    var groupCollection = Backbone.Collection.extend({
+
+        model: Group,
 
         initialize: function() {
         },
@@ -15281,26 +15332,47 @@ define('teji/lunch/collection/ShopCollection',["jquery", "backbone", "teji/lunch
             $.ajax({type: "GET",　
                 url: "/api/groups?inputToken=" + fbInit.accessToken
             }).done($.proxy(function(response){
-            // TODO: temp for demo data, it should be XHR for /api/groups
-            // with response.authResponse.accessToken
+                console.log(response);
+                // TODO: temp for demo data, it should be XHR for /api/groups
+                // with response.authResponse.accessToken
                 var data = [
-                    {name: "ほの字 渋谷店", address: "東京都渋谷区渋谷1-11-3 第一小山ビル　２Ｆ",　shopURL: "http://tabelog.com/tokyo/A1303/A130301/13007031/", imageURL: "http://image1-4.tabelog.k-img.com/restaurant/images/Rvw/27789/150x150_square_27789286.jpg"},
-                    {name: "恵み 渋谷ヒカリエ店", address: "東京都渋谷区渋谷2-21-1 渋谷ヒカリエ 6F", shopURL: "http://tabelog.com/tokyo/A1303/A130301/13140077/", imageURL: "http://image1-2.tabelog.k-img.com/restaurant/images/Rvw/21444/100x100_square_21444453.jpg"},
-                    {name: "shop 1", address: "shibuya-ku", shopURL: "", imageURL: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjE5cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MzAweDIwMDwvdGV4dD48L3N2Zz4="},
-                    {name: "ほの字 渋谷店", address: "東京都渋谷区渋谷1-11-3 第一小山ビル　２Ｆ",　shopURL: "http://tabelog.com/tokyo/A1303/A130301/13007031/", imageURL: "http://image1-4.tabelog.k-img.com/restaurant/images/Rvw/27789/150x150_square_27789286.jpg"},
-                    {name: "恵み 渋谷ヒカリエ店", address: "東京都渋谷区渋谷2-21-1 渋谷ヒカリエ 6F", shopURL: "http://tabelog.com/tokyo/A1303/A130301/13140077/", imageURL: "http://image1-2.tabelog.k-img.com/restaurant/images/Rvw/21444/100x100_square_21444453.jpg"},
-                    {name: "shop 1", address: "shibuya-ku", shopURL: "", imageURL: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjE5cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MzAweDIwMDwvdGV4dD48L3N2Zz4="}
+                    {name: "Group1", members: [{id: "123", name: "Takuya Tejima"}, {id: "456", name: "Ryo Ashi"}], shops: [
+                        {name: "ほの字 渋谷店", address: "東京都渋谷区渋谷1-11-3 第一小山ビル　２Ｆ",　shopURL: "http://tabelog.com/tokyo/A1303/A130301/13007031/", imageURL: "http://image1-4.tabelog.k-img.com/restaurant/images/Rvw/27789/150x150_square_27789286.jpg"},
+                        {name: "恵み 渋谷ヒカリエ店", address: "東京都渋谷区渋谷2-21-1 渋谷ヒカリエ 6F", shopURL: "http://tabelog.com/tokyo/A1303/A130301/13140077/", imageURL: "http://image1-2.tabelog.k-img.com/restaurant/images/Rvw/21444/100x100_square_21444453.jpg"}
+                    ]},
+                    {name: "Lunchメンバー＠LINE", members: [{id: "123", name: "Takuya Tejima"}, {id: "456", name: "Ryo Ashi"}], shops: [
+                        {name: "shop 1", address: "shibuya-ku", shopURL: "", imageURL: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjE5cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MzAweDIwMDwvdGV4dD48L3N2Zz4="}
+                    ]}
                 ];
                 var models = [];
                 _.each(data, function(item){
-                    models.push(new Shop(item));
+                    models.push(new Group(item));
                 });
                 // trigger
                 this.trigger("addCollection", models);
             }, this));
-        }        
+        },
+
+        postGroup: function(model, callback){
+            $.ajax({type: "POST",
+                url: "/api/group",
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify(model.toJSON())
+            }).done($.proxy(function(response){
+                // TODO: 
+                console.log(response);
+                if(callback){
+                    callback();
+                }
+            }, this));
+        },
+
+        putGroup: function(){
+
+        }
     });
-    return ShopCollection;
+    return groupCollection;
 });
 
 requirejs.config({
@@ -15331,14 +15403,14 @@ require([
     "bootstrap",
     "teji/lunch/fbInit",
     "teji/lunch/view/ShopListView",
-    "teji/lunch/collection/ShopCollection"], function($, bootstrap, fbInit, ShopListView, ShopCollection) {
+    "teji/lunch/collection/GroupCollection"], function($, bootstrap, fbInit, ShopListView, GroupCollection) {
         // initialize views
-        var shopCollection = new ShopCollection();
-        var shopListView = new ShopListView({el: ".fnResultViewList", collection: shopCollection});
+        var groupCollection = new GroupCollection();
+        var shopListView = new ShopListView({el: ".fnResultViewList", collection: groupCollection});
         // set callback for initial FB sdk load and <fb:login-button>
         fbInit.loginSuccessCallback = function(response){
             // initial load
-            shopCollection.loadList();
+            groupCollection.loadList();
             $(".fnDefaultContent").hide();
         };
         fbInit.loginFailCallback = function(response){
