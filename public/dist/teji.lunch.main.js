@@ -11157,6 +11157,7 @@ define("teji/lunch/fbInit", ["jquery"], function($){
 
     var fbInit = window.fbInit = {
 
+        me: {},
         accessToken: "",
         loginSuccessCallback: null,
         loginFailCallback: null,
@@ -11182,9 +11183,13 @@ define("teji/lunch/fbInit", ["jquery"], function($){
                 // show logged in user name and logout button
                 $("#loginBtnMenu").css({display: "none"});
                 $("#loginUserMenu").css({display: ""});
-                FB.api('/me', function(response) {
+                FB.api('/me', $.proxy(function(response) {
+                    console.log(response);
+                    fbInit.me = response;
                     $('#dropDownLoginName').html(response.name);
-                });
+                    $('#loginUserImage').html(this.getImageHTML(response.id));
+                }, this));
+                this.accessToken = response.authResponse.accessToken;
                 if(this.loginSuccessCallback){
                     this.loginSuccessCallback(response);
                 }
@@ -11211,6 +11216,15 @@ define("teji/lunch/fbInit", ["jquery"], function($){
                     this.logoutCallback(response);
                 }
             }, this));
+        },
+
+        getImageHTML: function(id, w, h){
+            w = w || "20px", h = h || "20px";
+            return "<img class='img-rounded' width='" + w + "' height='" + h + "' src='" + this.getImageURL(id) + "'/>";
+        },
+
+        getImageURL: function(id){
+            return "http://graph.facebook.com/" + id + "/picture?type=square";
         }
     };
     return fbInit;
@@ -15300,7 +15314,7 @@ requirejs.config({
         "flipsnap":  "lib/flipsnap/flipsnap"
     },
     shim: {
-       "bootstrap": {
+        "bootstrap": {
             deps: ["jquery"]
         },
         "backbone": {
@@ -15324,7 +15338,6 @@ require([
         // set callback for initial FB sdk load and <fb:login-button>
         fbInit.loginSuccessCallback = function(response){
             // initial load
-            fbInit.accessToken = response.authResponse.accessToken;
             shopCollection.loadList();
             $(".fnDefaultContent").hide();
         };

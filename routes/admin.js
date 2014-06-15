@@ -13,18 +13,11 @@ fs.readFile('./views/_templates/header.html', 'UTF-8', function (err, data) {
 var renderList = function(req, res) {
     var db = req.db, groups = db.groups;
     groups.find({}, function(err, items){
-       res.render('admin/index', {title: 'Lunch Timer!', header: _templates.header, groups: items});
+        res.render('admin/index', {title: 'Lunch Timer!', header: _templates.header, groups: items});
     });
 };
 
 router.get('/', renderList);
-
-
-router.get('/login', function(req, res){
-    res.render('admin/login', { title: 'Login page for Lunch Timer administration' });
-});
-
-
 
 router.get('/ui/add', function(req, res) {
     res.render('admin/add', {title: 'Add a Group'});
@@ -40,9 +33,13 @@ router.post('/add', function(req, res) {
     // TODO: check token
     var entry = req.body;
     if(entry.name){
-        req.db.groups.insert({name: entry.name,members: entry.members,restaurants: entry.restaurants}, function(err, newDoc){});
+        req.db.groups.insert({
+            name: entry.name,
+            members: entry.members,
+            shops: entry.shops
+        }, function(err, newDoc){});
     }
-        renderList(req, res);
+    renderList(req, res);
     // TODO: return json
 });
 
@@ -54,6 +51,30 @@ router.get('/delete/:id', function(req, res) {
     }
     renderList(req, res);
     // TODO: return json
+});
+
+// TODO: move to api.js
+router.get('/groups', function(req, res) {
+    var db = req.db, groups = db.groups;
+    groups.find({}, function(err, items){
+        res.contentType('application/json');
+        res.send(items);
+    });
+});
+
+router.post('/group', function(req, res) {
+    // TODO: check token
+    var entry = req.body;
+    if(entry.name){
+        console.dir(entry);
+        req.db.groups.insert({
+            name: entry.name,
+            members: entry.members,
+            shops: entry.shops
+        }, function(err, newDoc){});
+    }
+    res.contentType('application/json');
+    res.send('{"success":true}');
 });
 
 module.exports = router;

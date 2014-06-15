@@ -9,7 +9,7 @@ requirejs.config({
         "flipsnap":  "lib/flipsnap/flipsnap"
     },
     shim: {
-       "bootstrap": {
+        "bootstrap": {
             deps: ["jquery"]
         },
         "backbone": {
@@ -33,7 +33,6 @@ require([
         // set callback for initial FB sdk load and <fb:login-button>
         fbInit.loginSuccessCallback = function(response){
             // initial load
-            fbInit.accessToken = response.authResponse.accessToken;
             shopCollection.loadList();
             $(".fnDefaultContent").hide();
         };

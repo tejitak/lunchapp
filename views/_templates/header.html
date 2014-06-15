@@ -18,12 +18,12 @@
             </ul>
             <ul class="nav navbar-nav navbar-right" id="loginBtnMenu" style="display:none;">
                 <li style="margin-top: 12px;">
-                    <fb:login-button size="large" scope="public_profile" onlogin="fbInit.checkLoginState();"></fb:login-button>
+                    <fb:login-button size="large" scope="public_profile,user_friends" onlogin="fbInit.checkLoginState();"></fb:login-button>
                 <li>
             </ul>
             <ul class="nav navbar-nav navbar-right" id="loginUserMenu" style="display:none;">
                 <li class="dropdown open">
-                <a data-toggle="dropdown" class="dropdown-toggle" role="button" href="#"><span id="dropDownLoginName"></span><b class="caret"></b></a>
+                <a data-toggle="dropdown" class="dropdown-toggle" role="button" href="#"><span id="loginUserImage" class="loginUserImage"></span><span id="dropDownLoginName"></span><b class="caret"></b></a>
                     <ul role="menu" class="dropdown-menu">
                         <li role="presentation"><a href="javascript:;" onclick="location.href='/admin/'">Admin</a></li>
                         <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem" onclick="fbInit.logout();">Logout</a></li>

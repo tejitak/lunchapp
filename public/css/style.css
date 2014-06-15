@@ -18,6 +18,16 @@ a {
 }
 /*** bootstrap override end ***/
 
+/*** header start ***/
+.loginUserImage {
+    margin: 0 6px
+}
+
+.loginUserImage img {
+    margin-top: -2px;
+}
+/*** header end ***/
+
 /*** modules start ***/
 .sectionTitle {
     width: 100%;
@@ -54,3 +64,34 @@ a {
     text-align: center;
 }
 /*** flipsnap end ***/
+
+/*** admin start ***/
+.friendsAutoCompletedResults {
+    margin: 4px 0;
+}
+
+.friendsAutoCompletedResults ul.multiColumn, ul.multiColumn li {
+    margin: 2px;
+    padding: 0px;
+}
+
+.friendsAutoCompletedResults ul.multiColumn li.userPresentation {
+    display: table-cell;
+}
+
+.friendsAutoCompletedResults ul.multiColumn li.userPresentation .userContent {
+    margin: 2px;
+    font-size: 12px;
+    background-color: #eee;
+}
+
+.friendsAutoCompletedResults ul.multiColumn li.userPresentation .userContent a {
+    text-decoration: none;
+    margin-left: 4px;
+}
+
+.deleteIcon {
+    cursor: pointer;
+    margin: 0 4px;
+}
+/*** admin end ***/
