@@ -1,9 +1,11 @@
-define(["backbone"], function(Backbone){
+define(["backbone", "jquery"], function(Backbone, $){
     var Shop = Backbone.Model.extend({
 
         defaults: {
+            id: "",
             name: "",
             address: "",
+            url: "",
             imageURL: ""
         },
 
@@ -11,6 +13,18 @@ define(["backbone"], function(Backbone){
         },
 
         validate: function(attrs){
+        },
+
+        vote: function(){
+            $.ajax({type: "POST",
+                url: "/api/vote",
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify({inputToken: fbInit.accessToken, shopId: this.attributes.id})
+            }).done($.proxy(function(response){
+                // TODO: 
+                console.log(response);
+            }, this));
         }
     });
     return Shop;

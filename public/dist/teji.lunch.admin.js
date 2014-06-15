@@ -11143,7 +11143,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 
 define("bootstrap", ["jquery"], function(){});
 
-define('teji/lunch/fbInit',["jquery"], function($){
+define("teji/lunch/fbInit", ["jquery"], function($){
 
     window.fbAsyncInit = function() {
         FB.init({
@@ -11185,7 +11185,7 @@ define('teji/lunch/fbInit',["jquery"], function($){
                 FB.api('/me', function(response) {
                     $('#dropDownLoginName').html(response.name);
                 });
-                if(this.loginSuccessCallback !== "undefined"){
+                if(this.loginSuccessCallback){
                     this.loginSuccessCallback(response);
                 }
             }else{

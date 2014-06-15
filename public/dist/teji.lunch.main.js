@@ -11143,7 +11143,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 
 define("bootstrap", ["jquery"], function(){});
 
-define('teji/lunch/fbInit',["jquery"], function($){
+define("teji/lunch/fbInit", ["jquery"], function($){
 
     window.fbAsyncInit = function() {
         FB.init({
@@ -11185,7 +11185,7 @@ define('teji/lunch/fbInit',["jquery"], function($){
                 FB.api('/me', function(response) {
                     $('#dropDownLoginName').html(response.name);
                 });
-                if(this.loginSuccessCallback !== "undefined"){
+                if(this.loginSuccessCallback){
                     this.loginSuccessCallback(response);
                 }
             }else{
@@ -14562,7 +14562,7 @@ define('text',['module'], function (module) {
 
 define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail">\n    <img src="<%=imageURL%>" alt="photo" style="width: 300px; height: 200px;">\n    <div class="caption">\n        <h3><%=name%></h3>\n        <span><%=address%></span>\n        <p><a href="#" class="btn btn-primary fnBtnVote" role="button">投票</a></p>\n    </div>\n</div>';});
 
-define('teji/lunch/view/ShopView',["backbone", "underscore", "text!./templates/ShopView.html"], function(Backbone, _, tmpl){
+define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], function(Backbone, _, $, tmpl){
     var ShopView = Backbone.View.extend({
 
         tagName: "div",
@@ -14573,24 +14573,13 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "text!./templates/S
         },
 
         render: function() {
-            var json = this.model.toJSON();
-            this.$el.html(this.template(json));
-            this.$("fnBtnVote").click($.proxy(this.vote, this));
+            this.$el.html(this.template(this.model.toJSON()));
+            this.$(".fnBtnVote").click($.proxy(this.model.vote, this.model));
             return this;
-        },
-
-        vote: function(){
-            $.ajax({type: "GET",
-                url: "/api/vote?inputToken=" + fbInit.accessToken
-            }).done($.proxy(function(response){
-                // TODO: 
-            }, this));
-
         }
     });
     return ShopView;
 });
-
 /**
  * flipsnap.js
  *
@@ -15234,12 +15223,14 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
     return ShopListView;
 });
 
-define('teji/lunch/model/Shop',["backbone"], function(Backbone){
+define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
     var Shop = Backbone.Model.extend({
 
         defaults: {
+            id: "",
             name: "",
             address: "",
+            url: "",
             imageURL: ""
         },
 
@@ -15247,6 +15238,18 @@ define('teji/lunch/model/Shop',["backbone"], function(Backbone){
         },
 
         validate: function(attrs){
+        },
+
+        vote: function(){
+            $.ajax({type: "POST",
+                url: "/api/vote",
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify({inputToken: fbInit.accessToken, shopId: this.attributes.id})
+            }).done($.proxy(function(response){
+                // TODO: 
+                console.log(response);
+            }, this));
         }
     });
     return Shop;

@@ -1,4 +1,4 @@
-define(["jquery"], function($){
+define("teji/lunch/fbInit", ["jquery"], function($){
 
     window.fbAsyncInit = function() {
         FB.init({
@@ -40,7 +40,7 @@ define(["jquery"], function($){
                 FB.api('/me', function(response) {
                     $('#dropDownLoginName').html(response.name);
                 });
-                if(this.loginSuccessCallback !== "undefined"){
+                if(this.loginSuccessCallback){
                     this.loginSuccessCallback(response);
                 }
             }else{
