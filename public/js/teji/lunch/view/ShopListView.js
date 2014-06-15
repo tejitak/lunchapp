@@ -3,14 +3,13 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
 
         initialize: function() {
             this.listenTo(this.collection, "addCollection", this.addItems);
-            this.$viewTitle = $(".fnResultViewTitle");
             this.$groupSelect = $(".fnGroupSelect");
         },
 
         addItems: function(models){
             models = models || [];
             // clear node
-            this._clear();
+            this.clear();
             if(models.length == 0){
                 // show no groups messages
                 this.$el.append($('<div class="alert alert-info"></div>').html("No Groups - Please create a new group or join to an existing group."));
@@ -21,15 +20,13 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
                     $("<option></option>").val(i).html(models[i].get("name")).appendTo(this.$groupSelect);
                 }
                 this.$groupSelect.change($.proxy(function(){
-                    this._clear();
+                    this.clear();
                     this._renderGroup(models[this.$groupSelect.val()]);
                 }, this));
             }
         },
 
         _renderGroup: function(model){
-            // show title
-            this.$viewTitle.show();
             var shops = model.get("shops"), len = shops.length;
             if(len == 0){
                 this.$el.append($('<div class="alert alert-info"></div>').html("There is no restaurants in this group"));
@@ -51,14 +48,8 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
             return $div;
         },
         
-        _clear: function(){
+        clear function(){
             this.$el.empty();
-        },
-
-        clearView: function(){
-            this._clear();
-            // show default screen
-            this.$viewTitle.hide();
         }
     });
     return ShopListView;

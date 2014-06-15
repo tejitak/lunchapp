@@ -10,49 +10,48 @@
 <body>
 <%=header%>
     <div class="container">
-            <div class="fnDefaultContent" style="display: none;">
-                <div class="sectionTitle">Lunch Timer Admin</div>
-                <ul>
-                    <li>ランチグループの管理ができます</li>
-                </ul>
-                <div>まずはFacebookログインをしてはじめましょう</div>
-            </div>
-            <div class="fnGroupList">
-                <div>
-                    <h4>My Groups</h4>
-                </div> 
-                <div>
-                    <table class="table table-striped table-bordered">
-                        <thead>
+        <div class="fnDefaultContent" style="display: none;">
+            <div class="sectionTitle">Lunch Timer Admin</div>
+            <ul>
+                <li>ランチグループの管理ができます</li>
+            </ul>
+            <div>まずはFacebookログインをしてはじめましょう</div>
+        </div>
+        <div class="fnGroupList">
+            <div>
+                <h4>My Groups</h4>
+            </div> 
+            <div>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Group Name</th>
+                            <th>Group Member</th>
+                            <th>Restaurants</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% _.each(groups, function(group, key, arr) { %>
                             <tr>
-                                <th>Group Name</th>
-                                <th>Group Member</th>
-                                <th>Restaurants</th>
-                                <th></th>
+                                <td><span><%-group.name%></span></td>
+                                <td>
+                                    <% _.each(group.members, function(member, key, arr){ %>
+                                    <span style="margin-right: 8px;"><%-member.name%></span>
+                                    <% }); %>
+                                </td>
+                                <td><span><%-group.shops%></span></td>
+                                <td>
+                                    <a href="/admin/ui/edit/<%=group._id%>">Edit</a>
+                                    <a href="/admin/delete/<%=group._id%>">Delete</a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <% _.each(groups, function(group, key, arr) { %>
-                                <tr>
-                                    <td><span><%-group.name%></span></td>
-                                    <td>
-                                        <% _.each(group.members, function(member, key, arr){ %>
-                                        <span style="margin-right: 8px;"><%-member.name%></span>
-                                        <% }); %>
-                                    </td>
-                                    <td><span><%-group.shops%></span></td>
-                                    <td>
-                                        <a href="/admin/ui/edit/<%=group._id%>">Edit</a>
-                                        <a href="/admin/delete/<%=group._id%>">Delete</a>
-                                    </td>
-                                </tr>
-                            <% }); %>
-                        </tbody>
-                    </table>
-                </div>
-                <!--button type="button" class="btn btn-default" onclick="location.href='/admin/ui/add';">Add</button-->
-                <button class="btn btn-primary btn-default" data-toggle="modal" data-target="#addGroupModal">Add Group</button>
+                        <% }); %>
+                    </tbody>
+                </table>
             </div>
+            <button class="btn btn-primary btn-default" data-toggle="modal" data-target="#addGroupModal">Add Group</button>
+        </div>
     </div>
     <!-- Add Group Modal -->
     <div class="modal fade" id="addGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

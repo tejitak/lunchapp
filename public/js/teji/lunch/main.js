@@ -35,13 +35,16 @@ require([
             // initial load
             groupCollection.loadList();
             $(".fnDefaultContent").hide();
+            $(".fnMainContent").show();
         };
         fbInit.loginFailCallback = function(response){
             $(".fnDefaultContent").show();
+            $(".fnMainContent").hide();
         };
         fbInit.logoutCallback = function(){
             shopListView.clearView();
             $(".fnDefaultContent").show();
+            $(".fnMainContent").hide();
         };
         fbInit.load();
         // prevent keep opening dropdown after page load

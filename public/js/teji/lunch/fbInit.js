@@ -11,7 +11,6 @@ define("teji/lunch/fbInit", ["jquery"], function($){
     };
 
     var fbInit = window.fbInit = {
-
         me: {},
         accessToken: "",
         loginSuccessCallback: null,
@@ -34,7 +33,7 @@ define("teji/lunch/fbInit", ["jquery"], function($){
         },
 
         statusChangeCallback: function(response) {
-            if (response.status === 'connected') {
+            if(response.status === 'connected'){
                 // show logged in user name and logout button
                 $("#loginBtnMenu").css({display: "none"});
                 $("#loginUserMenu").css({display: ""});
