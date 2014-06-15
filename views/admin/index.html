@@ -26,8 +26,7 @@
                     <thead>
                         <tr>
                             <th>Group Name</th>
-                            <th>Group Member</th>
-                            <th>Restaurants</th>
+                            <th>Members</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -37,10 +36,9 @@
                                 <td><span><%-group.name%></span></td>
                                 <td>
                                     <% _.each(group.members, function(member, key, arr){ %>
-                                    <span style="margin-right: 8px;"><%-member.name%></span>
+                                    <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=member.id%>/picture?type=square" title="<%-member.name%>">
                                     <% }); %>
                                 </td>
-                                <td><span><%-group.shops%></span></td>
                                 <td>
                                     <a href="/admin/ui/edit/<%=group._id%>">Edit</a>
                                     <a href="/admin/delete/<%=group._id%>">Delete</a>
@@ -67,17 +65,13 @@
                         <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="friendAutoCompleteInput">Members</label>
-                        <div class="row">
-                            <!--div class="col-sm-5 col-xs-12 col-lg-3"-->
-                            <div class="col-xs-12 col-lg-3">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>
-                                    </span>
-                                </div>
-                            </div>
+                        <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>
+                        <!--div class="col-sm-5 col-xs-12 col-lg-3"-->
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>
+                            </span>
                         </div>
                         <div class="friendsAutoCompletedResults">
                             <ul class="multiColumn"></ul>
@@ -85,15 +79,11 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="shopURLInput">Restaurants</label>
-                        <div class="row">
-                            <div class="col-xs-12 col-lg-3">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="shopURLInput" placeholder="食べログURL">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default btn-primary fnAddShopURLBtn" type="button">Add</button>
-                                    </span>
-                                </div>
-                            </div>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="shopURLInput" placeholder="食べログURL">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-primary fnAddShopURLBtn" type="button">Add</button>
+                            </span>
                         </div>
                         <div class="fnShopURLResults"></div>
                     </div>

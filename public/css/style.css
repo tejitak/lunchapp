@@ -124,18 +124,20 @@ a {
     margin: 4px 0;
 }
 
-.friendsAutoCompletedResults ul.multiColumn, ul.multiColumn li {
+.friendsAutoCompletedResults ul.multiColumn {
     margin: 2px;
     padding: 0px;
+    display: flex;
+    flex-flow: row wrap;
 }
 
 .friendsAutoCompletedResults ul.multiColumn li.userPresentation {
-    display: table-cell;
+    display: block;
 }
 
 .friendsAutoCompletedResults ul.multiColumn li.userPresentation .userContent {
     margin: 2px;
-    font-size: 12px;
+    font-size: 13px;
     background-color: #eee;
 }
 
