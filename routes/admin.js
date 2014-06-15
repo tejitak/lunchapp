@@ -53,28 +53,4 @@ router.get('/delete/:id', function(req, res) {
     // TODO: return json
 });
 
-// TODO: move to api.js
-router.get('/groups', function(req, res) {
-    var db = req.db, groups = db.groups;
-    groups.find({}, function(err, items){
-        res.contentType('application/json');
-        res.send(items);
-    });
-});
-
-router.post('/group', function(req, res) {
-    // TODO: check token
-    var entry = req.body;
-    if(entry.name){
-        console.dir(entry);
-        req.db.groups.insert({
-            name: entry.name,
-            members: entry.members,
-            shops: entry.shops
-        }, function(err, newDoc){});
-    }
-    res.contentType('application/json');
-    res.send('{"success":true}');
-});
-
 module.exports = router;
