@@ -1,5 +1,6 @@
 var express = require('express');
 var fs = require('fs');
+var fbAuth = require('./modules/fbAuth');
 var router = express.Router();
 
 // load templates
@@ -9,48 +10,42 @@ fs.readFile('./views/_templates/header.html', 'UTF-8', function (err, data) {
     _templates.header = data;
 });
 
-/* GET users listing. */
-var renderList = function(req, res) {
-    var db = req.db, groups = db.groups;
-    groups.find({}, function(err, items){
+// TODO: to be removed, api.js will be used
+var renderList = function(req, res, authResponse) {
+    req.db.groups.find({}, function(err, items){
         res.render('admin/index', {title: 'Lunch Timer!', header: _templates.header, groups: items});
     });
 };
 
-router.get('/', renderList);
+router.get('/', function(req, res){
+    var callback = function(authResponse){
+        renderList(req, res, authResponse);
+    };
+    // TODO: temp to be removed
+    callback();
+    // fbAuth.checkAccessToken(req.query.inputToken, callback);
+});
 
+// TODO: to be removed, api.js will be used
 router.get('/ui/add', function(req, res) {
     res.render('admin/add', {title: 'Add a Group'});
 });
 
+// TODO: to be removed, api.js will be used
 router.get('/ui/edit/:id', function(req, res) {
     // TODO: check token
     res.render('admin/add', {title: 'Edit a Group', id: req.param.id});
-    // TODO: return json
 });
 
-router.post('/add', function(req, res) {
-    // TODO: check token
-    var entry = req.body;
-    if(entry.name){
-        req.db.groups.insert({
-            name: entry.name,
-            members: entry.members,
-            shops: entry.shops
-        }, function(err, newDoc){});
-    }
-    renderList(req, res);
-    // TODO: return json
-});
-
+// TODO: to be removed, api.js will be used
 router.get('/delete/:id', function(req, res) {
-    // TODO: check token
-    var id = req.param("id");
-    if(id){
-        req.db.groups.remove({_id: id}, {}, function(err, numRemoved){});
-    }
-    renderList(req, res);
-    // TODO: return json
+    var callback = function(authResponse){
+        req.db.groups.remove({_id: req.param("id")}, {}, function(err, numRemoved){});
+        renderList(req, res, authResponse);
+    };
+    // TODO: temp to be removed
+    callback();
+    // fbAuth.checkAccessToken(req.query.inputToken, callback);
 });
 
 module.exports = router;

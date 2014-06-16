@@ -43,9 +43,9 @@ router.get('/groups', function(req, res) {
  *     }
  */
 router.get('/group/:id', function(req, res) {
-    fbAuth.checkAccessToken(req.body.accessToken);
     var id = req.param("id");
     // TODO: return detail
+    fbAuth.checkAccessToken(req.body.accessToken);
 });
 
 /*********************************
@@ -67,7 +67,7 @@ router.get('/group/:id', function(req, res) {
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
- *     {"success":true}
+ *     {"success": true}
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Unauthorized
@@ -90,6 +90,31 @@ router.post('/group', function(req, res) {
         res.send('{"success":true}');        
     }
     fbAuth.checkAccessToken(entry.inputToken, callback);
+});
+
+/**
+ * @api {DELETE} /groups/:id Delete a specified group
+ *
+ * @apiParam {Number} id Group unique ID.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {"success": true}
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Unauthorized
+ *     {
+ *       "error": "404 Unauthorized"
+ *     }
+ */
+router.delete('/group/:id', function(req, res) {
+    var target = req.param("id");
+    var callback = function(authResponse){
+        req.db.groups.remove({_id: target}, {}, function(err, numRemoved){});
+        res.contentType('application/json');
+        res.send('{"success":true}');     
+    };
+    fbAuth.checkAccessToken(req.body.accessToken, callback);
 });
 
 module.exports = router;
