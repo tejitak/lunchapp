@@ -6,6 +6,11 @@ body {
 a {
     color: #00B7FF;
 }
+
+.opacityHide {
+    display: none;
+    opacity: 0;
+}
 /*** base style end ***/
 
 /*** bootstrap override start ***/
@@ -34,6 +39,18 @@ a {
     font-weight: bold;
     font-size: 20px;
     padding-bottom: 8px;
+}
+
+.fnAddGroupModal .displayEditGroup {
+    display: none;
+}
+
+.fnAddGroupModal.editGroupModal .displayEditGroup {
+    display: inline-block;
+}
+
+.fnAddGroupModal.editGroupModal .displayAddGroup {
+    display: none;
 }
 /*** modules end ***/
 

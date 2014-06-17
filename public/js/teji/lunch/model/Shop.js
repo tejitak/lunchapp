@@ -15,7 +15,7 @@ define(["backbone", "jquery"], function(Backbone, $){
         validate: function(attrs){
         },
 
-        vote: function(){
+        vote: function(callback){
             $.ajax({type: "POST",
                 url: "/api/vote",
                 contentType: "application/json; charset=utf-8",
@@ -24,6 +24,9 @@ define(["backbone", "jquery"], function(Backbone, $){
             }).done($.proxy(function(response){
                 // TODO: 
                 console.log(response);
+                if(callback){
+                    callback();
+                }
             }, this));
         }
     });

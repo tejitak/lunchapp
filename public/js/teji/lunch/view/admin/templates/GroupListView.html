@@ -1,0 +1,25 @@
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Group Name</th>
+            <th>Members</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody class="fnAdminGroupListTable">
+        <% _.each(groups, function(group, key, arr) { %>
+            <tr>
+                <td><span><%-group.name%></span></td>
+                <td>
+                    <% _.each(group.members, function(member, key, arr){ %>
+                    <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=member.id%>/picture?type=square" title="<%-member.name%>" alt="<%-member.name%>">
+                    <% }); %>
+                </td>
+                <td>
+                    <a class="fnGroupListViewEditBtn" data-group-id="<%=group._id%>" href="javascript:;">Edit</a>
+                    <a class="fnGroupListViewDeleteBtn" data-group-id="<%=group._id%>" href="javascript:;">Delete</a>
+                </td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>

@@ -22,6 +22,16 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
         },
 
         validate: function(attrs){
+        },
+
+        deleteGroup: function(groupId, callback){
+            $.ajax({type: "DELETE",
+                url: "/api/group/" + groupId + "/?inputToken=" + fbInit.accessToken
+            }).done($.proxy(function(response){
+                if(callback){
+                    callback();
+                }
+            }, this));
         }
     });
     return Group;

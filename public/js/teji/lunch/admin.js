@@ -32,10 +32,12 @@ require(["jquery",
     "teji/lunch/fbInit",
     "teji/lunch/util",
     "teji/lunch/collection/GroupCollection",
-    "teji/lunch/model/Group"], function($, jqAutoComplete, bootstrap, velocity, fbInit, util, GroupCollection, Group) {
+    "teji/lunch/model/Group",
+    "teji/lunch/view/admin/GroupListView"], function($, jqAutoComplete, bootstrap, velocity, fbInit, util, GroupCollection, Group, GroupListView) {
 
-    var mainPages = [".fnMainContainer", "#addGroupModal"];
+    var mainPages = [".fnMainContainer", ".fnAddGroupModal"];
     var groupCollection = new GroupCollection();
+    var groupListView = new GroupListView({el: ".fnGroupListView", collection: groupCollection});
 
     fbInit.loginSuccessCallback = function(response){
         // initial load
@@ -61,33 +63,36 @@ require(["jquery",
         });
         // attach event to open a new group modal dialog
         $('.fnAdminAddGroup').click(function(e){
-            util.showPage(mainPages, 1);
-            $("#addGroupModal").show().velocity({opacity: 1})
-            // clear values
+            util.showPage(1);
+            $(".fnAddGroupModal").removeClass("editGroupModal").show().velocity({opacity: 1})
+            // clear model
             newGroup = new Group({id: "", name: "", members: [], shops: []});
+            // clear group name
+            $("#groupNameInput").val("");
+            // clear members
             var personResult = {id: fbInit.me.id, name: fbInit.me.name};
-            var $resultContainer = $(".friendsAutoCompletedResults .multiColumn");
-            $resultContainer.empty();
-            fbInit.addAutoCompleteResult($resultContainer, personResult);
+            var $personResultContainer = $(".friendsAutoCompletedResults .multiColumn");
+            $personResultContainer.empty();
+            fbInit.addAutoCompleteResult($personResultContainer, personResult);
             newGroup.get("members").push(personResult);
         });
-        // attach event to save group    
-        $(".fnSaveGroupBtn").click(function(){
+        // attach event to add new group    
+        $(".fnSaveAddGroupBtn").click(function(){
             var groupName =  $("#groupNameInput").val();
             if(!newGroup || !groupName){
                 return;
             }
             newGroup.set("name", groupName);
+            // TODO: to be changed
             var callback = function(){
                 location.href = "/admin";
             };
             groupCollection.postGroup(newGroup, callback);
-            // TODO: for edit
             // groupCollection.putGroup(params);
         });
         // attach event to cancel add group
         $(".fnCancelSaveGroupBtn").click(function(){
-            util.showPage(mainPages, 0);
+            util.showPage(0);
         });
     };
     fbInit.loginFailCallback = function(response){
@@ -100,7 +105,7 @@ require(["jquery",
     };
     var fbOnLoadCallback = function(){
         // show main content
-        util.showPage(mainPages, 0)
+        util.showPage(0, mainPages)
     };
     fbInit.load(fbOnLoadCallback);
     // prevent keep opening dropdown after page load

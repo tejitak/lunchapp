@@ -35,15 +35,23 @@ define(["jquery", "backbone", "teji/lunch/model/Group"], function($, Backbone, G
                 processData: false,
                 data: JSON.stringify({inputToken: fbInit.accessToken, group: model.toJSON()})
             }).done($.proxy(function(response){
-                // TODO: 
-                console.log(response);
                 if(callback){
                     callback();
                 }
             }, this));
         },
 
-        putGroup: function(){
+        updateGroup: function(model, callback){
+            $.ajax({type: "PUT",
+                url: "/api/group",
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify({inputToken: fbInit.accessToken, group: model.toJSON()})
+            }).done($.proxy(function(response){
+                if(callback){
+                    callback();
+                }
+            }, this));
 
         }
     });

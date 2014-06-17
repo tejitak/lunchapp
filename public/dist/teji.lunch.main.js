@@ -14186,12 +14186,16 @@ define("teji/lunch/fbInit", ["jquery"], function($){
 });
 define("teji/lunch/util", ["jquery"], function($){
     return {
-        showPage: function(mainPages, pageIndex){
+        _mainPages: [],
+
+        showPage: function(pageIndex, mainPages){
+            mainPages = mainPages || this._mainPages;
             // hide other pages
             $.each(mainPages, function(i, selector){
                 $(selector).hide().css({opacity: 0});
             });
             $(mainPages[pageIndex]).show().velocity({opacity: 1});
+            this._mainPages = mainPages;
         }
     };
 });
@@ -18234,7 +18238,7 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
         validate: function(attrs){
         },
 
-        vote: function(){
+        vote: function(callback){
             $.ajax({type: "POST",
                 url: "/api/vote",
                 contentType: "application/json; charset=utf-8",
@@ -18243,6 +18247,9 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
             }).done($.proxy(function(response){
                 // TODO: 
                 console.log(response);
+                if(callback){
+                    callback();
+                }
             }, this));
         }
     });
@@ -18273,6 +18280,16 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
         },
 
         validate: function(attrs){
+        },
+
+        deleteGroup: function(groupId, callback){
+            $.ajax({type: "DELETE",
+                url: "/api/group/" + groupId + "/?inputToken=" + fbInit.accessToken
+            }).done($.proxy(function(response){
+                if(callback){
+                    callback();
+                }
+            }, this));
         }
     });
     return Group;
@@ -18315,15 +18332,23 @@ define('teji/lunch/collection/GroupCollection',["jquery", "backbone", "teji/lunc
                 processData: false,
                 data: JSON.stringify({inputToken: fbInit.accessToken, group: model.toJSON()})
             }).done($.proxy(function(response){
-                // TODO: 
-                console.log(response);
                 if(callback){
                     callback();
                 }
             }, this));
         },
 
-        putGroup: function(){
+        updateGroup: function(model, callback){
+            $.ajax({type: "PUT",
+                url: "/api/group",
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify({inputToken: fbInit.accessToken, group: model.toJSON()})
+            }).done($.proxy(function(response){
+                if(callback){
+                    callback();
+                }
+            }, this));
 
         }
     });
@@ -18382,13 +18407,13 @@ require([
             $(".fnMainContent").hide();
         };
         fbInit.logoutCallback = function(){
-            shopListView.clearView();
+            shopListView.clear();
             $(".fnDefaultContent").show();
             $(".fnMainContent").hide();
         };
         var fbOnLoadCallback = function(){
             // show main content
-            util.showPage(mainPages, 0);
+            util.showPage(0, mainPages);
         };
         fbInit.load(fbOnLoadCallback);
         // prevent keep opening dropdown after page load

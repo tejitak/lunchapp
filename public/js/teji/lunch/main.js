@@ -50,13 +50,13 @@ require([
             $(".fnMainContent").hide();
         };
         fbInit.logoutCallback = function(){
-            shopListView.clearView();
+            shopListView.clear();
             $(".fnDefaultContent").show();
             $(".fnMainContent").hide();
         };
         var fbOnLoadCallback = function(){
             // show main content
-            util.showPage(mainPages, 0);
+            util.showPage(0, mainPages);
         };
         fbInit.load(fbOnLoadCallback);
         // prevent keep opening dropdown after page load
