@@ -20,7 +20,8 @@
     "bootstrap": "~3.1.1",
     "backbone": "~1.1.2",
     "flipsnap": "~0.6.2",
-    "jquery.autocomplete": "*"
+    "jquery.autocomplete": "*",
+    "velocity": "~0.1.0"
   },
   "exportsOverride": {
     "bootstrap": {

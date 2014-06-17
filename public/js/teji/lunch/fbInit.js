@@ -17,7 +17,7 @@ define("teji/lunch/fbInit", ["jquery"], function($){
         loginFailCallback: null,
         logoutSuccesCallback: null,
 
-        load: function(){
+        load: function(onLoadCallback){
             // load sdk
             (function(d, s, id) {
                 var js, fjs = d.getElementsByTagName(s)[0];
@@ -28,7 +28,7 @@ define("teji/lunch/fbInit", ["jquery"], function($){
             }(document, 'script', 'facebook-jssdk'));
             // call initial login check after facebook sdk is loaded
             $("#fb-root").bind("facebook:init", $.proxy(function() {
-                this.checkLoginState();
+                this.checkLoginState(onLoadCallback);
             }, this));
         },
 
@@ -57,9 +57,12 @@ define("teji/lunch/fbInit", ["jquery"], function($){
             }
         },
 
-        checkLoginState: function() {
+        checkLoginState: function(onLoadCallback) {
             FB.getLoginStatus($.proxy(function(response) {
                 this.statusChangeCallback(response);
+                if(onLoadCallback){
+                    onLoadCallback();
+                }
             }, this));
         },
 

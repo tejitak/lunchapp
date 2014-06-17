@@ -9,7 +9,7 @@
 </head>
 <body>
 <%=header%>
-    <div class="container">
+    <div class="container fnMainContainer" style="display: none; opacity: 0;">
         <div class="fnDefaultContent" style="display: none;">
             <div class="sectionTitle">Lunch Timer Admin</div>
             <ul>
@@ -17,7 +17,7 @@
             </ul>
             <div>まずはFacebookログインをしてはじめましょう</div>
         </div>
-        <div class="fnGroupList">
+        <div class="fnAdminGroupList" style="display: none;">
             <div>
                 <h4>My Groups</h4>
             </div> 
@@ -30,7 +30,7 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="fnAdminGroupListTable">
                         <% _.each(groups, function(group, key, arr) { %>
                             <tr>
                                 <td><span><%-group.name%></span></td>
@@ -48,51 +48,46 @@
                     </tbody>
                 </table>
             </div>
-            <button class="btn btn-primary btn-default" data-toggle="modal" data-target="#addGroupModal">Add Group</button>
+            <button class="btn btn-primary btn-default fnAdminAddGroup">Add Group</button>
         </div>
     </div>
     <!-- Add Group Modal -->
-    <div class="modal fade" id="addGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="saveGroupModalTitle">Add a Group</h4>
+    <div class="container" id="addGroupModal" style="display: none; opacity: 0;">
+        <div>
+            <h4 id="saveGroupModalTitle">Add a Group</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="control-label" for="groupNameInput">Group Name</label>
+                <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>
+                <!--div class="col-sm-5 col-xs-12 col-lg-3"-->
+                <div class="input-group">
+                    <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>
+                    </span>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label class="control-label" for="groupNameInput">Group Name</label>
-                        <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>
-                        <!--div class="col-sm-5 col-xs-12 col-lg-3"-->
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>
-                            </span>
-                        </div>
-                        <div class="friendsAutoCompletedResults">
-                            <ul class="multiColumn"></ul>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" for="shopURLInput">Restaurants</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="shopURLInput" placeholder="食べログURL">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default btn-primary fnAddShopURLBtn" type="button">Add</button>
-                            </span>
-                        </div>
-                        <div class="fnShopURLResults"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary fnSaveGroupBtn">Save changes</button>
+                <div class="friendsAutoCompletedResults">
+                    <ul class="multiColumn"></ul>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="control-label" for="shopURLInput">Restaurants</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="shopURLInput" placeholder="食べログURL">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default btn-primary fnAddShopURLBtn" type="button">Add</button>
+                    </span>
+                </div>
+                <div class="fnShopURLResults"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default fnCancelSaveGroupBtn">Cancel</button>
+            <button type="button" class="btn btn-primary fnSaveGroupBtn">Save changes</button>
         </div>
     </div>
 </body>

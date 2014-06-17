@@ -6,7 +6,8 @@ requirejs.config({
         "bootstrap": "lib/bootstrap/bootstrap",
         "backbone": "lib/backbone/backbone",
         "underscore": "lib/underscore/underscore",
-        "flipsnap":  "lib/flipsnap/flipsnap"
+        "flipsnap":  "lib/flipsnap/flipsnap",
+        "velocity": "lib/velocity/jquery.velocity"
     },
     shim: {
         "bootstrap": {
@@ -17,6 +18,9 @@ requirejs.config({
         },
         "flipsnap": {
             exports: 'Flipsnap'
+        },
+        "velocity": {
+            deps: ["jquery"]
         }
     }
 });
@@ -24,9 +28,13 @@ requirejs.config({
 require([
     "jquery",
     "bootstrap",
+    "velocity",
     "teji/lunch/fbInit",
+    "teji/lunch/util",
     "teji/lunch/view/ShopListView",
-    "teji/lunch/collection/GroupCollection"], function($, bootstrap, fbInit, ShopListView, GroupCollection) {
+    "teji/lunch/collection/GroupCollection"], function($, bootstrap, velocity, fbInit, util, ShopListView, GroupCollection) {
+
+        var mainPages = [".fnMainContainer"];
         // initialize views
         var groupCollection = new GroupCollection();
         var shopListView = new ShopListView({el: ".fnResultViewList", collection: groupCollection});
@@ -46,7 +54,11 @@ require([
             $(".fnDefaultContent").show();
             $(".fnMainContent").hide();
         };
-        fbInit.load();
+        var fbOnLoadCallback = function(){
+            // show main content
+            util.showPage(mainPages, 0);
+        };
+        fbInit.load(fbOnLoadCallback);
         // prevent keep opening dropdown after page load
         $('.dropdown-menu').dropdown('toggle');
 });
