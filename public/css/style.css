@@ -41,15 +41,15 @@ a {
     padding-bottom: 8px;
 }
 
-.fnAddGroupModal .displayEditGroup {
+.fnGroupAddView .displayEditGroup {
     display: none;
 }
 
-.fnAddGroupModal.editGroupModal .displayEditGroup {
+.fnGroupAddView.editGroupModal .displayEditGroup {
     display: inline-block;
 }
 
-.fnAddGroupModal.editGroupModal .displayAddGroup {
+.fnGroupAddView.editGroupModal .displayAddGroup {
     display: none;
 }
 /*** modules end ***/

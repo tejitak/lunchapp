@@ -3,7 +3,9 @@ define(["backbone", "underscore", "teji/lunch/util", "text!./templates/GroupList
 
         template: _.template(tmpl),
 
-        initialize: function() {
+        initialize: function(options) {
+            options = options || {};
+            this._groupAddView = options.groupAddView;
             this.listenTo(this.collection, "addCollection", this.addItems);
         },
 
@@ -17,46 +19,18 @@ define(["backbone", "underscore", "teji/lunch/util", "text!./templates/GroupList
         _renderItems: function(models){
             var groupsJson = $.map(models, function(model){ return model.toJSON(); });
             this.$el.html(this.template({groups: groupsJson}));
-            // bind
-            var _groupCollection = this.collection;
-            this.$(".fnGroupListViewEditBtn").bind("click", function($e){
+            // bind onclick edit
+            this.$(".fnGroupListViewEditBtn").bind("click", $.proxy(function($e){
                 var $target = $($e.target);
                 var groupId = $target.attr("data-group-id");
                 // get detail from group models
                 var targetModel = $.grep(models, function(model){
                     return model.get("_id") === groupId;
                 })[0];
-                console.log(targetModel);
                 util.showPage(1);
-                // add class to change title and buttons
-                var $dlg = $(".fnAddGroupModal").addClass("editGroupModal");
-                // set group name
-                $("#groupNameInput").val(targetModel.get("name"));
-                // set members
-                var $personResultContainer = $(".friendsAutoCompletedResults .multiColumn");
-                $personResultContainer.empty();
-                var members = targetModel.get("members") || [];
-                // TODO: add remove callback
-                _.each(members, function(member){
-                    fbInit.addAutoCompleteResult($personResultContainer, member);
-                });
-
-                // attach event to edit group
-                $(".fnSaveEditGroupBtn").click(function(){
-                    var groupName =  $("#groupNameInput").val();
-                    if(!targetModel || !groupName){
-                        return;
-                    }
-                    targetModel.set("name", groupName);
-                    // TODO: to be changed
-                    var callback = function(){
-                        location.href = "/admin";
-                    };
-                    // TODO: update members
-
-                    _groupCollection.updateGroup(targetModel, callback);
-                });
-            });
+                this._groupAddView.updateView(targetModel, true/*isEdit*/);
+            }, this));
+            // bind onclick delete
             this.$(".fnGroupListViewDeleteBtn").bind("click", function($e){
                 var $target = $($e.target);
                 var groupId = $target.attr("data-group-id");
@@ -65,19 +39,17 @@ define(["backbone", "underscore", "teji/lunch/util", "text!./templates/GroupList
                 })[0];
                 if(targetModel && window.confirm("Are you sure you want to delete [" + targetModel.get("name") + "] ?")){
                     // TODO: to be changed
-                    var callback = function(){
-                        location.href = "/admin";
-                    };
+                    var callback = function(){ location.href = "/admin"; };
                     targetModel.deleteGroup(groupId, callback);
                 }
             });
         },
 
         clear: function(){
-            this.$el.empty();
             // unbind
             this.$("fnGroupListViewEditBtn").unbind("click");
             this.$("fnGroupListViewDeleteBtn").unbind("click");
+            this.$el.empty();
         }
     });
     return GroupListView;

@@ -15023,7 +15023,7 @@ define("teji/lunch/fbInit", ["jquery"], function($){
             var $li = $("<li></li>").addClass("userPresentation").append($div);
             var $img = $(this.getImageHTML(person.id));
             var $a = $("<a></a>").attr("href", "https://www.facebook.com/app_scoped_user_id/" + person.id).attr("target", "_blank").html(person.name);
-            if(removeCallback){
+            if(removeCallback && person.id !== this.me.id){
                 var $deleteNode = $("<span></span>").addClass("deleteIcon").html("x").click(function(){
                     $li.remove();
                     removeCallback(person);
@@ -18536,7 +18536,9 @@ define('teji/lunch/view/admin/GroupListView',["backbone", "underscore", "teji/lu
 
         template: _.template(tmpl),
 
-        initialize: function() {
+        initialize: function(options) {
+            options = options || {};
+            this._groupAddView = options.groupAddView;
             this.listenTo(this.collection, "addCollection", this.addItems);
         },
 
@@ -18550,46 +18552,18 @@ define('teji/lunch/view/admin/GroupListView',["backbone", "underscore", "teji/lu
         _renderItems: function(models){
             var groupsJson = $.map(models, function(model){ return model.toJSON(); });
             this.$el.html(this.template({groups: groupsJson}));
-            // bind
-            var _groupCollection = this.collection;
-            this.$(".fnGroupListViewEditBtn").bind("click", function($e){
+            // bind onclick edit
+            this.$(".fnGroupListViewEditBtn").bind("click", $.proxy(function($e){
                 var $target = $($e.target);
                 var groupId = $target.attr("data-group-id");
                 // get detail from group models
                 var targetModel = $.grep(models, function(model){
                     return model.get("_id") === groupId;
                 })[0];
-                console.log(targetModel);
                 util.showPage(1);
-                // add class to change title and buttons
-                var $dlg = $(".fnAddGroupModal").addClass("editGroupModal");
-                // set group name
-                $("#groupNameInput").val(targetModel.get("name"));
-                // set members
-                var $personResultContainer = $(".friendsAutoCompletedResults .multiColumn");
-                $personResultContainer.empty();
-                var members = targetModel.get("members") || [];
-                // TODO: add remove callback
-                _.each(members, function(member){
-                    fbInit.addAutoCompleteResult($personResultContainer, member);
-                });
-
-                // attach event to edit group
-                $(".fnSaveEditGroupBtn").click(function(){
-                    var groupName =  $("#groupNameInput").val();
-                    if(!targetModel || !groupName){
-                        return;
-                    }
-                    targetModel.set("name", groupName);
-                    // TODO: to be changed
-                    var callback = function(){
-                        location.href = "/admin";
-                    };
-                    // TODO: update members
-
-                    _groupCollection.updateGroup(targetModel, callback);
-                });
-            });
+                this._groupAddView.updateView(targetModel, true/*isEdit*/);
+            }, this));
+            // bind onclick delete
             this.$(".fnGroupListViewDeleteBtn").bind("click", function($e){
                 var $target = $($e.target);
                 var groupId = $target.attr("data-group-id");
@@ -18598,19 +18572,114 @@ define('teji/lunch/view/admin/GroupListView',["backbone", "underscore", "teji/lu
                 })[0];
                 if(targetModel && window.confirm("Are you sure you want to delete [" + targetModel.get("name") + "] ?")){
                     // TODO: to be changed
-                    var callback = function(){
-                        location.href = "/admin";
-                    };
+                    var callback = function(){ location.href = "/admin"; };
                     targetModel.deleteGroup(groupId, callback);
                 }
             });
         },
 
         clear: function(){
-            this.$el.empty();
             // unbind
             this.$("fnGroupListViewEditBtn").unbind("click");
             this.$("fnGroupListViewDeleteBtn").unbind("click");
+            this.$el.empty();
+        }
+    });
+    return GroupListView;
+});
+
+
+define('text!teji/lunch/view/admin/templates/GroupAddView.html',[],function () { return '<div>\n    <h4 class="displayAddGroup">Add a Group</h4>\n    <h4 class="displayEditGroup">Edit a Group</h4>\n</div>\n<div class="modal-body">\n    <div class="form-group">\n        <label class="control-label" for="groupNameInput">Group Name</label>\n        <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>\n        <!--div class="col-sm-5 col-xs-12 col-lg-3"-->\n        <div class="input-group">\n            <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">\n            <span class="input-group-btn">\n                <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>\n            </span>\n        </div>\n        <div class="friendsAutoCompletedResults">\n            <ul class="multiColumn"></ul>\n        </div>\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="shopURLInput">Restaurants</label>\n        <div class="input-group">\n            <input type="text" class="form-control" id="shopURLInput" placeholder="食べログURL">\n            <span class="input-group-btn">\n                <button class="btn btn-default btn-primary fnAddShopURLBtn" type="button">Add</button>\n            </span>\n        </div>\n        <div class="fnShopURLResults"></div>\n    </div>\n</div>\n<div class="modal-footer">\n    <button type="button" class="btn btn-default fnCancelSaveGroupBtn">Cancel</button>\n    <button type="button" class="btn btn-primary displayAddGroup fnSaveAddGroupBtn">Add Group</button>\n    <button type="button" class="btn btn-primary displayEditGroup fnSaveEditGroupBtn">Update Group</button>\n</div>';});
+
+define('teji/lunch/view/admin/GroupAddView',["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!./templates/GroupAddView.html"], function(Backbone, _, util, fbInit, tmpl){
+    var GroupListView = Backbone.View.extend({
+
+        template: _.template(tmpl),
+
+        _currentModel: null,
+
+        initialize: function() {
+            this.render();
+            this.$personResultContainer = this.$(".friendsAutoCompletedResults .multiColumn");
+
+            // setup FB friends autocomplete
+            fbInit.autoCompleteInit(this.$("#friendAutoCompleteInput"), this.$(".fnAddFriendAutoCompleteBtn"), $.proxy(function(personResult){
+                // callback when member add button is clicked. Add a member if the member does not exist in current group
+                if($.inArray(personResult.id, this._currentModel.get("members")) === -1){
+                    fbInit.addAutoCompleteResult(this.$personResultContainer, personResult, $.proxy(this.onRemoveMember, this));
+                    this._currentModel.get("members").push(personResult);
+                }
+            }, this));
+
+            // attach event to add new group    
+            this.$(".fnSaveAddGroupBtn").click($.proxy(function(){
+                var groupName =  this.$("#groupNameInput").val();
+                if(!this._currentModel || !groupName){
+                    return;
+                }
+                this._currentModel.set("name", groupName);
+                // TODO: to be changed
+                var callback = function(){
+                    location.href = "/admin";
+                };
+                this.collection.postGroup(this._currentModel, callback);
+            }, this));
+
+            // attach event to edit group
+            this.$(".fnSaveEditGroupBtn").click($.proxy(function(){
+                var groupName =  $("#groupNameInput").val();
+                if(!this._currentModel || !groupName){
+                    return;
+                }
+                this._currentModel.set("name", groupName);
+                // TODO: to be changed
+                var callback = function(){ location.href = "/admin"; };
+                this.collection.updateGroup(this._currentModel, callback);
+            }, this));
+
+            // attach event to cancel add group
+            this.$(".fnCancelSaveGroupBtn").click(function(){
+                util.showPage(0);
+            });
+        },
+
+        render: function(){
+            this.$el.html(this.template({}));
+        },
+
+        updateView: function(groupModel, isEdit){
+            this._currentModel = groupModel;
+            // add class to change title and buttons for add and edit
+            isEdit ? this.$el.addClass("editGroupModal") : this.$el.removeClass("editGroupModal");
+            // update group name input
+            this.$("#groupNameInput").val(groupModel.get("name"));
+            // update members view
+            this.$personResultContainer.empty();
+            var members = groupModel.get("members") || [];
+            _.each(members, $.proxy(function(member){
+                fbInit.addAutoCompleteResult(this.$personResultContainer, member, $.proxy(this.onRemoveMember, this));
+            }, this));
+        },
+
+        onRemoveMember: function(removeItem){
+            var members = this._currentModel.get("members");
+            if(removeItem && members && members.length){
+                this._currentModel.set("members", $.grep(members, function(value) {
+                    return value.id !== removeItem.id;
+                }));
+            }
+        },
+
+        clear: function(){
+
+        },
+
+        onEditGroup: function(){
+            // for override
+        },
+
+        onDeleteGroup: function(){
+            // for override
         }
     });
     return GroupListView;
@@ -18651,66 +18720,26 @@ require(["jquery",
     "teji/lunch/util",
     "teji/lunch/collection/GroupCollection",
     "teji/lunch/model/Group",
-    "teji/lunch/view/admin/GroupListView"], function($, jqAutoComplete, bootstrap, velocity, fbInit, util, GroupCollection, Group, GroupListView) {
+    "teji/lunch/view/admin/GroupListView",
+    "teji/lunch/view/admin/GroupAddView"], function($, jqAutoComplete, bootstrap, velocity, fbInit, util, GroupCollection, Group, GroupListView, GroupAddView) {
 
-    var mainPages = [".fnMainContainer", ".fnAddGroupModal"];
-    var groupCollection = new GroupCollection();
-    var groupListView = new GroupListView({el: ".fnGroupListView", collection: groupCollection});
+    var mainPages = [".fnMainContainer", ".fnGroupAddView"];
 
     fbInit.loginSuccessCallback = function(response){
+        // initialize views
+        var groupCollection = new GroupCollection();
+        var groupAddView = new GroupAddView({el: ".fnGroupAddView", collection: groupCollection});
+        var groupListView = new GroupListView({el: ".fnGroupListView", collection: groupCollection, groupAddView: groupAddView});
         // initial load
         groupCollection.loadList();
         $(".fnDefaultContent").hide();
         $(".fnAdminGroupList").show();
-        // setup FB friends autocomplete
-        var newGroup;
-        fbInit.autoCompleteInit($("#friendAutoCompleteInput"), $(".fnAddFriendAutoCompleteBtn"), function(personResult){
-            // callback when add button is clicked
-            var removeMemberCallback = function(removeItem){
-                var members = newGroup.get("members");
-                if(removeItem && members && members.length){
-                    newGroup.set("members", $.grep(members, function(value) {
-                        return value.id !== removeItem.id;
-                    }));
-                }
-            };
-            if($.inArray(personResult.id, newGroup.get("members")) != -1){
-                fbInit.addAutoCompleteResult($(".friendsAutoCompletedResults .multiColumn"), personResult, removeMemberCallback);
-                newGroup.get("members").push(personResult);
-            }
-        });
         // attach event to open a new group modal dialog
         $('.fnAdminAddGroup').click(function(e){
             util.showPage(1);
-            $(".fnAddGroupModal").removeClass("editGroupModal").show().velocity({opacity: 1})
-            // clear model
-            newGroup = new Group({id: "", name: "", members: [], shops: []});
-            // clear group name
-            $("#groupNameInput").val("");
-            // clear members
-            var personResult = {id: fbInit.me.id, name: fbInit.me.name};
-            var $personResultContainer = $(".friendsAutoCompletedResults .multiColumn");
-            $personResultContainer.empty();
-            fbInit.addAutoCompleteResult($personResultContainer, personResult);
-            newGroup.get("members").push(personResult);
-        });
-        // attach event to add new group    
-        $(".fnSaveAddGroupBtn").click(function(){
-            var groupName =  $("#groupNameInput").val();
-            if(!newGroup || !groupName){
-                return;
-            }
-            newGroup.set("name", groupName);
-            // TODO: to be changed
-            var callback = function(){
-                location.href = "/admin";
-            };
-            groupCollection.postGroup(newGroup, callback);
-            // groupCollection.putGroup(params);
-        });
-        // attach event to cancel add group
-        $(".fnCancelSaveGroupBtn").click(function(){
-            util.showPage(0);
+            // clear view with a new model and me
+            var newGroup = new Group({id: "", name: "", members: [{id: fbInit.me.id, name: fbInit.me.name}], shops: []});
+            groupAddView.updateView(newGroup);
         });
     };
     fbInit.loginFailCallback = function(response){
@@ -18718,8 +18747,9 @@ require(["jquery",
         $(".fnAdminGroupList").hide();
     };
     fbInit.logoutCallback = function(){
-        $(".fnAdminGroupList").hide();
-        $(".fnDefaultContent").show();
+        // $(".fnAdminGroupList").hide();
+        // $(".fnDefaultContent").show();
+        location.href = "/admin";
     };
     var fbOnLoadCallback = function(){
         // show main content

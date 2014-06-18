@@ -1,0 +1,38 @@
+<div>
+    <h4 class="displayAddGroup">Add a Group</h4>
+    <h4 class="displayEditGroup">Edit a Group</h4>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+        <label class="control-label" for="groupNameInput">Group Name</label>
+        <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>
+        <!--div class="col-sm-5 col-xs-12 col-lg-3"-->
+        <div class="input-group">
+            <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">
+            <span class="input-group-btn">
+                <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>
+            </span>
+        </div>
+        <div class="friendsAutoCompletedResults">
+            <ul class="multiColumn"></ul>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="shopURLInput">Restaurants</label>
+        <div class="input-group">
+            <input type="text" class="form-control" id="shopURLInput" placeholder="食べログURL">
+            <span class="input-group-btn">
+                <button class="btn btn-default btn-primary fnAddShopURLBtn" type="button">Add</button>
+            </span>
+        </div>
+        <div class="fnShopURLResults"></div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default fnCancelSaveGroupBtn">Cancel</button>
+    <button type="button" class="btn btn-primary displayAddGroup fnSaveAddGroupBtn">Add Group</button>
+    <button type="button" class="btn btn-primary displayEditGroup fnSaveEditGroupBtn">Update Group</button>
+</div>

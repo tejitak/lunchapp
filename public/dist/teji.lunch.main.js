@@ -14172,7 +14172,7 @@ define("teji/lunch/fbInit", ["jquery"], function($){
             var $li = $("<li></li>").addClass("userPresentation").append($div);
             var $img = $(this.getImageHTML(person.id));
             var $a = $("<a></a>").attr("href", "https://www.facebook.com/app_scoped_user_id/" + person.id).attr("target", "_blank").html(person.name);
-            if(removeCallback){
+            if(removeCallback && person.id !== this.me.id){
                 var $deleteNode = $("<span></span>").addClass("deleteIcon").html("x").click(function(){
                     $li.remove();
                     removeCallback(person);
@@ -18392,11 +18392,11 @@ require([
     "teji/lunch/collection/GroupCollection"], function($, bootstrap, velocity, fbInit, util, ShopListView, GroupCollection) {
 
         var mainPages = [".fnMainContainer"];
-        // initialize views
-        var groupCollection = new GroupCollection();
-        var shopListView = new ShopListView({el: ".fnResultViewList", collection: groupCollection});
         // set callback for initial FB sdk load and <fb:login-button>
         fbInit.loginSuccessCallback = function(response){
+            // initialize views
+            var groupCollection = new GroupCollection();
+            var shopListView = new ShopListView({el: ".fnResultViewList", collection: groupCollection});
             // initial load
             groupCollection.loadList();
             $(".fnDefaultContent").hide();
@@ -18407,9 +18407,10 @@ require([
             $(".fnMainContent").hide();
         };
         fbInit.logoutCallback = function(){
-            shopListView.clear();
-            $(".fnDefaultContent").show();
-            $(".fnMainContent").hide();
+            // shopListView.clear();
+            // $(".fnDefaultContent").show();
+            // $(".fnMainContent").hide();
+            location.href = "/";
         };
         var fbOnLoadCallback = function(){
             // show main content
