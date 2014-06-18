@@ -1,4 +1,4 @@
-define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!./templates/GroupAddView.html"], function(Backbone, _, util, fbInit, tmpl){
+define(["backbone", "underscore", "bootstrap.timepicker", "teji/lunch/util", "teji/lunch/fbInit", "text!./templates/GroupAddView.html"], function(Backbone, _, timePicker, util, fbInit, tmpl){
     var GroupListView = Backbone.View.extend({
 
         template: _.template(tmpl),
@@ -7,6 +7,8 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!
 
         initialize: function() {
             this.render();
+            // init bootstap time picker
+            this.$("#groupLunchTimeInput").timepicker();
             this.$personResultContainer = this.$(".friendsAutoCompletedResults .multiColumn");
 
             // setup FB friends autocomplete

@@ -1,0 +1,43 @@
+/*** base style start ***/
+body {
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+    color: #00B7FF;
+}
+
+.opacityHide {
+    display: none;
+    opacity: 0;
+}
+/*** base style end ***/
+
+/*** bootstrap override start ***/
+.bs-docs-section {
+    text-align: center;
+}
+
+.bs-docs-footer .container {
+    text-align: center;
+}
+/*** bootstrap override end ***/
+
+/*** header start ***/
+.loginUserImage {
+    margin: 0 6px
+}
+
+.loginUserImage img {
+    margin-top: -2px;
+}
+/*** header end ***/
+
+/*** modules start ***/
+.sectionTitle {
+    width: 100%;
+    font-weight: bold;
+    font-size: 20px;
+    padding-bottom: 8px;
+}
+/*** modules end ***/
