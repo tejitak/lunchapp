@@ -7,7 +7,8 @@ requirejs.config({
         "bootstrap": "lib/bootstrap/bootstrap",
         "backbone": "lib/backbone/backbone",
         "underscore": "lib/underscore/underscore",
-        "velocity": "lib/velocity/jquery.velocity"
+        "velocity": "lib/velocity/jquery.velocity",
+        "facebook": "//connect.facebook.net/en_US/all"        
     },
     shim: {
         "jquery.autocomplete": {
@@ -16,11 +17,17 @@ requirejs.config({
         "bootstrap": {
             deps: ["jquery"]
         },
+        "bootstrap.timepicker": {
+            deps: ["bootstrap"],
+        },
         "backbone": {
             deps: ["underscore"]
         },
         "velocity": {
             deps: ["jquery"]
+        },
+        "facebook": {
+            exports: "FB"
         }
     }
 });
@@ -68,7 +75,10 @@ require(["jquery",
         // show main content
         util.showPage(0, mainPages)
     };
-    fbInit.load(fbOnLoadCallback);
+    fbInit.checkLoginState(function(){
+        // initial callback to show main content
+        util.showPage(0, mainPages);
+    });
     // prevent keep opening dropdown after page load
     $('.dropdown-menu').dropdown('toggle');
 });

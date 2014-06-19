@@ -14887,17 +14887,14 @@ The biggest cause of both codebase bloat and codepath obfuscation is support for
 
 /* When animating height or width to a % value on an element *without* box-sizing:border-box and *with* visible scrollbars on *both* axes, the opposite axis (e.g. height vs width) will be shortened by the height/width of its scrollbar. */
 /* The translateX/Y/Z subproperties of the transform CSS property are %-relative to the element itself -- not its parent. Velocity, however, doesn't make the distinction. Thus, converting to or from the % unit with these subproperties will produce an inaccurate conversion value. */;
-define("teji/lunch/fbInit", ["jquery"], function($){
+define("teji/lunch/fbInit", ["facebook", "jquery"], function(facebook, $){
 
-    window.fbAsyncInit = function() {
-        FB.init({
-            appId      : '1437481033176694',
-            cookie     : true, 
-            xfbml      : true,
-            version    : 'v2.0'
-        });
-        $("#fb-root").trigger("facebook:init");
-    };
+    FB.init({
+        appId      : '1437481033176694',
+        cookie     : true, 
+        xfbml      : true,
+        version    : 'v2.0'
+    });
 
     var fbInit = window.fbInit = {
         me: {},
@@ -14905,21 +14902,6 @@ define("teji/lunch/fbInit", ["jquery"], function($){
         loginSuccessCallback: null,
         loginFailCallback: null,
         logoutSuccesCallback: null,
-
-        load: function(onLoadCallback){
-            // load sdk
-            (function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "//connect.facebook.net/en_US/sdk.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
-            // call initial login check after facebook sdk is loaded
-            $("#fb-root").bind("facebook:init", $.proxy(function() {
-                this.checkLoginState(onLoadCallback);
-            }, this));
-        },
 
         statusChangeCallback: function(response) {
             if(response.status === 'connected'){
@@ -18589,7 +18571,7 @@ define('teji/lunch/view/admin/GroupListView',["backbone", "underscore", "teji/lu
 });
 
 
-define('text!teji/lunch/view/admin/templates/GroupAddView.html',[],function () { return '<div>\n    <h4 class="displayAddGroup">Add a Group</h4>\n    <h4 class="displayEditGroup">Edit a Group</h4>\n</div>\n<div class="modal-body">\n    <div class="form-group">\n        <label class="control-label" for="groupNameInput">Group Name</label>\n        <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>\n        <!--div class="col-sm-5 col-xs-12 col-lg-3"-->\n        <div class="input-group">\n            <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">\n            <span class="input-group-btn">\n                <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>\n            </span>\n        </div>\n        <div class="friendsAutoCompletedResults">\n            <ul class="multiColumn"></ul>\n        </div>\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="shopURLInput">Restaurants</label>\n        <div class="input-group">\n            <input type="text" class="form-control" id="shopURLInput" placeholder="食べログURL">\n            <span class="input-group-btn">\n                <button class="btn btn-default btn-primary fnAddShopURLBtn" type="button">Add</button>\n            </span>\n        </div>\n        <div class="fnShopURLResults"></div>\n    </div>\n</div>\n<div class="modal-footer">\n    <button type="button" class="btn btn-default fnCancelSaveGroupBtn">Cancel</button>\n    <button type="button" class="btn btn-primary displayAddGroup fnSaveAddGroupBtn">Add Group</button>\n    <button type="button" class="btn btn-primary displayEditGroup fnSaveEditGroupBtn">Update Group</button>\n</div>';});
+define('text!teji/lunch/view/admin/templates/GroupAddView.html',[],function () { return '<div>\n    <h4 class="displayAddGroup">Add a Group</h4>\n    <h4 class="displayEditGroup">Edit a Group</h4>\n</div>\n<div class="modal-body">\n    <div class="form-group">\n        <label class="control-label" for="groupNameInput">Group Name</label>\n        <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="groupLunchTimeInput">Lunch Time</label>\n        <div class="input-group">\n            <input id="groupLunchTimeInput" class="form-control" type="time" value="12:00">\n        </div>\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>\n        <!--div class="col-sm-5 col-xs-12 col-lg-3"-->\n        <div class="input-group">\n            <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">\n            <span class="input-group-btn">\n                <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>\n            </span>\n        </div>\n        <div class="friendsAutoCompletedResults">\n            <ul class="multiColumn"></ul>\n        </div>\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="shopURLInput">Restaurants</label>\n        <div class="input-group">\n            <input type="text" class="form-control" id="shopURLInput" placeholder="食べログURL">\n            <span class="input-group-btn">\n                <button class="btn btn-default btn-primary fnAddShopURLBtn" type="button">Add</button>\n            </span>\n        </div>\n        <div class="fnShopURLResults"></div>\n    </div>\n</div>\n<div class="modal-footer">\n    <button type="button" class="btn btn-default fnCancelSaveGroupBtn">Cancel</button>\n    <button type="button" class="btn btn-primary displayAddGroup fnSaveAddGroupBtn">Add Group</button>\n    <button type="button" class="btn btn-primary displayEditGroup fnSaveEditGroupBtn">Update Group</button>\n</div>';});
 
 define('teji/lunch/view/admin/GroupAddView',["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!./templates/GroupAddView.html"], function(Backbone, _, util, fbInit, tmpl){
     var GroupListView = Backbone.View.extend({
@@ -18694,7 +18676,8 @@ requirejs.config({
         "bootstrap": "lib/bootstrap/bootstrap",
         "backbone": "lib/backbone/backbone",
         "underscore": "lib/underscore/underscore",
-        "velocity": "lib/velocity/jquery.velocity"
+        "velocity": "lib/velocity/jquery.velocity",
+        "facebook": "//connect.facebook.net/en_US/all"        
     },
     shim: {
         "jquery.autocomplete": {
@@ -18703,11 +18686,17 @@ requirejs.config({
         "bootstrap": {
             deps: ["jquery"]
         },
+        "bootstrap.timepicker": {
+            deps: ["bootstrap"],
+        },
         "backbone": {
             deps: ["underscore"]
         },
         "velocity": {
             deps: ["jquery"]
+        },
+        "facebook": {
+            exports: "FB"
         }
     }
 });
@@ -18755,7 +18744,10 @@ require(["jquery",
         // show main content
         util.showPage(0, mainPages)
     };
-    fbInit.load(fbOnLoadCallback);
+    fbInit.checkLoginState(function(){
+        // initial callback to show main content
+        util.showPage(0, mainPages);
+    });
     // prevent keep opening dropdown after page load
     $('.dropdown-menu').dropdown('toggle');
 });
