@@ -18,30 +18,44 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!
                 }
             }, this));
 
+            // attach event to retrive shop information via external API
+            this.$(".fnAddShopURLBtn").click($.proxy(function(){
+                var url = this.$(".fnAddShopURLBtn").val();
+                // TODO: get id by regex
+                var shopId = "";
+                var callback = function(){
+                    // TODO: rendering rsult as table
+
+                    // TODO: hide loading
+
+                };
+                // TODO: show loading
+
+                this._currentModel.retriveShopInfo(shopId, callback);
+            }, this));
+
             // attach event to add new group    
             this.$(".fnSaveAddGroupBtn").click($.proxy(function(){
-                var groupName =  this.$("#groupNameInput").val();
-                if(!this._currentModel || !groupName){
+                var result = this.updateModelByUI();
+                if(result.hasError){
+                    // TODO: show error message with model validate
                     return;
                 }
-                this._currentModel.set("name", groupName);
                 // TODO: to be changed
-                var callback = function(){
-                    location.href = "/admin";
-                };
-                this.collection.postGroup(this._currentModel, callback);
+                var callback = function(){ location.href = "/admin"; };
+                this.collection.postGroup(result.model, callback);
             }, this));
 
             // attach event to edit group
             this.$(".fnSaveEditGroupBtn").click($.proxy(function(){
-                var groupName =  $("#groupNameInput").val();
-                if(!this._currentModel || !groupName){
+                var result = this.updateModelByUI();
+                if(result.hasError){
+                    // TODO: show error message with model validate
                     return;
                 }
-                this._currentModel.set("name", groupName);
                 // TODO: to be changed
                 var callback = function(){ location.href = "/admin"; };
-                this.collection.updateGroup(this._currentModel, callback);
+                this.collection.updateGroup(result.model, callback);
             }, this));
 
             // attach event to cancel add group
@@ -60,12 +74,26 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!
             isEdit ? this.$el.addClass("editGroupModal") : this.$el.removeClass("editGroupModal");
             // update group name input
             this.$("#groupNameInput").val(groupModel.get("name"));
+            this.$("#groupLunchTimeInput").val(groupModel.get("lunchTime"));
             // update members view
             this.$personResultContainer.empty();
             var members = groupModel.get("members") || [];
             _.each(members, $.proxy(function(member){
                 fbInit.addAutoCompleteResult(this.$personResultContainer, member, $.proxy(this.onRemoveMember, this));
             }, this));
+        },
+
+        updateModelByUI: function(){
+            var result = {};
+            var model = result.model = this._currentModel;
+            var groupName =  this.$("#groupNameInput").val();
+            if(!this._currentModel || !groupName){
+                result.hasError = true;
+                return;
+            }
+            model.set("name", groupName);
+            model.set("lunchTime", $("#groupLunchTimeInput").val());
+            return result;
         },
 
         onRemoveMember: function(removeItem){

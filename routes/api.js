@@ -2,6 +2,12 @@ var express = require('express');
 var fbAuth = require('./modules/fbAuth');
 var router = express.Router();
 
+// TODO: read apikey.properties
+
+// TODO: fbAuth.setClientSecret
+fbAuth.setClientSecret();
+// TODO: set gurunabi API key
+
 /**
  * @api {GET} /groups Get groups which an authenticated user joins
  *
@@ -80,11 +86,7 @@ router.post('/group', function(req, res) {
     var callback = function(authResponse){
         var newGroup = entry.group;
         if(newGroup){
-            req.db.groups.insert({
-                name: newGroup.name,
-                members: newGroup.members,
-                shops: newGroup.shops
-            }, function(err, newDoc){
+            req.db.groups.insert(newGroup, function(err, newDoc){
                 res.contentType('application/json');
                 res.send('{"success":true}');                        
             });
@@ -143,6 +145,33 @@ router.delete('/group/:id', function(req, res) {
         });
     };
     fbAuth.checkAccessToken(req.query.inputToken, callback);
+});
+
+
+/**
+ * @api {GET} /shop/retrieve Get a specified shop information via external web API such as Gurunabi
+ *
+ * @apiParam {Number} shopId Shop unique ID.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Unauthorized
+ *     {
+ *       "error": "404 Unauthorized"
+ *     }
+ */
+router.get('/shop/retrieve', function(req, res) {
+    var shopId = req.query.shopId;
+    // TODO: get request
+
+    // TODO: parse XML via Gurunabi API
+
+    // TODO: return json
+    res.contentType('application/json');
+    res.send('{"success":true}');
 });
 
 module.exports = router;

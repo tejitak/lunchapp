@@ -18026,6 +18026,7 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
         defaults: {
             id: "",
             name: "",
+            lunchTime: "",
             members: [],
             shops: []
         },
@@ -18037,6 +18038,7 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
             }
             obj.members = obj.members || [];
             obj.shops = obj.shops || [];
+            obj.lunchTime = obj.lunchTime || "12:00";
             // change json to Shop model
             this.set("shops", $.map(obj.shops, function(n, i){
                 return new Shop(n);
@@ -18049,6 +18051,16 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
         deleteGroup: function(groupId, callback){
             $.ajax({type: "DELETE",
                 url: "/api/group/" + groupId + "/?inputToken=" + fbInit.accessToken
+            }).done($.proxy(function(response){
+                if(callback){
+                    callback();
+                }
+            }, this));
+        },
+
+        retriveShopInfo: function(shopId, callback){
+            $.ajax({type: "GET",
+                url: "/api/shop/retrieve?inputToken=" + fbInit.accessToken + "&shopId=" + shopId
             }).done($.proxy(function(response){
                 if(callback){
                     callback();
@@ -18075,9 +18087,6 @@ define('teji/lunch/collection/GroupCollection',["jquery", "backbone", "teji/lunc
                 _.each(data, function(item){
                     // TODO: demo data to be removed
                     item.shops = [
-                        {name: "ほの字 渋谷店", address: "東京都渋谷区渋谷1-11-3 第一小山ビル　２Ｆ",　shopURL: "http://tabelog.com/tokyo/A1303/A130301/13007031/", imageURL: "http://image1-4.tabelog.k-img.com/restaurant/images/Rvw/27789/150x150_square_27789286.jpg"},
-                        {name: "恵み 渋谷ヒカリエ店", address: "東京都渋谷区渋谷2-21-1 渋谷ヒカリエ 6F", shopURL: "http://tabelog.com/tokyo/A1303/A130301/13140077/", imageURL: "http://image1-2.tabelog.k-img.com/restaurant/images/Rvw/21444/100x100_square_21444453.jpg"},
-                        {name: "shop 1", address: "shibuya-ku", shopURL: "", imageURL: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjE5cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MzAweDIwMDwvdGV4dD48L3N2Zz4="},
                         {name: "ほの字 渋谷店", address: "東京都渋谷区渋谷1-11-3 第一小山ビル　２Ｆ",　shopURL: "http://tabelog.com/tokyo/A1303/A130301/13007031/", imageURL: "http://image1-4.tabelog.k-img.com/restaurant/images/Rvw/27789/150x150_square_27789286.jpg"},
                         {name: "恵み 渋谷ヒカリエ店", address: "東京都渋谷区渋谷2-21-1 渋谷ヒカリエ 6F", shopURL: "http://tabelog.com/tokyo/A1303/A130301/13140077/", imageURL: "http://image1-2.tabelog.k-img.com/restaurant/images/Rvw/21444/100x100_square_21444453.jpg"},
                         {name: "shop 1", address: "shibuya-ku", shopURL: "", imageURL: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjE5cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MzAweDIwMDwvdGV4dD48L3N2Zz4="}
@@ -18571,7 +18580,7 @@ define('teji/lunch/view/admin/GroupListView',["backbone", "underscore", "teji/lu
 });
 
 
-define('text!teji/lunch/view/admin/templates/GroupAddView.html',[],function () { return '<div>\n    <h4 class="displayAddGroup">Add a Group</h4>\n    <h4 class="displayEditGroup">Edit a Group</h4>\n</div>\n<div class="modal-body">\n    <div class="form-group">\n        <label class="control-label" for="groupNameInput">Group Name</label>\n        <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="groupLunchTimeInput">Lunch Time</label>\n        <div class="input-group">\n            <input id="groupLunchTimeInput" class="form-control" type="time" value="12:00">\n        </div>\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>\n        <!--div class="col-sm-5 col-xs-12 col-lg-3"-->\n        <div class="input-group">\n            <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">\n            <span class="input-group-btn">\n                <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>\n            </span>\n        </div>\n        <div class="friendsAutoCompletedResults">\n            <ul class="multiColumn"></ul>\n        </div>\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="shopURLInput">Restaurants</label>\n        <div class="input-group">\n            <input type="text" class="form-control" id="shopURLInput" placeholder="食べログURL">\n            <span class="input-group-btn">\n                <button class="btn btn-default btn-primary fnAddShopURLBtn" type="button">Add</button>\n            </span>\n        </div>\n        <div class="fnShopURLResults"></div>\n    </div>\n</div>\n<div class="modal-footer">\n    <button type="button" class="btn btn-default fnCancelSaveGroupBtn">Cancel</button>\n    <button type="button" class="btn btn-primary displayAddGroup fnSaveAddGroupBtn">Add Group</button>\n    <button type="button" class="btn btn-primary displayEditGroup fnSaveEditGroupBtn">Update Group</button>\n</div>';});
+define('text!teji/lunch/view/admin/templates/GroupAddView.html',[],function () { return '<div>\n    <h4 class="displayAddGroup">Add a Group</h4>\n    <h4 class="displayEditGroup">Edit a Group</h4>\n</div>\n<div class="modal-body">\n    <div class="form-group">\n        <label class="control-label" for="groupNameInput">Group Name</label>\n        <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="groupLunchTimeInput">Lunch Time</label>\n        <div class="input-group">\n            <input id="groupLunchTimeInput" class="form-control" type="time">\n        </div>\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>\n        <!--div class="col-sm-5 col-xs-12 col-lg-3"-->\n        <div class="input-group">\n            <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">\n            <span class="input-group-btn">\n                <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>\n            </span>\n        </div>\n        <div class="friendsAutoCompletedResults">\n            <ul class="multiColumn"></ul>\n        </div>\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="shopURLInput">Restaurants</label>\n        <div class="input-group">\n            <input type="text" class="form-control" id="shopURLInput" placeholder="ぐるなびURL">\n            <span class="input-group-btn">\n                <button class="btn btn-default btn-primary fnAddShopURLBtn" type="button">Add</button>\n            </span>\n        </div>\n        <div class="fnShopURLResults"></div>\n    </div>\n</div>\n<div class="modal-footer">\n    <button type="button" class="btn btn-default fnCancelSaveGroupBtn">Cancel</button>\n    <button type="button" class="btn btn-primary displayAddGroup fnSaveAddGroupBtn">Add Group</button>\n    <button type="button" class="btn btn-primary displayEditGroup fnSaveEditGroupBtn">Update Group</button>\n</div>';});
 
 define('teji/lunch/view/admin/GroupAddView',["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!./templates/GroupAddView.html"], function(Backbone, _, util, fbInit, tmpl){
     var GroupListView = Backbone.View.extend({
@@ -18593,30 +18602,44 @@ define('teji/lunch/view/admin/GroupAddView',["backbone", "underscore", "teji/lun
                 }
             }, this));
 
+            // attach event to retrive shop information via external API
+            this.$(".fnAddShopURLBtn").click($.proxy(function(){
+                var url = this.$(".fnAddShopURLBtn").val();
+                // TODO: get id by regex
+                var shopId = "";
+                var callback = function(){
+                    // TODO: rendering rsult as table
+
+                    // TODO: hide loading
+
+                };
+                // TODO: show loading
+
+                this._currentModel.retriveShopInfo(shopId, callback);
+            }, this));
+
             // attach event to add new group    
             this.$(".fnSaveAddGroupBtn").click($.proxy(function(){
-                var groupName =  this.$("#groupNameInput").val();
-                if(!this._currentModel || !groupName){
+                var result = this.updateModelByUI();
+                if(result.hasError){
+                    // TODO: show error message with model validate
                     return;
                 }
-                this._currentModel.set("name", groupName);
                 // TODO: to be changed
-                var callback = function(){
-                    location.href = "/admin";
-                };
-                this.collection.postGroup(this._currentModel, callback);
+                var callback = function(){ location.href = "/admin"; };
+                this.collection.postGroup(result.model, callback);
             }, this));
 
             // attach event to edit group
             this.$(".fnSaveEditGroupBtn").click($.proxy(function(){
-                var groupName =  $("#groupNameInput").val();
-                if(!this._currentModel || !groupName){
+                var result = this.updateModelByUI();
+                if(result.hasError){
+                    // TODO: show error message with model validate
                     return;
                 }
-                this._currentModel.set("name", groupName);
                 // TODO: to be changed
                 var callback = function(){ location.href = "/admin"; };
-                this.collection.updateGroup(this._currentModel, callback);
+                this.collection.updateGroup(result.model, callback);
             }, this));
 
             // attach event to cancel add group
@@ -18635,12 +18658,26 @@ define('teji/lunch/view/admin/GroupAddView',["backbone", "underscore", "teji/lun
             isEdit ? this.$el.addClass("editGroupModal") : this.$el.removeClass("editGroupModal");
             // update group name input
             this.$("#groupNameInput").val(groupModel.get("name"));
+            this.$("#groupLunchTimeInput").val(groupModel.get("lunchTime"));
             // update members view
             this.$personResultContainer.empty();
             var members = groupModel.get("members") || [];
             _.each(members, $.proxy(function(member){
                 fbInit.addAutoCompleteResult(this.$personResultContainer, member, $.proxy(this.onRemoveMember, this));
             }, this));
+        },
+
+        updateModelByUI: function(){
+            var result = {};
+            var model = result.model = this._currentModel;
+            var groupName =  this.$("#groupNameInput").val();
+            if(!this._currentModel || !groupName){
+                result.hasError = true;
+                return;
+            }
+            model.set("name", groupName);
+            model.set("lunchTime", $("#groupLunchTimeInput").val());
+            return result;
         },
 
         onRemoveMember: function(removeItem){
@@ -18727,7 +18764,7 @@ require(["jquery",
         $('.fnAdminAddGroup').click(function(e){
             util.showPage(1);
             // clear view with a new model and me
-            var newGroup = new Group({id: "", name: "", members: [{id: fbInit.me.id, name: fbInit.me.name}], shops: []});
+            var newGroup = new Group({id: "", name: "", members: [{id: fbInit.me.id, name: fbInit.me.name}], shops: [], lunchTime: "12:00"});
             groupAddView.updateView(newGroup);
         });
     };

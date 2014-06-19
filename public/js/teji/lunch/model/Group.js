@@ -4,6 +4,7 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
         defaults: {
             id: "",
             name: "",
+            lunchTime: "",
             members: [],
             shops: []
         },
@@ -15,6 +16,7 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
             }
             obj.members = obj.members || [];
             obj.shops = obj.shops || [];
+            obj.lunchTime = obj.lunchTime || "12:00";
             // change json to Shop model
             this.set("shops", $.map(obj.shops, function(n, i){
                 return new Shop(n);
@@ -27,6 +29,16 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
         deleteGroup: function(groupId, callback){
             $.ajax({type: "DELETE",
                 url: "/api/group/" + groupId + "/?inputToken=" + fbInit.accessToken
+            }).done($.proxy(function(response){
+                if(callback){
+                    callback();
+                }
+            }, this));
+        },
+
+        retriveShopInfo: function(shopId, callback){
+            $.ajax({type: "GET",
+                url: "/api/shop/retrieve?inputToken=" + fbInit.accessToken + "&shopId=" + shopId
             }).done($.proxy(function(response){
                 if(callback){
                     callback();

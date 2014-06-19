@@ -14,27 +14,34 @@ var params = {
         'grant_type': 'client_credentials'
     }
 }
-var urlStr = url.format(params);
-var req = http.get(urlStr, function(res) {
-    res.setEncoding('utf8');
 
-    var body = '';
-
-    res.on('data', function(chunk) {
-        body += chunk;
+var updateAccessToken = function(){
+    var urlStr = url.format(params);
+    var req = http.get(urlStr, function(res) {
+        res.setEncoding('utf8');
+        var body = '';
+        res.on('data', function(chunk) {
+            body += chunk;
+        });
+        res.on('end', function() {
+            access_token = body.split('=')[1];
+            console.log('Access token: ' + access_token);
+        });
+    }).on('error', function(e) {
+        console.log(e);
     });
-
-    res.on('end', function() {
-        access_token = body.split('=')[1];
-        console.log('Access token: ' + access_token);
-    });
-}).on('error', function(e) {
-    console.log(e);
-});
-
-req.end();
+    req.end();
+};
 
 var fbAuth = {
+
+    setClientSecret: function(clientSecret){
+        if(clientSecret){
+            params.query['client_secret'] = clientSecret;
+        }
+        updateAccessToken();
+    },
+
     checkAccessToken: function(inputToken, callback){
         var params = {
             host: FACEBOOK_API_PATH,
