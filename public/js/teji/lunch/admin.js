@@ -5,7 +5,6 @@ requirejs.config({
         "jquery.autocomplete": "lib/jquery.autocomplete/jquery.autocomplete",
         "text": "lib/requirejs-text/text",
         "bootstrap": "lib/bootstrap/bootstrap",
-        "bootstrap.timepicker": "lib/bootstrap3-timepicker/bootstrap-timepicker.min",
         "backbone": "lib/backbone/backbone",
         "underscore": "lib/underscore/underscore",
         "velocity": "lib/velocity/jquery.velocity"
