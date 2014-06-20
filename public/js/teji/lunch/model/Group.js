@@ -26,6 +26,12 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
         validate: function(attrs){
         },
 
+        addShop: function(shopModel){
+            var shops = this.get("shops") || [];
+            shops.push(shopModel);
+            this.trigger("onAddShopModel");
+        },
+
         deleteGroup: function(groupId, callback){
             $.ajax({type: "DELETE",
                 url: "/api/group/" + groupId + "/?inputToken=" + fbInit.accessToken
@@ -41,7 +47,7 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
                 url: "/api/shop/retrieve?inputToken=" + fbInit.accessToken + "&shopId=" + shopId
             }).done($.proxy(function(response){
                 if(callback){
-                    callback();
+                    callback(response);
                 }
             }, this));
         }

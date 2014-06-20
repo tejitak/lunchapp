@@ -10,10 +10,11 @@ var params = {
     protocol: 'https',
     query: {
         'client_id': '1437481033176694',
-        'client_secret': 'd83c9d2cc573cf4431d195bb81f08629',
+        // read from _apikey.json and set with setClientSecret
+        // 'client_secret': '',
         'grant_type': 'client_credentials'
     }
-}
+};
 
 var updateAccessToken = function(){
     var urlStr = url.format(params);
@@ -25,7 +26,7 @@ var updateAccessToken = function(){
         });
         res.on('end', function() {
             access_token = body.split('=')[1];
-            console.log('Access token: ' + access_token);
+            // console.log('Access token: ' + access_token);
         });
     }).on('error', function(e) {
         console.log(e);

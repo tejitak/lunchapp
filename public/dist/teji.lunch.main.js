@@ -18215,8 +18215,10 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
         defaults: {
             id: "",
             name: "",
+            category: "",
             address: "",
-            url: "",
+            tel: "",
+            url_mobile: "",
             imageURL: ""
         },
 
@@ -18272,6 +18274,12 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
         validate: function(attrs){
         },
 
+        addShop: function(shopModel){
+            var shops = this.get("shops") || [];
+            shops.push(shopModel);
+            this.trigger("onAddShopModel");
+        },
+
         deleteGroup: function(groupId, callback){
             $.ajax({type: "DELETE",
                 url: "/api/group/" + groupId + "/?inputToken=" + fbInit.accessToken
@@ -18287,7 +18295,7 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
                 url: "/api/shop/retrieve?inputToken=" + fbInit.accessToken + "&shopId=" + shopId
             }).done($.proxy(function(response){
                 if(callback){
-                    callback();
+                    callback(response);
                 }
             }, this));
         }
@@ -18309,12 +18317,12 @@ define('teji/lunch/collection/GroupCollection',["jquery", "backbone", "teji/lunc
             }).done($.proxy(function(data){
                 var models = [];
                 _.each(data, function(item){
-                    // TODO: demo data to be removed
-                    item.shops = [
-                        {name: "ほの字 渋谷店", address: "東京都渋谷区渋谷1-11-3 第一小山ビル　２Ｆ",　shopURL: "http://tabelog.com/tokyo/A1303/A130301/13007031/", imageURL: "http://image1-4.tabelog.k-img.com/restaurant/images/Rvw/27789/150x150_square_27789286.jpg"},
-                        {name: "恵み 渋谷ヒカリエ店", address: "東京都渋谷区渋谷2-21-1 渋谷ヒカリエ 6F", shopURL: "http://tabelog.com/tokyo/A1303/A130301/13140077/", imageURL: "http://image1-2.tabelog.k-img.com/restaurant/images/Rvw/21444/100x100_square_21444453.jpg"},
-                        {name: "shop 1", address: "shibuya-ku", shopURL: "", imageURL: ""}
-                    ]
+                    // demo data to be removed
+                    // item.shops = [
+                    //     {name: "ほの字 渋谷店", address: "東京都渋谷区渋谷1-11-3 第一小山ビル　２Ｆ",　shopURL: "http://tabelog.com/tokyo/A1303/A130301/13007031/", imageURL: "http://image1-4.tabelog.k-img.com/restaurant/images/Rvw/27789/150x150_square_27789286.jpg"},
+                    //     {name: "恵み 渋谷ヒカリエ店", address: "東京都渋谷区渋谷2-21-1 渋谷ヒカリエ 6F", shopURL: "http://tabelog.com/tokyo/A1303/A130301/13140077/", imageURL: "http://image1-2.tabelog.k-img.com/restaurant/images/Rvw/21444/100x100_square_21444453.jpg"},
+                    //     {name: "shop 1", address: "shibuya-ku", shopURL: "", imageURL: ""}
+                    // ];
                     models.push(new Group(item));
                 });
                 // trigger

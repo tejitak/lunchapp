@@ -14,7 +14,8 @@
     "debug": "~0.7.4",
     "consolidate": "^0.10.0",
     "underscore": "^1.6.0",
-    "nedb": "^0.10.5"
+    "nedb": "^0.10.5",
+    "xml2json": "^0.4.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

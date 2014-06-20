@@ -17991,8 +17991,10 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
         defaults: {
             id: "",
             name: "",
+            category: "",
             address: "",
-            url: "",
+            tel: "",
+            url_mobile: "",
             imageURL: ""
         },
 
@@ -18048,6 +18050,12 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
         validate: function(attrs){
         },
 
+        addShop: function(shopModel){
+            var shops = this.get("shops") || [];
+            shops.push(shopModel);
+            this.trigger("onAddShopModel");
+        },
+
         deleteGroup: function(groupId, callback){
             $.ajax({type: "DELETE",
                 url: "/api/group/" + groupId + "/?inputToken=" + fbInit.accessToken
@@ -18063,7 +18071,7 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
                 url: "/api/shop/retrieve?inputToken=" + fbInit.accessToken + "&shopId=" + shopId
             }).done($.proxy(function(response){
                 if(callback){
-                    callback();
+                    callback(response);
                 }
             }, this));
         }
@@ -18085,12 +18093,12 @@ define('teji/lunch/collection/GroupCollection',["jquery", "backbone", "teji/lunc
             }).done($.proxy(function(data){
                 var models = [];
                 _.each(data, function(item){
-                    // TODO: demo data to be removed
-                    item.shops = [
-                        {name: "ほの字 渋谷店", address: "東京都渋谷区渋谷1-11-3 第一小山ビル　２Ｆ",　shopURL: "http://tabelog.com/tokyo/A1303/A130301/13007031/", imageURL: "http://image1-4.tabelog.k-img.com/restaurant/images/Rvw/27789/150x150_square_27789286.jpg"},
-                        {name: "恵み 渋谷ヒカリエ店", address: "東京都渋谷区渋谷2-21-1 渋谷ヒカリエ 6F", shopURL: "http://tabelog.com/tokyo/A1303/A130301/13140077/", imageURL: "http://image1-2.tabelog.k-img.com/restaurant/images/Rvw/21444/100x100_square_21444453.jpg"},
-                        {name: "shop 1", address: "shibuya-ku", shopURL: "", imageURL: ""}
-                    ]
+                    // demo data to be removed
+                    // item.shops = [
+                    //     {name: "ほの字 渋谷店", address: "東京都渋谷区渋谷1-11-3 第一小山ビル　２Ｆ",　shopURL: "http://tabelog.com/tokyo/A1303/A130301/13007031/", imageURL: "http://image1-4.tabelog.k-img.com/restaurant/images/Rvw/27789/150x150_square_27789286.jpg"},
+                    //     {name: "恵み 渋谷ヒカリエ店", address: "東京都渋谷区渋谷2-21-1 渋谷ヒカリエ 6F", shopURL: "http://tabelog.com/tokyo/A1303/A130301/13140077/", imageURL: "http://image1-2.tabelog.k-img.com/restaurant/images/Rvw/21444/100x100_square_21444453.jpg"},
+                    //     {name: "shop 1", address: "shibuya-ku", shopURL: "", imageURL: ""}
+                    // ];
                     models.push(new Group(item));
                 });
                 // trigger
@@ -18580,17 +18588,24 @@ define('teji/lunch/view/admin/GroupListView',["backbone", "underscore", "teji/lu
 });
 
 
-define('text!teji/lunch/view/admin/templates/GroupAddView.html',[],function () { return '<div>\n    <h4 class="displayAddGroup">Add a Group</h4>\n    <h4 class="displayEditGroup">Edit a Group</h4>\n</div>\n<div class="modal-body">\n    <div class="form-group">\n        <label class="control-label" for="groupNameInput">Group Name</label>\n        <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="groupLunchTimeInput">Lunch Time</label>\n        <div class="input-group">\n            <input id="groupLunchTimeInput" class="form-control" type="time">\n        </div>\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>\n        <!--div class="col-sm-5 col-xs-12 col-lg-3"-->\n        <div class="input-group">\n            <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">\n            <span class="input-group-btn">\n                <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>\n            </span>\n        </div>\n        <div class="friendsAutoCompletedResults">\n            <ul class="multiColumn"></ul>\n        </div>\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="shopURLInput">Restaurants</label>\n        <div class="input-group adminToolbar">\n            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addShopModal">Add Restaurant</button>\n        </div>\n        <div>\n            <table class="table table-striped table-bordered">\n                <thead>\n                    <tr>\n                        <th></th>\n                        <th>Restaurant Name</th>\n                        <th></th>\n                    </tr>\n                </thead>\n                <tbody class="fnAdminShopListTable"></tbody>\n            </table>\n        </div>\n    </div>\n</div>\n<div class="modal-footer">\n    <button type="button" class="btn btn-default fnCancelSaveGroupBtn">Cancel</button>\n    <button type="button" class="btn btn-primary displayAddGroup fnSaveAddGroupBtn">Add Group</button>\n    <button type="button" class="btn btn-primary displayEditGroup fnSaveEditGroupBtn">Update Group</button>\n</div>\n\n<div class="modal fade" id="addShopModal" tabindex="-1" role="dialog" aria-labelledby="addShopModal" aria-hidden="true">\n    <div class="modal-dialog">\n        <div class="modal-content">\n            <div class="modal-header">\n                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n                <h4 class="modal-title">Add a Restaurant</h4>\n            </div>\n            <div class="modal-body">\n                <div>\n                    <div class="input-group">\n                        <input type="text" class="form-control" id="shopURLInput" placeholder="ぐるなびURL">\n                        <span class="input-group-btn">\n                            <button class="btn btn-default btn-primary fnGetShopInfoBtn" type="button">GET</button>\n                        </span>\n                    </div>\n                </div>\n                <hr>\n                <div>\n                    <div class="form-group">\n                        <label class="control-label" for="addShopInput_name">Restaurant Name</label>\n                        <input type="text" class="form-control" id="addShopInput_name" placeholder="Restaurant Name">\n                    </div>\n                    <div class="form-group">\n                        <label class="control-label" for="addShopInput_address">Restaurant Address</label>\n                        <input type="text" class="form-control" id="addShopInput_address" placeholder="Restaurant Address">\n                    </div>\n                    <div class="form-group">\n                        <label class="control-label" for="addShopInput_photoImgURL">Restaurant Photo Image URL</label>\n                        <input type="text" class="form-control" id="addShopInput_photoImgURL" placeholder="Restaurant Photo Image URL">\n                    </div>\n                </div>\n            </div>\n            <div class="modal-footer">\n                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>\n                <button type="button" class="btn btn-primary fnModalAddShopBtn">Add Restaurant</button>\n            </div>\n        </div>\n    </div>\n</div>';});
+define('text!teji/lunch/view/admin/templates/GroupAddView.html',[],function () { return '<div>\n    <h4 class="displayAddGroup">Add a Group</h4>\n    <h4 class="displayEditGroup">Edit a Group</h4>\n</div>\n<div class="modal-body">\n    <div class="form-group">\n        <label class="control-label" for="groupNameInput">Group Name</label>\n        <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="groupLunchTimeInput">Lunch Time</label>\n        <div class="input-group">\n            <input id="groupLunchTimeInput" class="form-control" type="time">\n        </div>\n    </div>\n    <div class="form-group">\n        <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>\n        <!--div class="col-sm-5 col-xs-12 col-lg-3"-->\n        <div class="input-group">\n            <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">\n            <span class="input-group-btn">\n                <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>\n            </span>\n        </div>\n        <div class="friendsAutoCompletedResults">\n            <ul class="multiColumn"></ul>\n        </div>\n    </div>\n    <div class="form-group">\n        <label class="control-label">Restaurants</label>\n        <div class="input-group adminToolbar">\n            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addShopModal">Add Restaurant</button>\n        </div>\n        <div class="fnAdminShopListTable"></div>\n    </div>\n</div>\n<div class="modal-footer">\n    <button type="button" class="btn btn-default fnCancelSaveGroupBtn">Cancel</button>\n    <button type="button" class="btn btn-primary displayAddGroup fnSaveAddGroupBtn">Add Group</button>\n    <button type="button" class="btn btn-primary displayEditGroup fnSaveEditGroupBtn">Update Group</button>\n</div>\n\n<div class="modal fade" id="addShopModal" tabindex="-1" role="dialog" aria-labelledby="addShopModal" aria-hidden="true">\n    <div class="modal-dialog">\n        <div class="modal-content">\n            <div class="modal-header">\n                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n                <h4 class="modal-title">Add a Restaurant</h4>\n            </div>\n            <div class="modal-body">\n                <div>\n                    <div class="input-group">\n                        <input type="text" class="form-control fnGetShopURLInput" placeholder="ぐるなびURL">\n                        <span class="input-group-btn">\n                            <button class="btn btn-default btn-primary fnGetShopInfoBtn" type="button">GET</button>\n                        </span>\n                    </div>\n                    <div style="">\n                        <a href="http://mobile.gnavi.co.jp/">\n                            <img src="http://apicache.gnavi.co.jp/image/rest/b/api_155_20.gif" width="155" height="20" border="0" alt="グルメ情報検索サイト　ぐるなび">\n                        </a>\n                    </div>\n                </div>\n                <hr>\n                <div>\n                    <div class="form-group" style="display: none;">\n                        <label class="control-label" for="addShopInput_id">ID</label>\n                        <input type="text" class="form-control" id="addShopInput_id">\n                    </div>\n                    <div class="form-group">\n                        <label class="control-label" for="addShopInput_name">Restaurant Name</label>\n                        <input type="text" class="form-control" id="addShopInput_name">\n                    </div>\n                    <div class="form-group">\n                        <label class="control-label" for="addShopInput_category">Category</label>\n                        <input type="text" class="form-control" id="addShopInput_category">\n                    </div>\n                    <div class="form-group">\n                        <label class="control-label" for="addShopInput_address">Address</label>\n                        <input type="text" class="form-control" id="addShopInput_address">\n                    </div>\n                    <div class="form-group">\n                        <label class="control-label" for="addShopInput_tel">TEL</label>\n                        <input type="text" class="form-control" id="addShopInput_tel">\n                    </div>\n                    <div class="form-group">\n                        <label class="control-label" for="addShopInput_imageURL">Restaurant Photo Image URL</label>\n                        <input type="text" class="form-control" id="addShopInput_imageURL">\n                    </div>\n                    <div class="form-group">\n                        <label class="control-label" for="addShopInput_url_mobile">Restaurant URL</label>\n                        <input type="text" class="form-control" id="addShopInput_url_mobile">\n                    </div>\n                </div>\n            </div>\n            <div class="modal-footer">\n                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>\n                <button type="button" class="btn btn-primary fnModalAddShopBtn">Add Restaurant</button>\n            </div>\n        </div>\n    </div>\n</div>';});
 
-define('teji/lunch/view/admin/GroupAddView',["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!./templates/GroupAddView.html"], function(Backbone, _, util, fbInit, tmpl){
+
+define('text!teji/lunch/view/admin/templates/ShopListTable.html',[],function () { return '<table class="table table-striped table-bordered">\n    <thead>\n        <tr>\n            <th></th>\n            <th>Restaurant Name</th>\n            <th></th>\n        </tr>\n    </thead>\n    <tbody>\n        <% _.each(shops, function(shop, key, arr){ %>\n        <tr>\n            <td><span><%=(key + 1)%></span></td>\n            <td><span><%=shop.name%></span></td>\n            <td>\n                <a class="fnShopListTableEditBtn" data-shop-id="<%=shop.id%>" href="javascript:;">Edit</a>\n                <a class="fnShopListTableDeleteBtn" data-shop-id="<%=shop.id%>" href="javascript:;">Delete</a>\n            </td>\n        </tr>\n        <% }); %>\n    </tbody>\n</table>';});
+
+define('teji/lunch/view/admin/GroupAddView',["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!./templates/GroupAddView.html", "text!./templates/ShopListTable.html", "teji/lunch/model/Shop"], function(Backbone, _, util, fbInit, tmpl, shopListTableTmpl, Shop){
     var GroupListView = Backbone.View.extend({
 
+        ADD_SHOP_INPUT_KEYS: ["id", "name", "category", "address", "tel", "imageURL", "url_mobile"],
+
         template: _.template(tmpl),
+        shopListTableTemplate: _.template(shopListTableTmpl),
 
         _currentModel: null,
 
         initialize: function() {
             this.render();
+
             this.$personResultContainer = this.$(".friendsAutoCompletedResults .multiColumn");
 
             // setup FB friends autocomplete
@@ -18604,20 +18619,50 @@ define('teji/lunch/view/admin/GroupAddView',["backbone", "underscore", "teji/lun
 
             // attach event to retrive shop information via external API
             this.$(".fnGetShopInfoBtn").click($.proxy(function(){
-                var url = this.$(".fnGetShopInfoBtn").val();
-                // TODO: get id by regex
-                var shopId = "";
-                var callback = function(){
-                    // TODO: rendering rsult as table
-
+                var url = this.$(".fnGetShopURLInput").val();
+                // get id from URL like "http://r.gnavi.co.jp/g910404/".split("/")[3]
+                var shopId = url.split("/")[3];
+                if(!shopId){
+                    // TODO: show no result
+                    return;
+                }
+                var callback = $.proxy(function(json){
                     // TODO: hide loading
-
-                };
+                    console.log(json);
+                    if(!json.response || !json.response.rest){
+                        // TODO: show no result
+                        return;
+                    }
+                    // obj is response of gurunabi API
+                    var result = json.response.rest;
+                    // set values
+                    for(var i=0, len=this.ADD_SHOP_INPUT_KEYS.length; i<len; i++){
+                        var key = this.ADD_SHOP_INPUT_KEYS[i];
+                        var $input = this.$("#addShopInput_" + key);
+                        var value = result[key];
+                        if(key == "imageURL"){
+                            value = result.image_url["shop_image1"] || "";
+                        }
+                        $input.val(value);
+                    }
+                }, this);
                 // TODO: show loading
-
                 this._currentModel.retriveShopInfo(shopId, callback);
             }, this));
-
+            // attach event to add a restaurant
+            this.$(".fnModalAddShopBtn").click($.proxy(function(){
+                var obj = {};
+                for(var i=0, len=this.ADD_SHOP_INPUT_KEYS.length; i<len; i++){
+                    var key = this.ADD_SHOP_INPUT_KEYS[i];
+                    var $input = this.$("#addShopInput_" + key);
+                    obj[key] = $input.val();
+                }
+                // create a shop model from input form
+                var shop = new Shop(obj);
+                // trigger onAddShopModel
+                this._currentModel.addShop(shop);
+                this.$("#addShopModal").modal('hide')
+            }, this));
             // attach event to add new group    
             this.$(".fnSaveAddGroupBtn").click($.proxy(function(){
                 var result = this.updateModelByUI();
@@ -18654,17 +18699,21 @@ define('teji/lunch/view/admin/GroupAddView',["backbone", "underscore", "teji/lun
 
         updateView: function(groupModel, isEdit){
             this._currentModel = groupModel;
+            // listen model
+            this.listenTo(groupModel, "onAddShopModel", this._onAddShopModel);
             // add class to change title and buttons for add and edit
             isEdit ? this.$el.addClass("editGroupModal") : this.$el.removeClass("editGroupModal");
             // update group name input
             this.$("#groupNameInput").val(groupModel.get("name"));
             this.$("#groupLunchTimeInput").val(groupModel.get("lunchTime"));
             // update members view
-            this.$personResultContainer.empty();
+            this.$personResultContainer.empty();            
             var members = groupModel.get("members") || [];
             _.each(members, $.proxy(function(member){
                 fbInit.addAutoCompleteResult(this.$personResultContainer, member, $.proxy(this.onRemoveMember, this));
             }, this));
+            // update shop list table view
+            this.renderShopListTable();
         },
 
         updateModelByUI: function(){
@@ -18673,7 +18722,7 @@ define('teji/lunch/view/admin/GroupAddView',["backbone", "underscore", "teji/lun
             var groupName =  this.$("#groupNameInput").val();
             if(!this._currentModel || !groupName){
                 result.hasError = true;
-                return;
+                return result;
             }
             model.set("name", groupName);
             model.set("lunchTime", $("#groupLunchTimeInput").val());
@@ -18687,6 +18736,38 @@ define('teji/lunch/view/admin/GroupAddView',["backbone", "underscore", "teji/lun
                     return value.id !== removeItem.id;
                 }));
             }
+        },
+
+        _onAddShopModel: function(){
+            // refresh table
+            this.renderShopListTable();
+        },
+
+        renderShopListTable: function(){
+            var $table = this.$(".fnAdminShopListTable");
+            $table.empty();
+            var shopsJson = $.map(this._currentModel.get("shops"), function(shopModel){
+                return shopModel.toJSON();
+            });
+            $table.html(this.shopListTableTemplate({shops: shopsJson}));
+            // attach event
+            this.$(".fnShopListTableEditBtn").click($.proxy(function($e){
+                // TODO
+            }, this));
+            this.$(".fnShopListTableDeleteBtn").click($.proxy(function($e){
+                var $target = $($e.target);
+                var shopId = $target.attr("data-shop-id");
+                var shopModels = this._currentModel.get("shops");
+                var targetModel = $.grep(shopModels, function(model){
+                    return model.get("id") === shopId;
+                })[0];
+                if(targetModel && window.confirm("Are you sure you want to delete [" + targetModel.get("name") + "] ?")){
+                    // remove from array
+                    // TOOD: should be handled in model?
+                    shopModels.splice($.inArray(targetModel, shopModels), 1);
+                    this.renderShopListTable();
+                }
+            }, this));
         },
 
         clear: function(){

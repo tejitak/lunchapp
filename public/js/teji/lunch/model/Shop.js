@@ -4,8 +4,10 @@ define(["backbone", "jquery"], function(Backbone, $){
         defaults: {
             id: "",
             name: "",
+            category: "",
             address: "",
-            url: "",
+            tel: "",
+            url_mobile: "",
             imageURL: ""
         },
 

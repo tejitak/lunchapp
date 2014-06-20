@@ -1,12 +1,19 @@
 var express = require('express');
+var fs = require('fs');
+var http = require('http');
+var url = require('url');
 var fbAuth = require('./modules/fbAuth');
+var xml2json = require('xml2json');
 var router = express.Router();
+var apiKeys = {};
 
-// TODO: read apikey.properties
-
-// TODO: fbAuth.setClientSecret
-fbAuth.setClientSecret();
-// TODO: set gurunabi API key
+// read _apikey.json
+fs.readFile('_apikey.json', 'UTF-8', function (err, data) {
+    if (err){ console.warn('Please create a file "_apikey.json"'); throw err; }
+    apiKeys = JSON.parse(data);
+    // set FB client_secret
+    fbAuth.setClientSecret(apiKeys["fb_client_secret"]);
+});
 
 /**
  * @api {GET} /groups Get groups which an authenticated user joins
@@ -160,14 +167,30 @@ router.delete('/group/:id', function(req, res) {
  *     }
  */
 router.get('/shop/retrieve', function(req, res) {
-    var shopId = req.query.shopId;
-    // TODO: get request
-
-    // TODO: parse XML via Gurunabi API
-
-    // TODO: return json
-    res.contentType('application/json');
-    res.send('{"success":true}');
+    var urlStr = url.format({
+        host: "api.gnavi.co.jp",
+        pathname: '/ver1/RestSearchAPI/',
+        protocol: 'http',
+        query: {
+            keyid: apiKeys["gurunabi"],
+            id: req.query.shopId
+        }
+    });
+    var apiReq = http.get(urlStr, function(apiRes) {
+        apiRes.setEncoding('utf8');
+        var body = '';
+        apiRes.on('data', function(chunk) {
+            body += chunk;
+        });
+        apiRes.on('end', function() {
+            var json = xml2json.toJson(body);
+            res.contentType('application/json');
+            res.send(json);
+        });
+    }).on('error', function(e) {
+        console.log(e);
+    });
+    apiReq.end();
 });
 
 module.exports = router;
