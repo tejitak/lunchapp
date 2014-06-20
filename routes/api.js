@@ -7,9 +7,9 @@ var xml2json = require('xml2json');
 var router = express.Router();
 var apiKeys = {};
 
-// read _apikey.json
-fs.readFile('_apikey.json', 'UTF-8', function (err, data) {
-    if (err){ console.warn('Please create a file "_apikey.json"'); throw err; }
+// read apikey.json
+fs.readFile('apikey.json', 'UTF-8', function (err, data) {
+    if (err){ console.warn('Please create a file "apikey.json"'); throw err; }
     apiKeys = JSON.parse(data);
     // set FB client_secret
     fbAuth.setClientSecret(apiKeys["fb_client_secret"]);
