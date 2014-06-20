@@ -80,6 +80,10 @@
 }
 /*** jquery autocomplete end ***/
 
+.adminToolbar {
+    margin: 6px 0;
+}
+
 .fnGroupAddView .displayEditGroup {
     display: none;
 }

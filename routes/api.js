@@ -105,11 +105,7 @@ router.put('/group', function(req, res) {
             req.db.groups.find({"_id": targetGroup._id}, function(err, items){
                 if(items && items.length > 0){
                     req.db.groups.remove({_id: targetGroup._id}, {}, function(err, numRemoved){
-                        req.db.groups.insert({
-                            name: targetGroup.name,
-                            members: targetGroup.members,
-                            shops: targetGroup.shops
-                        }, function(err, newDoc){
+                        req.db.groups.insert(targetGroup, function(err, newDoc){
                             res.contentType('application/json');
                             res.send('{"success":true}');                                    
                         });

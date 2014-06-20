@@ -19,8 +19,8 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!
             }, this));
 
             // attach event to retrive shop information via external API
-            this.$(".fnAddShopURLBtn").click($.proxy(function(){
-                var url = this.$(".fnAddShopURLBtn").val();
+            this.$(".fnGetShopInfoBtn").click($.proxy(function(){
+                var url = this.$(".fnGetShopInfoBtn").val();
                 // TODO: get id by regex
                 var shopId = "";
                 var callback = function(){
