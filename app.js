@@ -1,4 +1,5 @@
 var express = require('express');
+var domain = require('domain');
 var path = require('path');
 var favicon = require('static-favicon');
 var logger = require('morgan');
@@ -49,6 +50,14 @@ app.use(function(req, res, next) {
 });
 
 /// error handlers
+app.use(function(req, res, next) {
+  var reqd = domain.create();
+  reqd.on('error', function(err) {
+    res.render('error', {title:'error'});
+  });
+  reqd.run(next);
+});
+
 
 // development error handler
 // will print stacktrace
