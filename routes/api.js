@@ -56,9 +56,15 @@ router.get('/groups', function(req, res) {
  *     }
  */
 router.get('/group/:id', function(req, res) {
-    var id = req.param("id");
-    // TODO: return detail
-    fbAuth.checkAccessToken(req.query.inputToken);
+    var callback = function(authResponse) {
+      var userId = authResponse.data.user_id;
+      var id = req.param("id");
+      req.db.groups.find({"members.id": userId, "_id": id}, function(err, items) {
+        res.contentType('application/json');
+        res.send(items);
+      });
+    }
+    fbAuth.checkAccessToken(req.query.inputToken, callback);
 });
 
 /*********************************
@@ -92,10 +98,11 @@ router.post('/group', function(req, res) {
     var entry = req.body;
     var callback = function(authResponse){
         var newGroup = entry.group;
+        newGroup.administrator = authResponse.data.user_id;
         if(newGroup){
             req.db.groups.insert(newGroup, function(err, newDoc){
                 res.contentType('application/json');
-                res.send('{"success":true}');                        
+                res.send('{"success":true}');
             });
         }
     }
@@ -107,18 +114,10 @@ router.put('/group', function(req, res) {
     var callback = function(authResponse){
         var targetGroup = entry.group;
         if(targetGroup){
-            // TODO: should use update?
-            // TODO: return error when the id does not exist
-            req.db.groups.find({"_id": targetGroup._id}, function(err, items){
-                if(items && items.length > 0){
-                    req.db.groups.remove({_id: targetGroup._id}, {}, function(err, numRemoved){
-                        req.db.groups.insert(targetGroup, function(err, newDoc){
-                            res.contentType('application/json');
-                            res.send('{"success":true}');                                    
-                        });
-                    });
-                }
-            });
+          req.db.groups.update({"_id": targetGroup._id}, targetGroup, {upsert:true}, function(err, items){
+            res.contentType('application/json');
+            res.send('{"success":true}')
+          });
         }
     }
     fbAuth.checkAccessToken(entry.inputToken, callback);
@@ -142,9 +141,10 @@ router.put('/group', function(req, res) {
 router.delete('/group/:id', function(req, res) {
     var target = req.param("id");
     var callback = function(authResponse){
-        req.db.groups.remove({_id: target}, {}, function(err, numRemoved){
+        var userId = authResponse.data.user_id;
+        req.db.groups.remove({_id: target, administrator: userId}, function(err, numRemoved){
             res.contentType('application/json');
-            res.send('{"success":true}');     
+            res.send('{"success":true}');
         });
     };
     fbAuth.checkAccessToken(req.query.inputToken, callback);
