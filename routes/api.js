@@ -175,12 +175,11 @@ router.get('/shop/retrieve', function(req, res) {
             shopHTMLContent += chunk;
         });
         shopURLRes.on('end', function() {
-            console.log(shopHTMLContent);
             var re = /<body.*data-r.*\"sid\":\"(\w+)\",\"/g;
             var result = re.exec(shopHTMLContent);
             var sid = result[1];
             if(sid){
-                console.log(sid);
+//                console.log(sid);
                 var urlStr = url.format({
                     host: "api.gnavi.co.jp",
                     pathname: '/ver1/RestSearchAPI/',
