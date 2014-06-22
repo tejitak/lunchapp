@@ -15,7 +15,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/getting-started', function(req, res) {
-    res.render('getting-started', { title: 'Lunch Timer - Getting Started -', header: _templates.header});
+    res.render('getting-started', { title: 'Lunch Timer - Getting Started', header: _templates.header});
 });
 
 module.exports = router;
