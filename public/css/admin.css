@@ -1,4 +1,5 @@
 @import url("common.css");
+@import url("bootstrap-sortable.css");
 
 /*** jquery autocomplete start ***/
 .ac_results {
@@ -80,23 +81,29 @@
 }
 /*** jquery autocomplete end ***/
 
+/*** admin common start ***/
 .adminToolbar {
     margin: 6px 0;
-}
-
-.fnGroupAddView .displayEditGroup {
-    display: none;
-}
-
-.fnGroupAddView.editGroupModal .displayEditGroup {
-    display: inline-block;
-}
-
-.fnGroupAddView.editGroupModal .displayAddGroup {
-    display: none;
 }
 
 .deleteIcon {
     cursor: pointer;
     margin: 0 4px;
 }
+
+.isEditShow, .isEdit .isEditHidden {
+    display: none;
+}
+
+.isEditHidden, .isEdit .isEditShow {
+    display: block;
+}
+
+.modal-footer .isEditShow, .isEdit .modal-footer .isEditHidden {
+    display: none;
+}
+
+.modal-footer .isEditHidden, .isEdit .modal-footer .isEditShow {
+    display: inline-block;
+}
+/*** admin common end ***/

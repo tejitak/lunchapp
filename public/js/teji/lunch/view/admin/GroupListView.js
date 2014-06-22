@@ -1,4 +1,4 @@
-define(["backbone", "underscore", "teji/lunch/util", "text!./templates/GroupListView.html"], function(Backbone, _, util, tmpl){
+define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/model/Group", "text!./templates/GroupListView.html"], function(Backbone, _, util, Group, tmpl){
     var GroupListView = Backbone.View.extend({
 
         template: _.template(tmpl),
@@ -28,6 +28,7 @@ define(["backbone", "underscore", "teji/lunch/util", "text!./templates/GroupList
                     return model.get("_id") === groupId;
                 })[0];
                 util.showPage(1);
+                var cloned = new Group(targetModel.toJSON());
                 this._groupAddView.updateView(targetModel, true/*isEdit*/);
             }, this));
             // bind onclick delete

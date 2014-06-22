@@ -1,54 +1,57 @@
-<div>
-    <h4 class="displayAddGroup">Add a Group</h4>
-    <h4 class="displayEditGroup">Edit a Group</h4>
-</div>
-<div class="modal-body">
-    <div class="form-group">
-        <label class="control-label" for="groupNameInput">Group Name</label>
-        <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">
+<div class="addGroupModal">
+    <div>
+        <h4 class="isEditHidden">Add a Group</h4>
+        <h4 class="isEditShow">Edit a Group</h4>
     </div>
-    <div class="form-group">
-        <label class="control-label" for="groupLunchTimeInput">Lunch Time</label>
-        <div class="input-group">
-            <input id="groupLunchTimeInput" class="form-control" type="time">
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="control-label" for="groupNameInput">Group Name</label>
+            <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="groupLunchTimeInput">Lunch Time</label>
+            <div class="input-group">
+                <input id="groupLunchTimeInput" class="form-control" type="time">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>
+            <!--div class="col-sm-5 col-xs-12 col-lg-3"-->
+            <div class="input-group">
+                <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">
+                <span class="input-group-btn">
+                    <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>
+                </span>
+            </div>
+            <div class="friendsAutoCompletedResults">
+                <ul class="multiColumn"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Restaurants</label>
+            <div class="input-group adminToolbar">
+                <button type="button" class="btn btn-primary addShopModalBtn">Add Restaurant</button>
+            </div>
+            <div class="fnAdminShopListTable"></div>
         </div>
     </div>
-    <div class="form-group">
-        <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>
-        <!--div class="col-sm-5 col-xs-12 col-lg-3"-->
-        <div class="input-group">
-            <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">
-            <span class="input-group-btn">
-                <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>
-            </span>
-        </div>
-        <div class="friendsAutoCompletedResults">
-            <ul class="multiColumn"></ul>
-        </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default fnCancelSaveGroupBtn">Cancel</button>
+        <button type="button" class="btn btn-primary displayAddGroup fnSaveAddGroupBtn isEditHidden">Add Group</button>
+        <button type="button" class="btn btn-primary fnSaveEditGroupBtn isEditShow">Update Group</button>
     </div>
-    <div class="form-group">
-        <label class="control-label">Restaurants</label>
-        <div class="input-group adminToolbar">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addShopModal">Add Restaurant</button>
-        </div>
-        <div class="fnAdminShopListTable"></div>
-    </div>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-default fnCancelSaveGroupBtn">Cancel</button>
-    <button type="button" class="btn btn-primary displayAddGroup fnSaveAddGroupBtn">Add Group</button>
-    <button type="button" class="btn btn-primary displayEditGroup fnSaveEditGroupBtn">Update Group</button>
 </div>
 
-<div class="modal fade" id="addShopModal" tabindex="-1" role="dialog" aria-labelledby="addShopModal" aria-hidden="true">
+<div class="modal fade addShopModal" id="addShopModal" tabindex="-1" role="dialog" aria-labelledby="addShopModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add a Restaurant</h4>
+                <h4 class="modal-title isEditHidden">Add a Restaurant</h4>
+                <h4 class="modal-title isEditShow">Edit a Restaurant</h4>
             </div>
             <div class="modal-body">
-                <div>
+                <div class="isEditHidden">
                     <div class="input-group">
                         <input type="text" class="form-control fnGetShopURLInput" placeholder="ぐるなびURL">
                         <span class="input-group-btn">
@@ -56,12 +59,12 @@
                         </span>
                     </div>
                     <div style="">
-                        <a href="http://mobile.gnavi.co.jp/">
+                        <a href="http://mobile.gnavi.co.jp/" target="_blank">
                             <img src="http://apicache.gnavi.co.jp/image/rest/b/api_155_20.gif" width="155" height="20" border="0" alt="グルメ情報検索サイト　ぐるなび">
                         </a>
                     </div>
+                    <hr>
                 </div>
-                <hr>
                 <div>
                     <div class="form-group" style="display: none;">
                         <label class="control-label" for="addShopInput_id">ID</label>
@@ -91,11 +94,19 @@
                         <label class="control-label" for="addShopInput_url_mobile">Restaurant URL</label>
                         <input type="text" class="form-control" id="addShopInput_url_mobile">
                     </div>
+                    <div class="isEditShow">
+                        <hr>
+                        <div class="form-group">
+                            <label class="control-label" for="addShopInput_visitedCount">Visited Count</label>
+                            <input type="text" class="form-control" id="addShopInput_visitedCount">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary fnModalAddShopBtn">Add Restaurant</button>
+                <button type="button" class="btn btn-primary fnModalAddShopBtn isEditHidden">Add Restaurant</button>
+                <button type="button" class="btn btn-primary fnModalEditShopBtn isEditShow">Update</button>
             </div>
         </div>
     </div>

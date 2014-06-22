@@ -1,7 +1,16 @@
-define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!./templates/GroupAddView.html", "text!./templates/ShopListTable.html", "teji/lunch/model/Shop"], function(Backbone, _, util, fbInit, tmpl, shopListTableTmpl, Shop){
+define([
+    "backbone",
+    "underscore",
+    "bootstrap.sortable",
+    "teji/lunch/util",
+    "teji/lunch/fbInit",
+    "text!./templates/GroupAddView.html",
+    "text!./templates/ShopListTable.html",
+    "teji/lunch/model/Shop"], function(Backbone, _, sortalble, util, fbInit, tmpl, shopListTableTmpl, Shop){
+    
     var GroupListView = Backbone.View.extend({
 
-        ADD_SHOP_INPUT_KEYS: ["id", "name", "category", "address", "tel", "imageURL", "url_mobile"],
+        ADD_SHOP_INPUT_KEYS: ["id", "name", "category", "address", "tel", "imageURL", "url_mobile", "visitedCount"],
 
         template: _.template(tmpl),
         shopListTableTemplate: _.template(shopListTableTmpl),
@@ -22,6 +31,12 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!
                 }
             }, this));
 
+            // modal dialog
+            this.$(".addShopModalBtn").click($.proxy(function(){
+                this.clearAddShopModal();
+                this.$("#addShopModal").removeClass("isEdit").modal("show");
+            }, this));
+
             // attach event to retrive shop information via external API
             this.$(".fnGetShopInfoBtn").click($.proxy(function(){
                 var url = this.$(".fnGetShopURLInput").val();
@@ -31,43 +46,36 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!
                     // TODO: show no result
                     return;
                 }
-                var callback = $.proxy(function(json){
+                var callback = $.proxy(function(shopModel){
                     // TODO: hide loading
-                    console.log(json);
-                    if(!json.response || !json.response.rest){
-                        // TODO: show no result
-                        return;
-                    }
-                    // obj is response of gurunabi API
-                    var result = json.response.rest;
-                    // set values
-                    for(var i=0, len=this.ADD_SHOP_INPUT_KEYS.length; i<len; i++){
-                        var key = this.ADD_SHOP_INPUT_KEYS[i];
-                        var $input = this.$("#addShopInput_" + key);
-                        var value = result[key];
-                        if(key == "imageURL"){
-                            value = result.image_url["shop_image1"] || "";
-                        }
-                        $input.val(value);
-                    }
+                    // TODO: show no result
+                    this.updateAddShopModalByModel(shopModel);
                 }, this);
                 // TODO: show loading
                 this._currentModel.retriveShopInfo(shopId, callback);
             }, this));
+
             // attach event to add a restaurant
             this.$(".fnModalAddShopBtn").click($.proxy(function(){
-                var obj = {};
-                for(var i=0, len=this.ADD_SHOP_INPUT_KEYS.length; i<len; i++){
-                    var key = this.ADD_SHOP_INPUT_KEYS[i];
-                    var $input = this.$("#addShopInput_" + key);
-                    obj[key] = $input.val();
-                }
-                // create a shop model from input form
-                var shop = new Shop(obj);
-                // trigger onAddShopModel
-                this._currentModel.addShop(shop);
+                // trigger onUpdateShopModel
+                var shopInfo = this.createShopInfoFromInputs();
+                this._currentModel.addShop(new Shop(shopInfo));
                 this.$("#addShopModal").modal('hide')
             }, this));
+
+            // attach event to edit a restaurant
+            this.$(".fnModalEditShopBtn").click($.proxy(function(){
+                var targetId = this.$("#addShopModal").data("target-shop-id");
+                var targetShopModel = $.grep(this._currentModel.get("shops"), function(shopModel) {
+                    return shopModel.cid === targetId;
+                })[0];
+                if(targetShopModel){
+                    targetShopModel.updateValues(this.createShopInfoFromInputs());
+                    this.renderShopListTable();
+                }
+                this.$("#addShopModal").modal('hide')
+            }, this));
+
             // attach event to add new group    
             this.$(".fnSaveAddGroupBtn").click($.proxy(function(){
                 var result = this.updateModelByUI();
@@ -93,9 +101,21 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!
             }, this));
 
             // attach event to cancel add group
-            this.$(".fnCancelSaveGroupBtn").click(function(){
+            this.$(".fnCancelSaveGroupBtn").click($.proxy(function(){
+                // refresh group list view
+                this.collection.loadList();
                 util.showPage(0);
-            });
+            }, this));
+        },
+
+        createShopInfoFromInputs: function(){
+            var info = {};
+            for(var i=0, len=this.ADD_SHOP_INPUT_KEYS.length; i<len; i++){
+                var key = this.ADD_SHOP_INPUT_KEYS[i];
+                var $input = this.$("#addShopInput_" + key);
+                info[key] = $input.val();
+            }
+            return info;
         },
 
         render: function(){
@@ -103,17 +123,17 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!
         },
 
         updateView: function(groupModel, isEdit){
-            this._currentModel = groupModel;
+            var targetModel = this._currentModel = groupModel;
             // listen model
-            this.listenTo(groupModel, "onAddShopModel", this._onAddShopModel);
+            this.listenTo(targetModel, "onUpdateShopModel", this._onUpdateShopModel);
             // add class to change title and buttons for add and edit
-            isEdit ? this.$el.addClass("editGroupModal") : this.$el.removeClass("editGroupModal");
+            isEdit ? this.$(".addGroupModal").addClass("isEdit") : this.$(".addGroupModal").removeClass("isEdit");
             // update group name input
-            this.$("#groupNameInput").val(groupModel.get("name"));
-            this.$("#groupLunchTimeInput").val(groupModel.get("lunchTime"));
+            this.$("#groupNameInput").val(targetModel.get("name"));
+            this.$("#groupLunchTimeInput").val(targetModel.get("lunchTime"));
             // update members view
             this.$personResultContainer.empty();            
-            var members = groupModel.get("members") || [];
+            var members = targetModel.get("members") || [];
             _.each(members, $.proxy(function(member){
                 fbInit.addAutoCompleteResult(this.$personResultContainer, member, $.proxy(this.onRemoveMember, this));
             }, this));
@@ -143,7 +163,7 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!
             }
         },
 
-        _onAddShopModel: function(){
+        _onUpdateShopModel: function(){
             // refresh table
             this.renderShopListTable();
         },
@@ -155,24 +175,52 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/fbInit", "text!
                 return shopModel.toJSON();
             });
             $table.html(this.shopListTableTemplate({shops: shopsJson}));
-            // attach event
+            // enable sort
+            $.bootstrapSortable();
+            // attach event for edit button
             this.$(".fnShopListTableEditBtn").click($.proxy(function($e){
-                // TODO
+                this.clearAddShopModal();
+                var targetModel = this._getShopModelByNode($($e.target));
+                this.$("#addShopModal").addClass("isEdit").modal("show").data("target-shop-id", targetModel.cid);
+                this.updateAddShopModalByModel(targetModel);
             }, this));
+            // attach event for delete button
             this.$(".fnShopListTableDeleteBtn").click($.proxy(function($e){
-                var $target = $($e.target);
-                var shopId = $target.attr("data-shop-id");
-                var shopModels = this._currentModel.get("shops");
-                var targetModel = $.grep(shopModels, function(model){
-                    return model.get("id") === shopId;
-                })[0];
+                var targetModel = this._getShopModelByNode($($e.target));
                 if(targetModel && window.confirm("Are you sure you want to delete [" + targetModel.get("name") + "] ?")){
                     // remove from array
+                    var shopModels = this._currentModel.get("shops");
                     // TOOD: should be handled in model?
                     shopModels.splice($.inArray(targetModel, shopModels), 1);
                     this.renderShopListTable();
                 }
             }, this));
+        },
+
+        _getShopModelByNode: function($target){
+            var shopId = $target.attr("data-shop-id");
+            var shopModels = this._currentModel.get("shops");
+            return $.grep(shopModels, function(model){
+                return model.get("id") === shopId;
+            })[0];
+        },
+
+        clearAddShopModal: function(){
+            for(var i=0, len=this.ADD_SHOP_INPUT_KEYS.length; i<len; i++){
+                var key = this.ADD_SHOP_INPUT_KEYS[i];
+                var blankValue = "";
+                if(key == "visitedCount"){
+                    blankValue = 0;
+                }
+                this.$("#addShopInput_" + key).val(blankValue);
+            }
+        },
+
+        updateAddShopModalByModel: function(shopModel){
+            for(var i=0, len=this.ADD_SHOP_INPUT_KEYS.length; i<len; i++){
+                var key = this.ADD_SHOP_INPUT_KEYS[i];                
+                this.$("#addShopInput_" + key).val(shopModel.get(key));
+            }
         },
 
         clear: function(){

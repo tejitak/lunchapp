@@ -5,6 +5,7 @@ requirejs.config({
         "jquery.autocomplete": "lib/jquery.autocomplete/jquery.autocomplete",
         "text": "lib/requirejs-text/text",
         "bootstrap": "lib/bootstrap/bootstrap",
+        "bootstrap.sortable": "lib/bootstrap-sortable/bootstrap-sortable",
         "backbone": "lib/backbone/backbone",
         "underscore": "lib/underscore/underscore",
         "velocity": "lib/velocity/jquery.velocity",
@@ -17,7 +18,7 @@ requirejs.config({
         "bootstrap": {
             deps: ["jquery"]
         },
-        "bootstrap.timepicker": {
+        "bootstrap.sortable": {
             deps: ["bootstrap"],
         },
         "backbone": {

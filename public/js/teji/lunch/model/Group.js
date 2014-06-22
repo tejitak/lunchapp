@@ -29,7 +29,13 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
         addShop: function(shopModel){
             var shops = this.get("shops") || [];
             shops.push(shopModel);
-            this.trigger("onAddShopModel");
+            this.trigger("onUpdateShopModel");
+        },
+
+        addShop: function(shopModel, index){
+            // var shops = this.get("shops") || [];
+            // shops.push(shopModel);
+            this.trigger("onUpdateShopModel");
         },
 
         deleteGroup: function(groupId, callback){
@@ -45,9 +51,16 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
         retriveShopInfo: function(shopId, callback){
             $.ajax({type: "GET",
                 url: "/api/shop/retrieve?inputToken=" + fbInit.accessToken + "&shopId=" + shopId
-            }).done($.proxy(function(response){
+            }).done($.proxy(function(json){
+                // create a new shop model from response
+                if(!json.response || !json.response.rest){
+                    return;
+                }
+                // obj is response of gurunabi API
+                var shopModel = new Shop();
+                shopModel.initWithTaberoguResponse(json.response.rest);
                 if(callback){
-                    callback(response);
+                    callback(shopModel);
                 }
             }, this));
         }

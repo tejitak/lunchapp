@@ -9189,6 +9189,8 @@ return jQuery;
 
 }));
 
+define("jquery", function(){});
+
 /*!
  * Bootstrap v3.1.1 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -18219,10 +18221,29 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
             address: "",
             tel: "",
             url_mobile: "",
-            imageURL: ""
+            imageURL: "",
+            rating: 0,
+            visitedCount: 0
         },
 
         initialize: function(){
+        },
+
+        initWithTaberoguResponse: function(result){
+            // set values from taberog API response
+            this.set("id", result["id"]);
+            this.set("name", result["name"]);
+            this.set("category", result["category"]);
+            this.set("address", result["address"]);
+            this.set("tel", result["tel"]);
+            this.set("url_mobile", result["url_mobile"]);
+            this.set("imageURL", result.image_url["shop_image1"] || "");
+        },
+
+        updateValues: function(shopInfo){
+            $.each(shopInfo, $.proxy(function(key, value){
+                this.set(key, value);
+            }, this));
         },
 
         validate: function(attrs){
@@ -18277,7 +18298,13 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
         addShop: function(shopModel){
             var shops = this.get("shops") || [];
             shops.push(shopModel);
-            this.trigger("onAddShopModel");
+            this.trigger("onUpdateShopModel");
+        },
+
+        addShop: function(shopModel, index){
+            // var shops = this.get("shops") || [];
+            // shops.push(shopModel);
+            this.trigger("onUpdateShopModel");
         },
 
         deleteGroup: function(groupId, callback){
@@ -18293,9 +18320,16 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
         retriveShopInfo: function(shopId, callback){
             $.ajax({type: "GET",
                 url: "/api/shop/retrieve?inputToken=" + fbInit.accessToken + "&shopId=" + shopId
-            }).done($.proxy(function(response){
+            }).done($.proxy(function(json){
+                // create a new shop model from response
+                if(!json.response || !json.response.rest){
+                    return;
+                }
+                // obj is response of gurunabi API
+                var shopModel = new Shop();
+                shopModel.initWithTaberoguResponse(json.response.rest);
                 if(callback){
-                    callback(response);
+                    callback(shopModel);
                 }
             }, this));
         }
