@@ -32,12 +32,6 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
             this.trigger("onUpdateShopModel");
         },
 
-        addShop: function(shopModel, index){
-            // var shops = this.get("shops") || [];
-            // shops.push(shopModel);
-            this.trigger("onUpdateShopModel");
-        },
-
         deleteGroup: function(groupId, callback){
             $.ajax({type: "DELETE",
                 url: "/api/group/" + groupId + "/?inputToken=" + fbInit.accessToken
