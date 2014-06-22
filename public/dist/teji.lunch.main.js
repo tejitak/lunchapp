@@ -18317,9 +18317,9 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
             }, this));
         },
 
-        retriveShopInfo: function(shopId, callback){
+        retriveShopInfo: function(shopURL, callback){
             $.ajax({type: "GET",
-                url: "/api/shop/retrieve?inputToken=" + fbInit.accessToken + "&shopId=" + shopId
+                url: "/api/shop/retrieve?inputToken=" + fbInit.accessToken + "&shopURL=" + shopURL
             }).done($.proxy(function(json){
                 // create a new shop model from response
                 if(!json.response || !json.response.rest){

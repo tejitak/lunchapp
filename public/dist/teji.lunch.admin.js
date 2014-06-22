@@ -18093,9 +18093,9 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
             }, this));
         },
 
-        retriveShopInfo: function(shopId, callback){
+        retriveShopInfo: function(shopURL, callback){
             $.ajax({type: "GET",
-                url: "/api/shop/retrieve?inputToken=" + fbInit.accessToken + "&shopId=" + shopId
+                url: "/api/shop/retrieve?inputToken=" + fbInit.accessToken + "&shopURL=" + shopURL
             }).done($.proxy(function(json){
                 // create a new shop model from response
                 if(!json.response || !json.response.rest){
@@ -18802,9 +18802,7 @@ define('teji/lunch/view/admin/GroupAddView',[
             // attach event to retrive shop information via external API
             this.$(".fnGetShopInfoBtn").click($.proxy(function(){
                 var url = this.$(".fnGetShopURLInput").val();
-                // get id from URL like "http://r.gnavi.co.jp/g910404/".split("/")[3]
-                var shopId = url.split("/")[3];
-                if(!shopId){
+                if(!url){
                     // TODO: show no result
                     return;
                 }
@@ -18814,7 +18812,7 @@ define('teji/lunch/view/admin/GroupAddView',[
                     this.updateAddShopModalByModel(shopModel);
                 }, this);
                 // TODO: show loading
-                this._currentModel.retriveShopInfo(shopId, callback);
+                this._currentModel.retriveShopInfo(url, callback);
             }, this));
 
             // attach event to add a restaurant

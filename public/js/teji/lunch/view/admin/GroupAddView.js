@@ -40,9 +40,7 @@ define([
             // attach event to retrive shop information via external API
             this.$(".fnGetShopInfoBtn").click($.proxy(function(){
                 var url = this.$(".fnGetShopURLInput").val();
-                // get id from URL like "http://r.gnavi.co.jp/g910404/".split("/")[3]
-                var shopId = url.split("/")[3];
-                if(!shopId){
+                if(!url){
                     // TODO: show no result
                     return;
                 }
@@ -52,7 +50,7 @@ define([
                     this.updateAddShopModalByModel(shopModel);
                 }, this);
                 // TODO: show loading
-                this._currentModel.retriveShopInfo(shopId, callback);
+                this._currentModel.retriveShopInfo(url, callback);
             }, this));
 
             // attach event to add a restaurant

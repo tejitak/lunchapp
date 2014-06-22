@@ -167,30 +167,52 @@ router.delete('/group/:id', function(req, res) {
  *     }
  */
 router.get('/shop/retrieve', function(req, res) {
-    var urlStr = url.format({
-        host: "api.gnavi.co.jp",
-        pathname: '/ver1/RestSearchAPI/',
-        protocol: 'http',
-        query: {
-            keyid: apiKeys["gurunabi"],
-            id: req.query.shopId
-        }
-    });
-    var apiReq = http.get(urlStr, function(apiRes) {
-        apiRes.setEncoding('utf8');
-        var body = '';
-        apiRes.on('data', function(chunk) {
-            body += chunk;
+
+    var shopURLReq = http.get(req.query.shopURL, function(shopURLRes) {
+        shopURLRes.setEncoding('utf8');
+        var shopHTMLContent = '';
+        shopURLRes.on('data', function(chunk) {
+            shopHTMLContent += chunk;
         });
-        apiRes.on('end', function() {
-            var json = xml2json.toJson(body);
-            res.contentType('application/json');
-            res.send(json);
+        shopURLRes.on('end', function() {
+            console.log(shopHTMLContent);
+            var re = /<body.*data-r.*\"sid\":\"(\w+)\",\"/g;
+            var result = re.exec(shopHTMLContent);
+            var sid = result[1];
+            if(sid){
+                console.log(sid);
+                var urlStr = url.format({
+                    host: "api.gnavi.co.jp",
+                    pathname: '/ver1/RestSearchAPI/',
+                    protocol: 'http',
+                    query: {
+                        keyid: apiKeys["gurunabi"],
+                        id: sid
+                    }
+                });
+                var apiReq = http.get(urlStr, function(apiRes) {
+                    apiRes.setEncoding('utf8');
+                    var body = '';
+                    apiRes.on('data', function(chunk) {
+                        body += chunk;
+                    });
+                    apiRes.on('end', function() {
+                        var json = xml2json.toJson(body);
+                        res.contentType('application/json');
+                        res.send(json);
+                    });
+                }).on('error', function(e) {
+                    console.log(e);
+                });
+                apiReq.end();
+            }
         });
     }).on('error', function(e) {
         console.log(e);
     });
-    apiReq.end();
+    shopURLReq.end();
+
+  
 });
 
 module.exports = router;
