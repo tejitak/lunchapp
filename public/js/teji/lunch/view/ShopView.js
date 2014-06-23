@@ -17,6 +17,7 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
             }
             this.$el.html(this.template(json));
             this.$(".fnBtnVote").click($.proxy(this.model.vote, this.model));
+            this.$(".fnBtnInfo").click($.proxy(this.model.showInfo, this.model))
             return this;
         }
     });

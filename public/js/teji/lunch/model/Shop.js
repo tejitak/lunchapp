@@ -49,6 +49,11 @@ define(["backbone", "jquery"], function(Backbone, $){
                     callback();
                 }
             }, this));
+        },
+
+        showInfo: function(){
+            // TODO: set proper URL attribute. Right now using dummy attribue!!
+            window.open(this.get('shopURL'));
         }
     });
     return Shop;
