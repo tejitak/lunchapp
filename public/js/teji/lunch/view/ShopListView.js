@@ -1,44 +1,87 @@
 define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], function(Backbone, _, ShopView, flipsnap){
     var ShopListView = Backbone.View.extend({
 
+        _groups: null,
+
         initialize: function() {
             this.listenTo(this.collection, "addCollection", this.addItems);
             this.$groupSelect = $(".fnGroupSelect");
         },
 
         addItems: function(models){
-            models = models || [];
-            // clear node
-            this.clear();
+            models = this._groups = models || [];
+            // clearShops node
+            this.clearShops();
             if(models.length == 0){
+                $(".fnResultViewFilterection").hide();
                 // show no groups messages
                 this.$el.append($('<div class="alert alert-info"></div>').html("No Groups - Please create a new group or join to an existing group."));
             }else{
+                $(".fnResultViewFilterection").show();
+                // TODO: switch UI between result and vote
                 this._renderGroup(models[0]);
                 // show group selector
                 for(var i=0, len=models.length; i<len; i++){
                     $("<option></option>").val(i).html(models[i].get("name")).appendTo(this.$groupSelect);
                 }
                 this.$groupSelect.change($.proxy(function(){
-                    this.clear();
-                    this._renderGroup(models[this.$groupSelect.val()]);
+                    this.clearShops();
+                    this._renderGroup(this._groups[this.$groupSelect.val()]);
                 }, this));
+                if(models.length > 1){
+                    $(".fnGroupSelectContainer").show();
+                }else{
+                    $(".fnGroupSelectContainer").hide();
+                }
             }
         },
 
         _renderGroup: function(model){
-            var shops = model.get("shops"), len = shops.length;
+            var shops = model.get("shops")
+            this._renderShops(shops);
+            // show advanced section when categories exist
+            var categories = $.map(shops, function(shop){ return shop.get("category"); });
+            var uniqueCategories = [];
+            var countMap = {};
+            $.each(categories, function(i, cat){
+                if(!countMap[cat]){
+                    countMap[cat] = 1;
+                    uniqueCategories.push(cat);
+                }else{
+                    countMap[cat]++;
+                }
+            });
+            var $categoryFilterSelect = $(".fnCategoryFilter");
+            $categoryFilterSelect.empty();
+            $("<option></option>").val("all").html("All (" + categories.length + ")").appendTo($categoryFilterSelect);
+            for(var i=0, len=uniqueCategories.length; i<len; i++){
+                $("<option></option>").val(uniqueCategories[i]).html(uniqueCategories[i] + " (" + countMap[uniqueCategories[i]] + ")").appendTo($categoryFilterSelect);
+            }
+            $categoryFilterSelect.change($.proxy(function(){
+                // refresh UI with specified category
+                this.clearShops();
+                var group = this._groups[this.$groupSelect.val()];
+                var selectedCategory = $(".fnCategoryFilter").val();
+                var filteredShops = (selectedCategory == "all") ? group.get("shops") : $.grep(group.get("shops"), function(shop){
+                    return shop.get("category") == selectedCategory;
+                });
+                this._renderShops(filteredShops);
+            }, this));
+        },
+
+        _renderShops: function(shops){
+            var len = shops.length;
             if(len == 0){
                 this.$el.append($('<div class="alert alert-info"></div>').html("There is no restaurants in this group"));
             }else{
                 var w = (len * 220/*item width*/) + 95/* padding */;
-                var $node = this._renderShops(shops).addClass("flipsnap").width(w + "px");
+                var $node = this._createShopsNode(shops).addClass("flipsnap").width(w + "px");
                 this.$el.append($node);
                 flipsnap('.flipsnap', {distance: 230});
             }
         },
 
-        _renderShops: function(shops){
+        _createShopsNode: function(shops){
             var $div = $("<div></div>");
             _.each(shops, function(shop){
                 var shopView = new ShopView({model: shop});
@@ -48,7 +91,7 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
             return $div;
         },
         
-        clear: function(){
+        clearShops: function(){
             this.$el.empty();
         }
     });

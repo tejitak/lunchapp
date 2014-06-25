@@ -167,50 +167,64 @@ router.delete('/group/:id', function(req, res) {
  *     }
  */
 router.get('/shop/retrieve', function(req, res) {
-
-    var shopURLReq = http.get(req.query.shopURL, function(shopURLRes) {
-        shopURLRes.setEncoding('utf8');
-        var shopHTMLContent = '';
-        shopURLRes.on('data', function(chunk) {
-            shopHTMLContent += chunk;
-        });
-        shopURLRes.on('end', function() {
-            var re = /<body.*data-r.*\"sid\":\"(\w+)\",\"/g;
-            var result = re.exec(shopHTMLContent);
-            if(result && result[1]){
-                var sid = result[1];
-                var urlStr = url.format({
-                    host: "api.gnavi.co.jp",
-                    pathname: '/ver1/RestSearchAPI/',
-                    protocol: 'http',
-                    query: {
-                        keyid: apiKeys["gurunabi"],
-                        id: sid
-                    }
-                });
-                var apiReq = http.get(urlStr, function(apiRes) {
-                    apiRes.setEncoding('utf8');
-                    var body = '';
-                    apiRes.on('data', function(chunk) {
-                        body += chunk;
-                    });
-                    apiRes.on('end', function() {
-                        var json = xml2json.toJson(body);
-                        res.contentType('application/json');
-                        res.send(json);
-                    });
-                }).on('error', function(e) {
-                    console.log(e);
-                });
-                apiReq.end();
+    var callAPI = function(sid){
+        var urlStr = url.format({
+            host: "api.gnavi.co.jp",
+            pathname: '/ver1/RestSearchAPI/',
+            protocol: 'http',
+            query: {
+                keyid: apiKeys["gurunabi"],
+                id: sid
             }
         });
-    }).on('error', function(e) {
-        console.log(e);
-    });
-    shopURLReq.end();
+        var apiReq = http.get(urlStr, function(apiRes) {
+            apiRes.setEncoding('utf8');
+            var body = '';
+            apiRes.on('data', function(chunk) {
+                body += chunk;
+            });
+            apiRes.on('end', function() {
+                var json = xml2json.toJson(body);
+                res.contentType('application/json');
+                res.send(json);
+            });
+        }).on('error', function(e) {
+            console.log(e);
+        });
+        apiReq.end();
+    };
 
-  
+    var shopURL = req.query.shopURL;
+    if(!shopURL){ /* TOOD: return error */ }
+    if(shopURL.indexOf("mobile.gnavi.co.jp") != -1){
+        // the id in URL can be used as sid for mobile site
+        // e.g. http://mobile.gnavi.co.jp/shop/gdtp400/
+        var re = /mobile.gnavi.co.jp\/shop\/(.*)\//g;
+        var result = re.exec(shopURL);
+        if(result && result[1]){
+            callAPI(result[1]);
+        }
+    }else{
+        // the id in URL is not same as sid sometimes for PC site
+        var shopURLReq = http.get(shopURL, function(shopURLRes) {
+            shopURLRes.setEncoding('utf8');
+            var shopHTMLContent = '';
+            shopURLRes.on('data', function(chunk) {
+                shopHTMLContent += chunk;
+            });
+            shopURLRes.on('end', function() {
+                var re = /<body.*data-r.*\"sid\":\"(\w+)\",\"/g;
+                var result = re.exec(shopHTMLContent);
+                console.dir(result);
+                if(result && result[1]){
+                    callAPI(result[1]);
+                }
+            });
+        }).on('error', function(e) {
+            console.log(e);
+        });
+        shopURLReq.end();
+    }  
 });
 
 module.exports = router;

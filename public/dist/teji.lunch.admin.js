@@ -9189,8 +9189,6 @@ return jQuery;
 
 }));
 
-define("jquery", function(){});
-
 /*
  * jQuery Autocomplete plugin 1.2.3
  *
@@ -18038,6 +18036,11 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
                     callback();
                 }
             }, this));
+        },
+
+        showInfo: function(){
+            // TODO: set proper URL attribute. Right now using dummy attribue!!
+            window.open(this.get('shopURL'));
         }
     });
     return Shop;
@@ -18960,6 +18963,7 @@ define('teji/lunch/view/admin/GroupAddView',[
         },
 
         clearAddShopModal: function(){
+            this.$(".fnGetShopURLInput").val("");
             for(var i=0, len=this.ADD_SHOP_INPUT_KEYS.length; i<len; i++){
                 var key = this.ADD_SHOP_INPUT_KEYS[i];
                 var blankValue = "";

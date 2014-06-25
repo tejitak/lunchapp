@@ -38,6 +38,6 @@ a {
     width: 100%;
     font-weight: bold;
     font-size: 20px;
-    padding-bottom: 8px;
+    padding: 8px 0;
 }
 /*** modules end ***/
