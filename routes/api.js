@@ -171,12 +171,34 @@ router.post('/vote', function(req, res) {
     var callback = function(authResponse){
         var groupId = entry.groupId;
         var shopId = entry.shopId;
-        console.log("Vote to group: " + groupId + ", shop: " + shopId);
-        // TODO: store the userId to the target shop object as a votedBy entry
-        
-        res.contentType('application/json');
-        res.send('{"success":true}');
-    }
+        var userId = authResponse.data.user_id;
+        // store the userId to the target shop object as a votedBy entry
+        // 
+        // TODO: Cannot change value in array of a sub document. It is maybe NeDB bug?
+        //
+        //   req.db.groups.update({"_id": groupId, "shops.id": shopId}, {$push: {"shops.$.votedBy": userId}}, {}, function(err, numReplaced, newDoc) {})
+        //
+        // In mongo DB, the above should work. The following is a workaround for NeDB
+        req.db.groups.find({"_id": groupId}, function(err, items) {
+            if(items && items[0]){
+                var item = items[0];
+                for(var i=0, len=item.shops.length; i<len; i++){
+                    var shop = item.shops[i];
+                    if(shop.id === shopId){
+                        if(!item.votedBy){ item.votedBy = []; }
+                        if(item.votedBy.indexOf(userId) == -1){
+                            item.votedBy.push(userId);
+                        }
+                        break;
+                    }
+                }
+                req.db.groups.update({"_id": groupId, "shops.id": shopId}, item, {upsert: true}, function(err, numReplaced, newDoc) {
+                    res.contentType('application/json');
+                    res.send('{"success":true}');
+                });
+            }
+        });
+    };
     fbAuth.checkAccessToken(entry.inputToken, callback);
 });
 
