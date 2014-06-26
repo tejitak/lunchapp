@@ -18236,8 +18236,27 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
                 var w = (len * 220/*item width*/) + 95/* padding */;
                 var $node = this._createShopsNode(shops).addClass("flipsnap").width(w + "px");
                 this.$el.append($node);
-                flipsnap('.flipsnap', {distance: 230});
+                this.enableFilpSnap();
             }
+        },
+
+        enableFilpSnap: function(){
+            var flip = flipsnap('.flipsnap', {distance: 230});
+            // attach event for flipsnap
+            var $prevArrow = $("<div></div>").addClass("flipsnapPrevArrow disabled").click(function() {
+                if(flip.hasPrev()){ flip.toPrev(); }
+            });
+            this.$el.append($prevArrow);
+            var $nextArrow = $("<div></div>").addClass("flipsnapNextArrow disabled").click(function() {
+                if(flip.hasNext()){ flip.toNext(); }
+            });
+            this.$el.append($nextArrow);
+            var updateFlipBtnStates = function(){
+                flip.hasPrev() ? $prevArrow.removeClass("disabled") : $prevArrow.addClass("disabled");
+                flip.hasNext() ? $nextArrow.removeClass("disabled") : $nextArrow.addClass("disabled");
+            };
+            flip.element.addEventListener('fspointmove', updateFlipBtnStates, false);
+            updateFlipBtnStates();
         },
 
         _createShopsNode: function(shops){

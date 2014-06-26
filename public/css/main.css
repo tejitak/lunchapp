@@ -1,8 +1,12 @@
 @import url("common.css");
 
+.mainContent {
+    position: relative;
+}
+
 /*** flipsnap start ***/
 .viewport {
-    width: 320px;
+    width: 310px;
     overflow: hidden;
     margin: 0 auto;
     -webkit-transform: translateZ(0); /* Optional: When heavy at iOS6+ */
@@ -26,4 +30,55 @@
     margin: 0 10px;
     text-align: center;
 }
+.flipsnapPrevArrow {
+    display: none;
+    position: absolute;
+    top: 120px;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 70px 50px 70px 0;
+    border-color: transparent #00a6ff transparent transparent;
+}
+
+.flipsnapPrevArrow.disabled {
+    border-color: transparent #cccccc transparent transparent;
+}
+
+.flipsnapNextArrow {
+    display: none;
+    position: absolute;
+    top: 140px;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 70px 0 70px 50px;
+    border-color: transparent transparent transparent #00a6ff;
+}
+
+.flipsnapNextArrow.disabled{
+    border-color: transparent transparent transparent #cccccc;
+}
 /*** flipsnap end ***/
+
+/*** PC version start ***/
+@media (min-width: 768px) {
+    .viewport {
+        width: 600px;
+    }
+    .flipsnapPrevArrow {
+        display: block;
+    }
+    .flipsnapNextArrow {
+        display: block;
+    }
+}
+
+@media (min-width: 1024px) {
+    .viewport {
+        width: 820px;
+    }
+}
+/*** PC version end ***/
