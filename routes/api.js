@@ -185,9 +185,9 @@ router.post('/vote', function(req, res) {
                 for(var i=0, len=item.shops.length; i<len; i++){
                     var shop = item.shops[i];
                     if(shop.id === shopId){
-                        if(!item.votedBy){ item.votedBy = []; }
-                        if(item.votedBy.indexOf(userId) == -1){
-                            item.votedBy.push(userId);
+                        if(!shop.votedBy){ shop.votedBy = []; }
+                        if(shop.votedBy.indexOf(userId) == -1){
+                            shop.votedBy.push(userId);
                         }
                         break;
                     }
