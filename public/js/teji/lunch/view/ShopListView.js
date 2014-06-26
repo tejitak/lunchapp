@@ -26,7 +26,7 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
                 }
                 this.$groupSelect.change($.proxy(function(){
                     this.clearShops();
-                    this._renderGroup(this._groups[this.$groupSelect.val()]);
+                    this._renderGroup(this.getSelectedGroup());
                 }, this));
                 if(models.length > 1){
                     $(".fnGroupSelectContainer").show();
@@ -60,7 +60,7 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
             $categoryFilterSelect.change($.proxy(function(){
                 // refresh UI with specified category
                 this.clearShops();
-                var group = this._groups[this.$groupSelect.val()];
+                var group = this.getSelectedGroup();
                 var selectedCategory = $(".fnCategoryFilter").val();
                 var filteredShops = (selectedCategory == "all") ? group.get("shops") : $.grep(group.get("shops"), function(shop){
                     return shop.get("category") == selectedCategory;
@@ -85,10 +85,22 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
             var $div = $("<div></div>");
             _.each(shops, function(shop){
                 var shopView = new ShopView({model: shop});
+                shopView.onVoteClick = $.proxy(function(shopModel){
+                    var groupModel = this.getSelectedGroup();
+                    if(groupModel){
+                        // TODO: set callback
+                        var callback = function(){};
+                        groupModel.vote(shopModel.get("id"), callback);
+                    }
+                }, this);
                 var el = shopView.render().el;
                 $div.append(el);
             }, this);
             return $div;
+        },
+
+        getSelectedGroup: function(){
+            return this._groups[this.$groupSelect.val()];
         },
         
         clearShops: function(){

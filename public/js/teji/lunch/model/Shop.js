@@ -36,24 +36,9 @@ define(["backbone", "jquery"], function(Backbone, $){
         validate: function(attrs){
         },
 
-        vote: function(callback){
-            $.ajax({type: "POST",
-                url: "/api/vote",
-                contentType: "application/json; charset=utf-8",
-                processData: false,
-                data: JSON.stringify({inputToken: fbInit.accessToken, shopId: this.attributes.id})
-            }).done($.proxy(function(response){
-                // TODO: 
-                console.log(response);
-                if(callback){
-                    callback();
-                }
-            }, this));
-        },
-
         showInfo: function(){
-            // TODO: set proper URL attribute. Right now using dummy attribue!!
-            window.open(this.get('shopURL'));
+            // TODO: set proper URL attribute. Swicth URL for mobile and PC.
+            window.open(this.get('url_mobile'));
         }
     });
     return Shop;

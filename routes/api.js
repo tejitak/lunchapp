@@ -150,6 +150,36 @@ router.delete('/group/:id', function(req, res) {
     fbAuth.checkAccessToken(req.query.inputToken, callback);
 });
 
+/**
+ * @api {POST} /vote Vote to a shop in a group
+ *
+ * @apiParam {String} groupId Group ID.
+ * @apiParam {String} shopId Shop ID.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {"success": true}
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Unauthorized
+ *     {
+ *       "error": "404 Unauthorized"
+ *     }
+ */
+router.post('/vote', function(req, res) {
+    var entry = req.body;
+    var callback = function(authResponse){
+        var groupId = entry.groupId;
+        var shopId = entry.shopId;
+        console.log("Vote to group: " + groupId + ", shop: " + shopId);
+        // TODO: store the userId to the target shop object as a votedBy entry
+        
+        res.contentType('application/json');
+        res.send('{"success":true}');
+    }
+    fbAuth.checkAccessToken(entry.inputToken, callback);
+});
+
 
 /**
  * @api {GET} /shop/retrieve Get a specified shop information via external web API such as Gurunabi

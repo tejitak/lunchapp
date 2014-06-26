@@ -17546,9 +17546,13 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./t
                 json.imageURL = this.defaultImgURL;
             }
             this.$el.html(this.template(json));
-            this.$(".fnBtnVote").click($.proxy(this.model.vote, this.model));
+            this.$(".fnBtnVote").click($.proxy(function(){ this.onVoteClick(this.model); }, this));
             this.$(".fnBtnInfo").click($.proxy(this.model.showInfo, this.model))
             return this;
+        },
+
+        // for override
+        onVoteClick: function(shopModel){
         }
     });
     return ShopView;
@@ -18181,7 +18185,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
                 }
                 this.$groupSelect.change($.proxy(function(){
                     this.clearShops();
-                    this._renderGroup(this._groups[this.$groupSelect.val()]);
+                    this._renderGroup(this.getSelectedGroup());
                 }, this));
                 if(models.length > 1){
                     $(".fnGroupSelectContainer").show();
@@ -18215,7 +18219,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
             $categoryFilterSelect.change($.proxy(function(){
                 // refresh UI with specified category
                 this.clearShops();
-                var group = this._groups[this.$groupSelect.val()];
+                var group = this.getSelectedGroup();
                 var selectedCategory = $(".fnCategoryFilter").val();
                 var filteredShops = (selectedCategory == "all") ? group.get("shops") : $.grep(group.get("shops"), function(shop){
                     return shop.get("category") == selectedCategory;
@@ -18240,10 +18244,22 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
             var $div = $("<div></div>");
             _.each(shops, function(shop){
                 var shopView = new ShopView({model: shop});
+                shopView.onVoteClick = $.proxy(function(shopModel){
+                    var groupModel = this.getSelectedGroup();
+                    if(groupModel){
+                        // TODO: set callback
+                        var callback = function(){};
+                        groupModel.vote(shopModel.get("id"), callback);
+                    }
+                }, this);
                 var el = shopView.render().el;
                 $div.append(el);
             }, this);
             return $div;
+        },
+
+        getSelectedGroup: function(){
+            return this._groups[this.$groupSelect.val()];
         },
         
         clearShops: function(){
@@ -18291,24 +18307,9 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
         validate: function(attrs){
         },
 
-        vote: function(callback){
-            $.ajax({type: "POST",
-                url: "/api/vote",
-                contentType: "application/json; charset=utf-8",
-                processData: false,
-                data: JSON.stringify({inputToken: fbInit.accessToken, shopId: this.attributes.id})
-            }).done($.proxy(function(response){
-                // TODO: 
-                console.log(response);
-                if(callback){
-                    callback();
-                }
-            }, this));
-        },
-
         showInfo: function(){
-            // TODO: set proper URL attribute. Right now using dummy attribue!!
-            window.open(this.get('shopURL'));
+            // TODO: set proper URL attribute. Swicth URL for mobile and PC.
+            window.open(this.get('url_mobile'));
         }
     });
     return Shop;
@@ -18371,6 +18372,21 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
                 shopModel.initWithTaberoguResponse(json.response.rest);
                 if(callback){
                     callback(shopModel);
+                }
+            }, this));
+        },
+
+        vote: function(shopId, callback){
+            $.ajax({type: "POST",
+                url: "/api/vote",
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify({inputToken: fbInit.accessToken, groupId: this.get("_id"), shopId: shopId})
+            }).done($.proxy(function(response){
+                // TODO: 
+                console.log(response);
+                if(callback){
+                    callback();
                 }
             }, this));
         }

@@ -16,9 +16,13 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
                 json.imageURL = this.defaultImgURL;
             }
             this.$el.html(this.template(json));
-            this.$(".fnBtnVote").click($.proxy(this.model.vote, this.model));
+            this.$(".fnBtnVote").click($.proxy(function(){ this.onVoteClick(this.model); }, this));
             this.$(".fnBtnInfo").click($.proxy(this.model.showInfo, this.model))
             return this;
+        },
+
+        // for override
+        onVoteClick: function(shopModel){
         }
     });
     return ShopView;

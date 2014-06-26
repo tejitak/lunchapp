@@ -57,6 +57,21 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
                     callback(shopModel);
                 }
             }, this));
+        },
+
+        vote: function(shopId, callback){
+            $.ajax({type: "POST",
+                url: "/api/vote",
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify({inputToken: fbInit.accessToken, groupId: this.get("_id"), shopId: shopId})
+            }).done($.proxy(function(response){
+                // TODO: 
+                console.log(response);
+                if(callback){
+                    callback();
+                }
+            }, this));
         }
     });
     return Group;
