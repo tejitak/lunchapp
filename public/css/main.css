@@ -6,7 +6,7 @@
 
 /*** flipsnap start ***/
 .viewport {
-    width: 310px;
+    width: 290px;
     overflow: hidden;
     margin: 0 auto;
     -webkit-transform: translateZ(0); /* Optional: When heavy at iOS6+ */
@@ -40,7 +40,7 @@
     height: 0;
     border-style: solid;
     border-width: 70px 50px 70px 0;
-    border-color: transparent #00a6ff transparent transparent;
+    border-color: transparent #428BCA transparent transparent;
 }
 
 .flipsnapPrevArrow.disabled {
@@ -58,7 +58,7 @@
     height: 0;
     border-style: solid;
     border-width: 70px 0 70px 50px;
-    border-color: transparent transparent transparent #00a6ff;
+    border-color: transparent transparent transparent #428BCA;
 }
 
 .flipsnapNextArrow.disabled{
@@ -68,6 +68,13 @@
 /*** flipsnap end ***/
 
 /*** PC version start ***/
+@media (max-width: 768px) {
+    .container, .jumbotron {
+        padding-left: 8px;
+        padding-right: 8px;
+    }    
+}
+
 @media (min-width: 768px) {
     .viewport {
         width: 600px;
