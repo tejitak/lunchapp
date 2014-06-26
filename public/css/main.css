@@ -33,6 +33,7 @@
 .flipsnapPrevArrow {
     display: none;
     position: absolute;
+    cursor: pointer;
     top: 120px;
     left: 0;
     width: 0;
@@ -44,11 +45,13 @@
 
 .flipsnapPrevArrow.disabled {
     border-color: transparent #cccccc transparent transparent;
+    cursor: default;
 }
 
 .flipsnapNextArrow {
     display: none;
     position: absolute;
+    cursor: pointer;
     top: 140px;
     right: 0;
     width: 0;
@@ -60,6 +63,7 @@
 
 .flipsnapNextArrow.disabled{
     border-color: transparent transparent transparent #cccccc;
+    cursor: default;
 }
 /*** flipsnap end ***/
 
