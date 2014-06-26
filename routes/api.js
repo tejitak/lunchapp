@@ -267,7 +267,6 @@ router.get('/shop/retrieve', function(req, res) {
             shopURLRes.on('end', function() {
                 var re = /<body.*data-r.*\"sid\":\"(\w+)\",\"/g;
                 var result = re.exec(shopHTMLContent);
-                console.dir(result);
                 if(result && result[1]){
                     callAPI(result[1]);
                 }
