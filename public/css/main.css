@@ -14,7 +14,7 @@
 
 .flipsnap {
     /* width: 960px; (220px(item width) * 3(item count) + 45px (padding left) + 50px) */
-    padding-left: 45px;
+    padding-left: 35px; /*35px seems to be ideal for iPhone. Probably because viewport is 290px and one item is 220px (=290px with 35px padding x2)*/
 }
 
 .flipsnap:after {
@@ -39,7 +39,7 @@
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: 70px 50px 70px 0;
+    border-width: 65px 40px 65px 0;
     border-color: transparent #428BCA transparent transparent;
 }
 
@@ -57,7 +57,7 @@
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: 70px 0 70px 50px;
+    border-width: 65px 0 65px 40px;
     border-color: transparent transparent transparent #428BCA;
 }
 

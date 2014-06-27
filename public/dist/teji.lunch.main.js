@@ -18273,7 +18273,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
         },
 
         enableFilpSnap: function(){
-            var flip = flipsnap('.flipsnap', {distance: 230});
+            var flip = flipsnap('.flipsnap', {distance: 220});//220px seems to be the perfect distance for some reason. Maybe because .flipsnapItem has 200px and 10px padding (220px)
             // attach event for flipsnap
             var $prevArrow = $("<div></div>").addClass("flipsnapPrevArrow disabled").click(function() {
                 if(flip.hasPrev()){ flip.toPrev(); }
