@@ -41,7 +41,7 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
             if(model.get("state") === "vote"){
                 // _votedShopId ? GLOBAL Variable. maybe a better way to solve this?
                 // also one problem I experience with fbInit.me.id is that it sometimes loads after the rendering, giving the shopview rendering the wrong parameters.
-                _votedShopId = model.getVotedShopId(/*fbInit.me.id*/"661664063920036"); 
+                _votedShopId = model.getVotedShopId(fbInit.me.id/*"661664063920036"*/); 
                 var shops = model.get("shops")
                 this._renderShops(shops);
                 // show advanced section when categories exist
