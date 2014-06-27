@@ -17528,7 +17528,7 @@ define('text',['module'], function (module) {
 });
 
 
-define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail">\n\t<h4><%=name%></h4>\n    <img src="<%=imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">\n    <div class="caption">\n        <p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button">投票</a></p>\n\t\t<p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n    </div>\n</div>';});
+define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail">\n\t<h4><%=name%></h4>\n    <img src="<%=imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">\n    <div class="caption">\n    \t<p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button">投票</a>\n    \t   <a href="#" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hide" role="button">UNDO</a></p>\n\t\t<p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n    </div>\n</div>';});
 
 define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], function(Backbone, _, $, tmpl){
     var ShopView = Backbone.View.extend({
@@ -17541,20 +17541,38 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./t
         initialize: function() {
         },
 
-        render: function() {
+        /**
+        *@param {enableVote} A boolean value indicating if the vote button should be clickable or not
+        *@param {isVoted} A boolean value indicating whether this view should display an undo vote button
+        */
+        render: function(enableVote, isVoted) {
             var json = this.model.toJSON();
             // show default image when the image URL is not specified
             if(!json.imageURL){
                 json.imageURL = this.defaultImgURL;
             }
             this.$el.html(this.template(json));
+
+            if(!enableVote){
+                this.$(".fnBtnVote").addClass('disabled'); 
+                this.$(".fnBtnVote").prop('disabled', true); 
+            }
+            if(isVoted){
+                this.$(".fnBtnVote").addClass('hide');
+                this.$(".fnBtnUndoVote").removeClass('hide');
+            }
             this.$(".fnBtnVote").click($.proxy(function(){ this.onVoteClick(this.model); }, this));
+            this.$(".fnBtnUndoVote").click($.proxy(function(){ this.onUndoVoteClick(this.model); }, this));
             this.$(".fnBtnInfo").click($.proxy(this.model.showInfo, this.model))
+
+
             return this;
         },
 
         // for override
         onVoteClick: function(shopModel){
+        },
+        onUndoVoteClick: function(shopModel){
         }
     });
     return ShopView;
@@ -18198,36 +18216,48 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
         },
 
         _renderGroup: function(model){
-            var shops = model.get("shops")
-            this._renderShops(shops);
-            // show advanced section when categories exist
-            var categories = $.map(shops, function(shop){ return shop.get("category"); });
-            var uniqueCategories = [];
-            var countMap = {};
-            $.each(categories, function(i, cat){
-                if(!countMap[cat]){
-                    countMap[cat] = 1;
-                    uniqueCategories.push(cat);
-                }else{
-                    countMap[cat]++;
-                }
-            });
-            var $categoryFilterSelect = $(".fnCategoryFilter");
-            $categoryFilterSelect.empty();
-            $("<option></option>").val("all").html("All (" + categories.length + ")").appendTo($categoryFilterSelect);
-            for(var i=0, len=uniqueCategories.length; i<len; i++){
-                $("<option></option>").val(uniqueCategories[i]).html(uniqueCategories[i] + " (" + countMap[uniqueCategories[i]] + ")").appendTo($categoryFilterSelect);
-            }
-            $categoryFilterSelect.change($.proxy(function(){
-                // refresh UI with specified category
-                this.clearShops();
-                var group = this.getSelectedGroup();
-                var selectedCategory = $(".fnCategoryFilter").val();
-                var filteredShops = (selectedCategory == "all") ? group.get("shops") : $.grep(group.get("shops"), function(shop){
-                    return shop.get("category") == selectedCategory;
+
+            if(model.get("state") === "vote"){
+                // _votedShopId ? GLOBAL Variable. maybe a better way to solve this?
+                // also one problem I experience with fbInit.me.id is that it sometimes loads after the rendering, giving the shopview rendering the wrong parameters.
+                _votedShopId = model.getVotedShopId(/*fbInit.me.id*/"661664063920036"); 
+                var shops = model.get("shops")
+                this._renderShops(shops);
+                // show advanced section when categories exist
+                var categories = $.map(shops, function(shop){ return shop.get("category"); });
+                var uniqueCategories = [];
+                var countMap = {};
+                $.each(categories, function(i, cat){
+                    if(!countMap[cat]){
+                        countMap[cat] = 1;
+                        uniqueCategories.push(cat);
+                    }else{
+                        countMap[cat]++;
+                    }
                 });
-                this._renderShops(filteredShops);
-            }, this));
+                var $categoryFilterSelect = $(".fnCategoryFilter");
+                $categoryFilterSelect.empty();
+                $("<option></option>").val("all").html("All (" + categories.length + ")").appendTo($categoryFilterSelect);
+                for(var i=0, len=uniqueCategories.length; i<len; i++){
+                    $("<option></option>").val(uniqueCategories[i]).html(uniqueCategories[i] + " (" + countMap[uniqueCategories[i]] + ")").appendTo($categoryFilterSelect);
+                }
+                $categoryFilterSelect.change($.proxy(function(){
+                    // refresh UI with specified category
+                    this.clearShops();
+                    var group = this.getSelectedGroup();
+                    var selectedCategory = $(".fnCategoryFilter").val();
+                    var filteredShops = (selectedCategory == "all") ? group.get("shops") : $.grep(group.get("shops"), function(shop){
+                        return shop.get("category") == selectedCategory;
+                    });
+                    this._renderShops(filteredShops);
+                }, this));
+            }else if(model.get("state") === "voted"){
+                //TODO Make nice view for decided shop.
+                var decidedShop = model.get("decidedShop");
+                this.$el.append($('<div class="alert alert-info"></div>').html("The selected shop is: " + decidedShop));
+            }else{
+                this.$el.append($('<div class="alert alert-danger"></div>').html("Something went wrong..."));
+            }
         },
 
         _renderShops: function(shops){
@@ -18268,12 +18298,24 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
                 shopView.onVoteClick = $.proxy(function(shopModel){
                     var groupModel = this.getSelectedGroup();
                     if(groupModel){
-                        // TODO: set callback
-                        var callback = function(){};
+                        // TODO: set callback (made it reload, maybe a better solution exists?)
+                        var callback = function(){ location.reload(); };
                         groupModel.vote(shopModel.get("id"), callback);
                     }
                 }, this);
-                var el = shopView.render().el;
+
+                shopView.onUndoVoteClick = $.proxy(function(shopModel){
+                    var groupModel = this.getSelectedGroup();
+                    if(groupModel){
+                        // TODO: set callback (made it reload, maybe a better solution exists?)
+                        var callback = function(){ location.reload(); };
+                        groupModel.undoVote(shopModel.get("id"), callback);
+                    }
+                }, this);
+
+                var enableVote = !_votedShopId; //enableVote = false if _votedShop is set to some ShopId
+                var isVoted = _votedShopId === shop.get("id");
+                var el = shopView.render(enableVote, isVoted).el;
                 $div.append(el);
             }, this);
             return $div;
@@ -18302,7 +18344,8 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
             url_mobile: "",
             imageURL: "",
             rating: 0,
-            visitedCount: 0
+            visitedCount: 0,
+            votedBy: []
         },
 
         initialize: function(){
@@ -18317,6 +18360,7 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
             this.set("tel", result["tel"]);
             this.set("url_mobile", result["url_mobile"]);
             this.set("imageURL", result.image_url["shop_image1"] || "");
+            this.set("votedBy", []);
         },
 
         updateValues: function(shopInfo){
@@ -18340,6 +18384,9 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
     var Group = Backbone.Model.extend({
 
         defaults: {
+            state: "", //TODO A function somewhere (server or client?) to change state. also init value not set properly (please help :)
+            decidedShop: "",
+            votedShop: "", //maybe not a good idea to have it in database, would . I think it's better to retrieve it from the shops.votedBy entry.
             id: "",
             name: "",
             lunchTime: "",
@@ -18352,6 +18399,7 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
                 // default will be used
                 return;
             }
+            obj.state = obj.state || "vote";
             obj.members = obj.members || [];
             obj.shops = obj.shops || [];
             obj.lunchTime = obj.lunchTime || "12:00";
@@ -18397,8 +18445,33 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
             }, this));
         },
 
+        getVotedShopId: function(userId){
+            for(var i=0, len=this.get("shops").length; i<len; i++){
+                var shop = this.get("shops")[i];
+                if(shop.get("votedBy").indexOf(userId) != -1){
+                        return shop.get("id");
+                }
+            }
+            return;
+        },
+
         vote: function(shopId, callback){
             $.ajax({type: "POST",
+                url: "/api/vote",
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify({inputToken: fbInit.accessToken, groupId: this.get("_id"), shopId: shopId})
+            }).done($.proxy(function(response){
+                // TODO: 
+                console.log(response);
+                if(callback){
+                    callback();
+                }
+            }, this));
+        },
+
+        undoVote: function(shopId, callback){
+            $.ajax({type: "DELETE",
                 url: "/api/vote",
                 contentType: "application/json; charset=utf-8",
                 processData: false,

@@ -10,7 +10,8 @@ define(["backbone", "jquery"], function(Backbone, $){
             url_mobile: "",
             imageURL: "",
             rating: 0,
-            visitedCount: 0
+            visitedCount: 0,
+            votedBy: []
         },
 
         initialize: function(){
@@ -25,6 +26,7 @@ define(["backbone", "jquery"], function(Backbone, $){
             this.set("tel", result["tel"]);
             this.set("url_mobile", result["url_mobile"]);
             this.set("imageURL", result.image_url["shop_image1"] || "");
+            this.set("votedBy", []);
         },
 
         updateValues: function(shopInfo){

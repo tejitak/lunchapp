@@ -2,6 +2,9 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
     var Group = Backbone.Model.extend({
 
         defaults: {
+            state: "", //TODO A function somewhere (server or client?) to change state. also init value not set properly (please help :)
+            decidedShop: "",
+            votedShop: "", //maybe not a good idea to have it in database, would . I think it's better to retrieve it from the shops.votedBy entry.
             id: "",
             name: "",
             lunchTime: "",
@@ -14,6 +17,7 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
                 // default will be used
                 return;
             }
+            obj.state = obj.state || "vote";
             obj.members = obj.members || [];
             obj.shops = obj.shops || [];
             obj.lunchTime = obj.lunchTime || "12:00";
@@ -59,8 +63,33 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
             }, this));
         },
 
+        getVotedShopId: function(userId){
+            for(var i=0, len=this.get("shops").length; i<len; i++){
+                var shop = this.get("shops")[i];
+                if(shop.get("votedBy").indexOf(userId) != -1){
+                        return shop.get("id");
+                }
+            }
+            return;
+        },
+
         vote: function(shopId, callback){
             $.ajax({type: "POST",
+                url: "/api/vote",
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify({inputToken: fbInit.accessToken, groupId: this.get("_id"), shopId: shopId})
+            }).done($.proxy(function(response){
+                // TODO: 
+                console.log(response);
+                if(callback){
+                    callback();
+                }
+            }, this));
+        },
+
+        undoVote: function(shopId, callback){
+            $.ajax({type: "DELETE",
                 url: "/api/vote",
                 contentType: "application/json; charset=utf-8",
                 processData: false,

@@ -9,20 +9,38 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
         initialize: function() {
         },
 
-        render: function() {
+        /**
+        *@param {enableVote} A boolean value indicating if the vote button should be clickable or not
+        *@param {isVoted} A boolean value indicating whether this view should display an undo vote button
+        */
+        render: function(enableVote, isVoted) {
             var json = this.model.toJSON();
             // show default image when the image URL is not specified
             if(!json.imageURL){
                 json.imageURL = this.defaultImgURL;
             }
             this.$el.html(this.template(json));
+
+            if(!enableVote){
+                this.$(".fnBtnVote").addClass('disabled'); 
+                this.$(".fnBtnVote").prop('disabled', true); 
+            }
+            if(isVoted){
+                this.$(".fnBtnVote").addClass('hide');
+                this.$(".fnBtnUndoVote").removeClass('hide');
+            }
             this.$(".fnBtnVote").click($.proxy(function(){ this.onVoteClick(this.model); }, this));
+            this.$(".fnBtnUndoVote").click($.proxy(function(){ this.onUndoVoteClick(this.model); }, this));
             this.$(".fnBtnInfo").click($.proxy(this.model.showInfo, this.model))
+
+
             return this;
         },
 
         // for override
         onVoteClick: function(shopModel){
+        },
+        onUndoVoteClick: function(shopModel){
         }
     });
     return ShopView;

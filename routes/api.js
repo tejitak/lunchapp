@@ -172,36 +172,90 @@ router.post('/vote', function(req, res) {
         var groupId = entry.groupId;
         var shopId = entry.shopId;
         var userId = authResponse.data.user_id;
-        // store the userId to the target shop object as a votedBy entry
-        // 
-        // TODO: Cannot change value in array of a sub document. It is maybe NeDB bug?
-        //
-        //   req.db.groups.update({"_id": groupId, "shops.id": shopId}, {$push: {"shops.$.votedBy": userId}}, {}, function(err, numReplaced, newDoc) {})
-        //
-        // In mongo DB, the above should work. The following is a workaround for NeDB
-        req.db.groups.find({"_id": groupId}, function(err, items) {
-            if(items && items[0]){
-                var item = items[0];
-                for(var i=0, len=item.shops.length; i<len; i++){
-                    var shop = item.shops[i];
-                    if(shop.id === shopId){
-                        if(!shop.votedBy){ shop.votedBy = []; }
-                        if(shop.votedBy.indexOf(userId) == -1){
-                            shop.votedBy.push(userId);
-                        }
-                        break;
-                    }
-                }
-                req.db.groups.update({"_id": groupId, "shops.id": shopId}, item, {upsert: true}, function(err, numReplaced, newDoc) {
-                    res.contentType('application/json');
-                    res.send('{"success":true}');
-                });
-            }
-        });
+        addVotedByEntry(groupId, shopId, userId, req);
+        res.contentType('application/json');
+        res.send('{"success":true}');
     };
     fbAuth.checkAccessToken(entry.inputToken, callback);
 });
 
+router.delete('/vote', function(req, res) {
+    var entry = req.body;
+    var callback = function(authResponse){
+        var groupId = entry.groupId;
+        var shopId = entry.shopId;
+        var userId = authResponse.data.user_id;
+        deleteVotedByEntry(groupId, shopId, userId, req, res);
+        res.contentType('application/json');
+        res.send('{"success":true}');
+    };
+    fbAuth.checkAccessToken(entry.inputToken, callback);
+});
+
+// Adds a shop[shopId].votedBy entry with userId into the database document for group._id = groupId
+function addVotedByEntry(groupId, shopId, userId, req)
+{
+    // store the userId to the target shop object as a votedBy entry
+    // 
+    // TODO: Cannot change value in array of a sub document. It is maybe NeDB bug?
+    //
+    //   req.db.groups.update({"_id": groupId, "shops.id": shopId}, {$push: {"shops.$.votedBy": userId}}, {}, function(err, numReplaced, newDoc) {})
+    //
+    // In mongo DB, the above should work. The following is a workaround for NeDB
+    req.db.groups.find({"_id": groupId}, function(err, items) {
+        if(items && items[0]){
+            var item = items[0];
+            for(var i=0, len=item.shops.length; i<len; i++){
+                var shop = item.shops[i];
+                if(shop.id === shopId){
+                    if(!shop.votedBy){ shop.votedBy = []; }
+                    if(shop.votedBy.indexOf(userId) == -1){
+                        shop.votedBy.push(userId);
+                    }
+                    break;
+                }
+            }
+            req.db.groups.update({"_id": groupId, "shops.id": shopId}, item, {upsert: true}, function(err, numReplaced, newDoc) {});
+        }
+    });
+}
+
+// Deletes a shop[shopId].votedBy entry with userId in the database document for group._id = groupId
+function deleteVotedByEntry(groupId, shopId, userId, req){
+    req.db.groups.find({"_id": groupId}, function(err, items) {
+        if(items && items[0]){
+            var item = items[0];
+            for(var i=0, len=item.shops.length; i<len; i++){
+                var shop = item.shops[i];
+                if(shop.id === shopId){
+                    if(!shop.votedBy){ shop.votedBy = []; }
+                    var index = shop.votedBy.indexOf(userId);
+                    if(index != -1){
+                        shop.votedBy.splice(index, 1);
+                    }
+                    break;
+                }
+            }
+            req.db.groups.update({"_id": groupId, "shops.id": shopId}, item, {upsert: true}, function(err, numReplaced, newDoc) {});
+        }
+    });
+}
+
+// Maybe useful for a new voting round. Clears all shops.votedBy arrays and sets decidedShop to ""
+function resetVotes(groupId, req)
+{
+    req.db.groups.find({"_id": groupId}, function(err, items) {
+        if(items && items[0]){
+            var item = items[0];
+            item.decidedShop = "";
+            for(var i=0, len=item.shops.length; i<len; i++){
+                var shop = item.shops[i];
+                shop.votedBy = [];
+            }
+            req.db.groups.update({"_id": groupId}, item, {upsert: true}, function(err, numReplaced, newDoc) {});
+        }
+    });
+}
 
 /**
  * @api {GET} /shop/retrieve Get a specified shop information via external web API such as Gurunabi

@@ -37,36 +37,48 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
         },
 
         _renderGroup: function(model){
-            var shops = model.get("shops")
-            this._renderShops(shops);
-            // show advanced section when categories exist
-            var categories = $.map(shops, function(shop){ return shop.get("category"); });
-            var uniqueCategories = [];
-            var countMap = {};
-            $.each(categories, function(i, cat){
-                if(!countMap[cat]){
-                    countMap[cat] = 1;
-                    uniqueCategories.push(cat);
-                }else{
-                    countMap[cat]++;
-                }
-            });
-            var $categoryFilterSelect = $(".fnCategoryFilter");
-            $categoryFilterSelect.empty();
-            $("<option></option>").val("all").html("All (" + categories.length + ")").appendTo($categoryFilterSelect);
-            for(var i=0, len=uniqueCategories.length; i<len; i++){
-                $("<option></option>").val(uniqueCategories[i]).html(uniqueCategories[i] + " (" + countMap[uniqueCategories[i]] + ")").appendTo($categoryFilterSelect);
-            }
-            $categoryFilterSelect.change($.proxy(function(){
-                // refresh UI with specified category
-                this.clearShops();
-                var group = this.getSelectedGroup();
-                var selectedCategory = $(".fnCategoryFilter").val();
-                var filteredShops = (selectedCategory == "all") ? group.get("shops") : $.grep(group.get("shops"), function(shop){
-                    return shop.get("category") == selectedCategory;
+
+            if(model.get("state") === "vote"){
+                // _votedShopId ? GLOBAL Variable. maybe a better way to solve this?
+                // also one problem I experience with fbInit.me.id is that it sometimes loads after the rendering, giving the shopview rendering the wrong parameters.
+                _votedShopId = model.getVotedShopId(/*fbInit.me.id*/"661664063920036"); 
+                var shops = model.get("shops")
+                this._renderShops(shops);
+                // show advanced section when categories exist
+                var categories = $.map(shops, function(shop){ return shop.get("category"); });
+                var uniqueCategories = [];
+                var countMap = {};
+                $.each(categories, function(i, cat){
+                    if(!countMap[cat]){
+                        countMap[cat] = 1;
+                        uniqueCategories.push(cat);
+                    }else{
+                        countMap[cat]++;
+                    }
                 });
-                this._renderShops(filteredShops);
-            }, this));
+                var $categoryFilterSelect = $(".fnCategoryFilter");
+                $categoryFilterSelect.empty();
+                $("<option></option>").val("all").html("All (" + categories.length + ")").appendTo($categoryFilterSelect);
+                for(var i=0, len=uniqueCategories.length; i<len; i++){
+                    $("<option></option>").val(uniqueCategories[i]).html(uniqueCategories[i] + " (" + countMap[uniqueCategories[i]] + ")").appendTo($categoryFilterSelect);
+                }
+                $categoryFilterSelect.change($.proxy(function(){
+                    // refresh UI with specified category
+                    this.clearShops();
+                    var group = this.getSelectedGroup();
+                    var selectedCategory = $(".fnCategoryFilter").val();
+                    var filteredShops = (selectedCategory == "all") ? group.get("shops") : $.grep(group.get("shops"), function(shop){
+                        return shop.get("category") == selectedCategory;
+                    });
+                    this._renderShops(filteredShops);
+                }, this));
+            }else if(model.get("state") === "voted"){
+                //TODO Make nice view for decided shop.
+                var decidedShop = model.get("decidedShop");
+                this.$el.append($('<div class="alert alert-info"></div>').html("The selected shop is: " + decidedShop));
+            }else{
+                this.$el.append($('<div class="alert alert-danger"></div>').html("Something went wrong..."));
+            }
         },
 
         _renderShops: function(shops){
@@ -107,12 +119,24 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
                 shopView.onVoteClick = $.proxy(function(shopModel){
                     var groupModel = this.getSelectedGroup();
                     if(groupModel){
-                        // TODO: set callback
-                        var callback = function(){};
+                        // TODO: set callback (made it reload, maybe a better solution exists?)
+                        var callback = function(){ location.reload(); };
                         groupModel.vote(shopModel.get("id"), callback);
                     }
                 }, this);
-                var el = shopView.render().el;
+
+                shopView.onUndoVoteClick = $.proxy(function(shopModel){
+                    var groupModel = this.getSelectedGroup();
+                    if(groupModel){
+                        // TODO: set callback (made it reload, maybe a better solution exists?)
+                        var callback = function(){ location.reload(); };
+                        groupModel.undoVote(shopModel.get("id"), callback);
+                    }
+                }, this);
+
+                var enableVote = !_votedShopId; //enableVote = false if _votedShop is set to some ShopId
+                var isVoted = _votedShopId === shop.get("id");
+                var el = shopView.render(enableVote, isVoted).el;
                 $div.append(el);
             }, this);
             return $div;
