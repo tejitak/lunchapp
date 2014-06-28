@@ -20,15 +20,15 @@ define("teji/lunch/fbInit", ["facebook", "jquery"], function(facebook, $){
                 $("#loginBtnMenu").css({display: "none"});
                 $("#loginUserMenu").css({display: ""});
                 FB.api('/me', $.proxy(function(response) {
-                    console.log(response);
+                    // console.log(response);
                     fbInit.me = response;
                     $('#dropDownLoginName').html(response.name);
                     $('#loginUserImage').html(this.getImageHTML(response.id));
+                    if(this.loginSuccessCallback){
+                        this.loginSuccessCallback(response);
+                    }
                 }, this));
                 this.accessToken = response.authResponse.accessToken;
-                if(this.loginSuccessCallback){
-                    this.loginSuccessCallback(response);
-                }
             }else{
                 // show login button
                 $("#loginBtnMenu").css({display: ""});
