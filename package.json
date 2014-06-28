@@ -15,7 +15,8 @@
     "consolidate": "^0.10.0",
     "underscore": "^1.6.0",
     "nedb": "^0.10.5",
-    "xml2json": "^0.4.0"
+    "xml2json": "^0.4.0",
+    "moment": "^2.7.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

@@ -18067,6 +18067,25 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
         validate: function(attrs){
         },
 
+        getUniqueCategories: function(){
+            var shops = this.get("shops");
+            var categories = $.map(shops, function(shop){ return shop.get("category"); });
+            var uniqueCategories = [];
+            var countMap = {};
+            $.each(categories, function(i, cat){
+                if(!countMap[cat]){
+                    countMap[cat] = 1;
+                    uniqueCategories.push({name: cat});
+                }else{
+                    countMap[cat]++;
+                }
+            });
+            $.each(uniqueCategories, function(i, obj){
+                obj.count = countMap[obj.name];
+            });
+            return uniqueCategories;
+        },
+
         addShop: function(shopModel){
             var shops = this.get("shops") || [];
             shops.push(shopModel);

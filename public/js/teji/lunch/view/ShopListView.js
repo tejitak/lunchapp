@@ -37,30 +37,19 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
         },
 
         _renderGroup: function(model){
-
             if(model.get("state") === "vote"){
                 // _votedShopId ? GLOBAL Variable. maybe a better way to solve this?
                 // also one problem I experience with fbInit.me.id is that it sometimes loads after the rendering, giving the shopview rendering the wrong parameters.
                 _votedShopId = model.getVotedShopId(fbInit.me.id/*"661664063920036"*/); 
-                var shops = model.get("shops")
-                this._renderShops(shops);
+                var shops = model.get("shops");
+                this._renderShops(model.get("shops"));
                 // show advanced section when categories exist
-                var categories = $.map(shops, function(shop){ return shop.get("category"); });
-                var uniqueCategories = [];
-                var countMap = {};
-                $.each(categories, function(i, cat){
-                    if(!countMap[cat]){
-                        countMap[cat] = 1;
-                        uniqueCategories.push(cat);
-                    }else{
-                        countMap[cat]++;
-                    }
-                });
+                var uniqueCategories = model.getUniqueCategories();
                 var $categoryFilterSelect = $(".fnCategoryFilter");
                 $categoryFilterSelect.empty();
-                $("<option></option>").val("all").html("All (" + categories.length + ")").appendTo($categoryFilterSelect);
+                $("<option></option>").val("all").html("All (" + shops.length + ")").appendTo($categoryFilterSelect);
                 for(var i=0, len=uniqueCategories.length; i<len; i++){
-                    $("<option></option>").val(uniqueCategories[i]).html(uniqueCategories[i] + " (" + countMap[uniqueCategories[i]] + ")").appendTo($categoryFilterSelect);
+                    $("<option></option>").val(uniqueCategories[i].name).html(uniqueCategories[i].name + " (" + uniqueCategories[i].count + ")").appendTo($categoryFilterSelect);
                 }
                 $categoryFilterSelect.change($.proxy(function(){
                     // refresh UI with specified category

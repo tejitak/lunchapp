@@ -4,6 +4,7 @@ var http = require('http');
 var url = require('url');
 var fbAuth = require('./modules/fbAuth');
 var xml2json = require('xml2json');
+var moment = require('moment');
 var router = express.Router();
 var apiKeys = {};
 
@@ -14,6 +15,22 @@ fs.readFile('apikey.json', 'UTF-8', function (err, data) {
     // set FB client_secret
     fbAuth.setClientSecret(apiKeys["fb_client_secret"]);
 });
+
+
+/**
+ *  calculate diffrence between currenttime and configured time
+ *  e.g.
+ *  - current time: 11:00, configured time: 12:00
+ *    moment().diff(moment("12:00", "HH:mm")) / (1000*60*60) -> -1
+ *  - current time: 13:30, configured time: 13:00
+ *    moment().diff(moment("13:00", "HH:mm")) / (1000*60*60) -> 0.5
+ */
+var getVoteState = function(group){
+    var diffHours = moment().diff(moment(group.lunchTime, "HH:mm")) / (1000 * 60 * 60);
+    // console.log("Time diff (h): " + diffHours);
+    // "voted" during 6 hours after configured time
+    return (0 < diffHours && diffHours < 6) ? "voted": "vote";
+};
 
 /**
  * @api {GET} /groups Get groups which an authenticated user joins
@@ -33,6 +50,16 @@ router.get('/groups', function(req, res) {
         // filter by FB authenticated user
         var userId = authResponse.data.user_id;
         req.db.groups.find({"members.id": userId}, function(err, items){
+            // TODO: set state by checking current time and group configured time
+            if(items){
+                for(var i=0, len=items.length; i<len; i++){
+                    var group = items[i];
+                    // set vote state "vote" or "voted"
+                    var state = getVoteState(group);
+                    
+                    group.state = 
+                }
+            }
             res.contentType('application/json');
             res.send(items);
         });
@@ -67,22 +94,12 @@ router.get('/group/:id', function(req, res) {
     fbAuth.checkAccessToken(req.query.inputToken, callback);
 });
 
-/*********************************
-    POST /group
-    contentType: application/json
-    data: {
-        inputToken: {accessToken},
-        name: "group1",
-        members: [{id: "123", name: "Tejitak"}],
-        shops: []
-    }
-*********************************/
 /**
  * @api {POST} /group Add a new group
  *
  * @apiParam {String} name Group name.
- * @apiParam {Array} members An array of member {id: "{fb_user_id}", name: ""}.
- * @apiParam {Array} shops An array of shops {id: "", name: ""}..
+ * @apiParam {Array} members An array of member [{id: "{fb_user_id}", name: ""}].
+ * @apiParam {Array} shops An array of shops [{id: "", name: ""}].
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
