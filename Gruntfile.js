@@ -17,6 +17,9 @@ module.exports = function (grunt) {
         shell: {
             start: {
                 command: 'npm start'
+            },
+            test: {
+                command: 'npm test'
             }
         },
         bower: {
@@ -104,5 +107,9 @@ module.exports = function (grunt) {
         'jshint',
         'requirejs:main_compressed',
         'requirejs:admin_compressed'
+    ]);
+
+    grunt.registerTask('test', [
+        'shell:test'
     ]);
 };
