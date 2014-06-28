@@ -32,6 +32,11 @@ var getVoteState = function(group){
     return (0 < diffHours && diffHours < 6) ? "voted": "vote";
 };
 
+var calcDecidedShop = function(group){
+    // TODO: imple
+    return group.shops && group.shops[0] && group.shops[0].id;
+};
+
 /**
  * @api {GET} /groups Get groups which an authenticated user joins
  *
@@ -55,9 +60,14 @@ router.get('/groups', function(req, res) {
                 for(var i=0, len=items.length; i<len; i++){
                     var group = items[i];
                     // set vote state "vote" or "voted"
-                    var state = getVoteState(group);
-                    
-                    group.state = 
+                    var state = group.state = getVoteState(group);
+                    if(state == "voted" && !group.decidedShop){
+                        // first access for vote result time 
+                        group.decidedShop = calcDecidedShop(group);
+                    }else if(state == "vote" && group.decidedShop){
+                        // first access for voting time
+                        resetVotes(group, req);
+                    }
                 }
             }
             res.contentType('application/json');
@@ -258,19 +268,22 @@ function deleteVotedByEntry(groupId, shopId, userId, req){
 }
 
 // Maybe useful for a new voting round. Clears all shops.votedBy arrays and sets decidedShop to ""
-function resetVotes(groupId, req){
+function resetVotesByGroupId(groupId, req){
     req.db.groups.find({"_id": groupId}, function(err, items) {
         if(items && items[0]){
-            var item = items[0];
-            item.decidedShop = "";
-            item.state = "vote"
-            for(var i=0, len=item.shops.length; i<len; i++){
-                var shop = item.shops[i];
-                shop.votedBy = [];
-            }
-            req.db.groups.update({"_id": groupId}, item, {upsert: true}, function(err, numReplaced, newDoc) {});
+            resetVotes(items[0], req);
         }
     });
+}
+
+function resetVotes(group, req){
+    group.decidedShop = "";
+    group.state = "vote"
+    for(var i=0, len=group.shops.length; i<len; i++){
+        var shop = group.shops[i];
+        shop.votedBy = [];
+    }
+    req.db.groups.update({"_id": group._id}, group, {upsert: true}, function(err, numReplaced, newDoc) {});    
 }
 
 //TODO Count votes and change status to voted and set decidedShop (and maybe update visited or something)
