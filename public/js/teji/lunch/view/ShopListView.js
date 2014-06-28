@@ -1,6 +1,7 @@
-define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], function(Backbone, _, ShopView, flipsnap){
+define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "flipsnap"], function(Backbone, _, cookie, ShopView, flipsnap){
     var ShopListView = Backbone.View.extend({
 
+        COOKIE_SELECTED_GROUP: "teji.lunch.selectedGroup",
         _groups: null,
 
         initialize: function() {
@@ -21,16 +22,24 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
                 }));
            }else{
                 $(".fnResultViewFilterSection").show();
-                // TODO: switch UI between result and vote
-                this._renderGroup(models[0]);
-                // show group selector
+                // read id from cookie
+                var initialSelectedGroupId = $.cookie(this.COOKIE_SELECTED_GROUP);
                 for(var i=0, len=models.length; i<len; i++){
-                    $("<option></option>").val(i).html(models[i].get("name")).appendTo(this.$groupSelect);
+                    var groupId = models[i].get("_id");
+                    var $option = $("<option></option>").val(groupId).html(models[i].get("name"));
+                    if(groupId === initialSelectedGroupId){
+                        $option.attr("selected", "selected");
+                    }
+                    $option.appendTo(this.$groupSelect);
                 }
                 this.$groupSelect.change($.proxy(function(){
                     this.clearShops();
-                    this._renderGroup(this.getSelectedGroup());
+                    var selectedGroup = this.getSelectedGroup();
+                    this._renderGroup(selectedGroup);
+                    // set id to cookie
+                    $.cookie(this.COOKIE_SELECTED_GROUP, selectedGroup.get("_id"));
                 }, this));
+                this._renderGroup(this.getSelectedGroupById(initialSelectedGroupId) || models[0]);
                 if(models.length > 1){
                     $(".fnGroupSelectContainer").show();
                 }else{
@@ -41,9 +50,7 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
 
         _renderGroup: function(model){
             if(model.get("state") === "vote"){
-                // _votedShopId ? GLOBAL Variable. maybe a better way to solve this?
-                // also one problem I experience with fbInit.me.id is that it sometimes loads after the rendering, giving the shopview rendering the wrong parameters.
-                _votedShopId = model.getVotedShopId(fbInit.me.id/*"661664063920036"*/); 
+                this._votedShopId = model.getVotedShopId(fbInit.me.id);
                 var shops = model.get("shops");
                 this._renderShops(model.get("shops"));
                 // show advanced section when categories exist
@@ -133,9 +140,8 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
                         groupModel.undoVote(shopModel.get("id"), callback);
                     }
                 }, this);
-
-                var enableVote = !_votedShopId; //enableVote = false if _votedShop is set to some ShopId
-                var isVoted = _votedShopId === shop.get("id");
+                var enableVote = !this._votedShopId; //enableVote = false if _votedShop is set to some ShopId
+                var isVoted = this._votedShopId === shop.get("id");
                 var el = shopView.render(enableVote, isVoted).el;
                 $div.append(el);
             }, this);
@@ -143,7 +149,13 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
         },
 
         getSelectedGroup: function(){
-            return this._groups[this.$groupSelect.val()];
+            return this.getSelectedGroupById(this.$groupSelect.val());
+        },
+
+        getSelectedGroupById: function(id){
+            return $.grep(this._groups, $.proxy(function(group){
+                return group.get("_id") === id;
+            }, this))[0];
         },
         
         clearShops: function(){

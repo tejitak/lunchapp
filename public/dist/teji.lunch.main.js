@@ -14060,15 +14060,15 @@ define("teji/lunch/fbInit", ["facebook", "jquery"], function(facebook, $){
                 $("#loginBtnMenu").css({display: "none"});
                 $("#loginUserMenu").css({display: ""});
                 FB.api('/me', $.proxy(function(response) {
-                    console.log(response);
+                    // console.log(response);
                     fbInit.me = response;
                     $('#dropDownLoginName').html(response.name);
                     $('#loginUserImage').html(this.getImageHTML(response.id));
+                    if(this.loginSuccessCallback){
+                        this.loginSuccessCallback(response);
+                    }
                 }, this));
                 this.accessToken = response.authResponse.accessToken;
-                if(this.loginSuccessCallback){
-                    this.loginSuccessCallback(response);
-                }
             }else{
                 // show login button
                 $("#loginBtnMenu").css({display: ""});
@@ -17136,6 +17136,124 @@ define("teji/lunch/util", ["jquery"], function($){
 
 }));
 
+/*!
+ * jQuery Cookie Plugin v1.4.1
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2013 Klaus Hartl
+ * Released under the MIT license
+ */
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD
+		define('jquery.cookie',['jquery'], factory);
+	} else if (typeof exports === 'object') {
+		// CommonJS
+		factory(require('jquery'));
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
+
+	var pluses = /\+/g;
+
+	function encode(s) {
+		return config.raw ? s : encodeURIComponent(s);
+	}
+
+	function decode(s) {
+		return config.raw ? s : decodeURIComponent(s);
+	}
+
+	function stringifyCookieValue(value) {
+		return encode(config.json ? JSON.stringify(value) : String(value));
+	}
+
+	function parseCookieValue(s) {
+		if (s.indexOf('"') === 0) {
+			// This is a quoted cookie as according to RFC2068, unescape...
+			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+		}
+
+		try {
+			// Replace server-side written pluses with spaces.
+			// If we can't decode the cookie, ignore it, it's unusable.
+			// If we can't parse the cookie, ignore it, it's unusable.
+			s = decodeURIComponent(s.replace(pluses, ' '));
+			return config.json ? JSON.parse(s) : s;
+		} catch(e) {}
+	}
+
+	function read(s, converter) {
+		var value = config.raw ? s : parseCookieValue(s);
+		return $.isFunction(converter) ? converter(value) : value;
+	}
+
+	var config = $.cookie = function (key, value, options) {
+
+		// Write
+
+		if (value !== undefined && !$.isFunction(value)) {
+			options = $.extend({}, config.defaults, options);
+
+			if (typeof options.expires === 'number') {
+				var days = options.expires, t = options.expires = new Date();
+				t.setTime(+t + days * 864e+5);
+			}
+
+			return (document.cookie = [
+				encode(key), '=', stringifyCookieValue(value),
+				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+				options.path    ? '; path=' + options.path : '',
+				options.domain  ? '; domain=' + options.domain : '',
+				options.secure  ? '; secure' : ''
+			].join(''));
+		}
+
+		// Read
+
+		var result = key ? undefined : {};
+
+		// To prevent the for loop in the first place assign an empty array
+		// in case there are no cookies at all. Also prevents odd result when
+		// calling $.cookie().
+		var cookies = document.cookie ? document.cookie.split('; ') : [];
+
+		for (var i = 0, l = cookies.length; i < l; i++) {
+			var parts = cookies[i].split('=');
+			var name = decode(parts.shift());
+			var cookie = parts.join('=');
+
+			if (key && key === name) {
+				// If second argument (value) is a function it's a converter...
+				result = read(cookie, value);
+				break;
+			}
+
+			// Prevent storing a cookie that we couldn't decode.
+			if (!key && (cookie = read(cookie)) !== undefined) {
+				result[name] = cookie;
+			}
+		}
+
+		return result;
+	};
+
+	config.defaults = {};
+
+	$.removeCookie = function (key, options) {
+		if ($.cookie(key) === undefined) {
+			return false;
+		}
+
+		// Must not alter options, thus extending a fresh object...
+		$.cookie(key, '', $.extend({}, options, { expires: -1 }));
+		return !$.cookie(key);
+	};
+
+}));
+
 /**
  * @license RequireJS text 2.0.12 Copyright (c) 2010-2014, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
@@ -17528,7 +17646,7 @@ define('text',['module'], function (module) {
 });
 
 
-define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail shopViewItem">\n    <h4><%=name%></h4>\n    <img src="<%=imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">\n    <div class="caption shopViewButtons">\n        <p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button">投票</a>\n           <a href="#" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hide" role="button">UNDO</a></p>\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n    </div>\n    <div class="caption resultViewItemInfo">\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n        <div>投票数: <%=votedBy.length%></div>\n        <div>投票者: \n            <% _.each(votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        </div>\n    </div>\n</div>';});
+define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail shopViewItem">\n    <h4><%=name%></h4>\n    <img src="<%=imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">\n    <div class="caption shopViewButtons">\n        <p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button">投票</a>\n           <a href="#" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hide" role="button">UNDO</a></p>\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n    </div>\n    <div class="caption resultViewItemInfo">\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n        <div>投票数: <%=votedBy.length%></div>\n        <% if(votedBy.length > 0) { %>\n        <div>投票者: \n            <% _.each(votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        </div>\n        <% } %>\n        <div>訪問回数: <%=visitedCount%></div>\n    </div>\n</div>';});
 
 define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], function(Backbone, _, $, tmpl){
     var ShopView = Backbone.View.extend({
@@ -18177,9 +18295,10 @@ else {
 
 })(window, window.document);
 
-define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], function(Backbone, _, ShopView, flipsnap){
+define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "flipsnap"], function(Backbone, _, cookie, ShopView, flipsnap){
     var ShopListView = Backbone.View.extend({
 
+        COOKIE_SELECTED_GROUP: "teji.lunch.selectedGroup",
         _groups: null,
 
         initialize: function() {
@@ -18200,16 +18319,24 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
                 }));
            }else{
                 $(".fnResultViewFilterSection").show();
-                // TODO: switch UI between result and vote
-                this._renderGroup(models[0]);
-                // show group selector
+                // read id from cookie
+                var initialSelectedGroupId = $.cookie(this.COOKIE_SELECTED_GROUP);
                 for(var i=0, len=models.length; i<len; i++){
-                    $("<option></option>").val(i).html(models[i].get("name")).appendTo(this.$groupSelect);
+                    var groupId = models[i].get("_id");
+                    var $option = $("<option></option>").val(groupId).html(models[i].get("name"));
+                    if(groupId === initialSelectedGroupId){
+                        $option.attr("selected", "selected");
+                    }
+                    $option.appendTo(this.$groupSelect);
                 }
                 this.$groupSelect.change($.proxy(function(){
                     this.clearShops();
-                    this._renderGroup(this.getSelectedGroup());
+                    var selectedGroup = this.getSelectedGroup();
+                    this._renderGroup(selectedGroup);
+                    // set id to cookie
+                    $.cookie(this.COOKIE_SELECTED_GROUP, selectedGroup.get("_id"));
                 }, this));
+                this._renderGroup(this.getSelectedGroupById(initialSelectedGroupId) || models[0]);
                 if(models.length > 1){
                     $(".fnGroupSelectContainer").show();
                 }else{
@@ -18220,9 +18347,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
 
         _renderGroup: function(model){
             if(model.get("state") === "vote"){
-                // _votedShopId ? GLOBAL Variable. maybe a better way to solve this?
-                // also one problem I experience with fbInit.me.id is that it sometimes loads after the rendering, giving the shopview rendering the wrong parameters.
-                _votedShopId = model.getVotedShopId(fbInit.me.id/*"661664063920036"*/); 
+                this._votedShopId = model.getVotedShopId(fbInit.me.id);
                 var shops = model.get("shops");
                 this._renderShops(model.get("shops"));
                 // show advanced section when categories exist
@@ -18312,9 +18437,8 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
                         groupModel.undoVote(shopModel.get("id"), callback);
                     }
                 }, this);
-
-                var enableVote = !_votedShopId; //enableVote = false if _votedShop is set to some ShopId
-                var isVoted = _votedShopId === shop.get("id");
+                var enableVote = !this._votedShopId; //enableVote = false if _votedShop is set to some ShopId
+                var isVoted = this._votedShopId === shop.get("id");
                 var el = shopView.render(enableVote, isVoted).el;
                 $div.append(el);
             }, this);
@@ -18322,7 +18446,13 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
         },
 
         getSelectedGroup: function(){
-            return this._groups[this.$groupSelect.val()];
+            return this.getSelectedGroupById(this.$groupSelect.val());
+        },
+
+        getSelectedGroupById: function(id){
+            return $.grep(this._groups, $.proxy(function(group){
+                return group.get("_id") === id;
+            }, this))[0];
         },
         
         clearShops: function(){
@@ -18568,6 +18698,7 @@ requirejs.config({
     baseUrl: "/js",
     paths: {
         "jquery": "lib/jquery/jquery",
+        "jquery.cookie": "lib/jquery.cookie/jquery.cookie",
         "text": "lib/requirejs-text/text",
         "bootstrap": "lib/bootstrap/bootstrap",
         "backbone": "lib/backbone/backbone",
@@ -18577,6 +18708,9 @@ requirejs.config({
         "facebook": "//connect.facebook.net/en_US/all"
     },
     shim: {
+        "jquery.cookie": {
+            deps: ["jquery"]
+        },
         "bootstrap": {
             deps: ["jquery"]
         },

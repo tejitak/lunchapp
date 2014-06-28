@@ -2,6 +2,7 @@ requirejs.config({
     baseUrl: "/js",
     paths: {
         "jquery": "lib/jquery/jquery",
+        "jquery.cookie": "lib/jquery.cookie/jquery.cookie",
         "text": "lib/requirejs-text/text",
         "bootstrap": "lib/bootstrap/bootstrap",
         "backbone": "lib/backbone/backbone",
@@ -11,6 +12,9 @@ requirejs.config({
         "facebook": "//connect.facebook.net/en_US/all"
     },
     shim: {
+        "jquery.cookie": {
+            deps: ["jquery"]
+        },
         "bootstrap": {
             deps: ["jquery"]
         },
