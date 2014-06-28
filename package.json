@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha --require test/env --reporter dot test/"
+    "test": "mocha --reporter dot test/"
   },
   "dependencies": {
     "body-parser": "~1.0.0",
