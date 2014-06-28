@@ -15001,13 +15001,13 @@ define("teji/lunch/fbInit", ["facebook", "jquery"], function(facebook, $){
             })();
         },
 
-        addAutoCompleteResult: function($resultContainer, person, removeCallback){
+        addAutoCompleteResult: function($resultContainer, person, removeCallback, administratorId){
             // add me as a member
             var $div = $("<div></div>").addClass("userContent");
             var $li = $("<li></li>").addClass("userPresentation").append($div);
             var $img = $(this.getImageHTML(person.id));
             var $a = $("<a></a>").attr("href", "https://www.facebook.com/app_scoped_user_id/" + person.id).attr("target", "_blank").html(person.name);
-            if(removeCallback && person.id !== this.me.id){
+            if(removeCallback && person.id !== administratorId){
                 var $deleteNode = $("<span></span>").addClass("deleteIcon").html("x").click(function(){
                     $li.remove();
                     removeCallback(person);
@@ -18837,7 +18837,7 @@ define('teji/lunch/view/admin/GroupAddView',[
             fbInit.autoCompleteInit(this.$("#friendAutoCompleteInput"), this.$(".fnAddFriendAutoCompleteBtn"), $.proxy(function(personResult){
                 // callback when member add button is clicked. Add a member if the member does not exist in current group
                 if($.inArray(personResult.id, this._currentModel.get("members")) === -1){
-                    fbInit.addAutoCompleteResult(this.$personResultContainer, personResult, $.proxy(this.onRemoveMember, this));
+                    fbInit.addAutoCompleteResult(this.$personResultContainer, personResult, $.proxy(this.onRemoveMember, this), this._currentModel.administrator);
                     this._currentModel.get("members").push(personResult);
                 }
             }, this));
@@ -18951,7 +18951,7 @@ define('teji/lunch/view/admin/GroupAddView',[
             this.$personResultContainer.empty();            
             var members = targetModel.get("members") || [];
             _.each(members, $.proxy(function(member){
-                fbInit.addAutoCompleteResult(this.$personResultContainer, member, $.proxy(this.onRemoveMember, this));
+                fbInit.addAutoCompleteResult(this.$personResultContainer, member, $.proxy(this.onRemoveMember, this), this._currentModel.get("administrator"));
             }, this));
             // update shop list table view
             this.renderShopListTable();
