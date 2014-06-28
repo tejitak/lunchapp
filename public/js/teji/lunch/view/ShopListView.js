@@ -66,8 +66,13 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
                 }, this));
             }else if(model.get("state") === "voted"){
                 //TODO Make nice view for decided shop.
-                var decidedShop = model.get("decidedShop");
-                this.$el.append($('<div class="alert alert-info"></div>').html("The selected shop is: " + decidedShop));
+                var decidedShopId = model.get("decidedShop");
+                var decidedShop = $.grep(model.get("shops"), function(shop){
+                    return shop.id === decidedShopId;
+                })[0];
+                var shopView = new ShopView({model: decidedShop});
+                shopView.render().$el.addClass("resultView");
+                this.$el.append(shopView.$el);
             }else{
                 this.$el.append($('<div class="alert alert-danger"></div>').html("Something went wrong..."));
             }

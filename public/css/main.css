@@ -67,6 +67,26 @@
 }
 /*** flipsnap end ***/
 
+/*** shop view items start ***/
+.flipsnapItem.resultView {
+    float: none;
+    margin: 0 auto;
+}
+
+.resultViewItemInfo {
+    display: none;
+}
+
+.resultView .resultViewItemInfo {
+    display: block;
+}
+
+.resultView .shopViewItem .shopViewButtons {
+    display: none;
+}
+
+/*** shop view items end ***/
+
 /*** PC version start ***/
 @media (max-width: 768px) {
     .container, .jumbotron {
