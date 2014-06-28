@@ -18,6 +18,10 @@ module.exports = function (grunt) {
             start: {
                 command: 'npm start'
             },
+            // used for product task becuase the bower task does not correctly locate fonts dir
+            copyFonts: {
+                command: 'cp -r bower_components/bootstrap/dist/fonts public/js/lib'
+            },
             test: {
                 command: 'npm test'
             }
@@ -104,6 +108,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('product', [
         'bower:install',
+        'shell:copyFonts',
         'jshint',
         'requirejs:main_compressed',
         'requirejs:admin_compressed'
