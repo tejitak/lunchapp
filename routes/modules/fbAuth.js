@@ -1,4 +1,4 @@
-var http = require('https');
+var request= require('request');
 var url = require('url');
 
 var FACEBOOK_API_PATH = 'graph.facebook.com';
@@ -18,20 +18,12 @@ var params = {
 
 var updateAccessToken = function(){
     var urlStr = url.format(params);
-    var req = http.get(urlStr, function(res) {
-        res.setEncoding('utf8');
-        var body = '';
-        res.on('data', function(chunk) {
-            body += chunk;
-        });
-        res.on('end', function() {
+    var req = request(urlStr, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            response.setEncoding('utf8');
             access_token = body.split('=')[1];
-            // console.log('Access token: ' + access_token);
-        });
-    }).on('error', function(e) {
-        console.log(e);
+        };
     });
-    req.end();
 };
 
 var fbAuth = {
@@ -54,30 +46,19 @@ var fbAuth = {
             }
         };
         var urlStr = url.format(params);
-        var req = http.get(urlStr, function(res) {
-            res.setEncoding('utf8');
-
-            var body = '';
-
-            res.on('data', function(chunk) {
-                body += chunk;
-            });
-
-            res.on('end', function() {
+        var req = request(urlStr, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                response.setEncoding('utf8');
                 var resJson = JSON.parse(body);
                 if (!resJson.data || !resJson.data.is_valid) {
                     throw new Error('Invalid access token');
-                }
+                };
                 if(callback){
                     callback(resJson);
                 }
-            });
-        }).on('error', function(e) {
-            console.log(e);
-            res.send('{"success":false}');
+            }
         });
-        req.end();
     }
-};
+}
 
 module.exports = fbAuth;
