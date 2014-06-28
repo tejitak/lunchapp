@@ -193,8 +193,7 @@ router.delete('/vote', function(req, res) {
 });
 
 // Adds a shop[shopId].votedBy entry with userId into the database document for group._id = groupId
-function addVotedByEntry(groupId, shopId, userId, req)
-{
+function addVotedByEntry(groupId, shopId, userId, req){
     // store the userId to the target shop object as a votedBy entry
     // 
     // TODO: Cannot change value in array of a sub document. It is maybe NeDB bug?
@@ -242,12 +241,12 @@ function deleteVotedByEntry(groupId, shopId, userId, req){
 }
 
 // Maybe useful for a new voting round. Clears all shops.votedBy arrays and sets decidedShop to ""
-function resetVotes(groupId, req)
-{
+function resetVotes(groupId, req){
     req.db.groups.find({"_id": groupId}, function(err, items) {
         if(items && items[0]){
             var item = items[0];
             item.decidedShop = "";
+            item.state = "vote"
             for(var i=0, len=item.shops.length; i<len; i++){
                 var shop = item.shops[i];
                 shop.votedBy = [];
@@ -257,6 +256,39 @@ function resetVotes(groupId, req)
     });
 }
 
+//TODO Count votes and change status to voted and set decidedShop (and maybe update visited or something)
+function calculateVotes(groupId, req){
+
+}
+
+//TODO Check time and state to determine if a caluclate vote or resetvotes needs to be done!
+function shouldChangeState(lunchTime, state){
+    var res = lunchTime.split(":");
+    var d = new Date();
+    var H = parseInt(res[0]);
+    var M = parseInt(res[1]);
+    for(var i = 0, interval = 6; i<=interval;i++){
+        console.log(H);
+        if(d.getHours() === H){
+            if(i === 0){
+                if(M - d.getMinutes() <= 0){
+                    console.log("too late!"); 
+                }else{
+                    console.log("still time to vote");
+                }
+            }else if(i === interval){
+                if(M - d.getMinutes() >= 0){
+                    console.log("voting not yet started");
+                }else {
+                    console.log("voting just started!");
+                }
+            }else{
+                console.log("voting closed!");
+            }
+        }
+        H = (H+1)%24;
+    } //all other times are in voting range. For example if lunch time is 12:00 the for-loop would indicate that the voting is closed between times 12:00-18:00
+}
 /**
  * @api {GET} /shop/retrieve Get a specified shop information via external web API such as Gurunabi
  *
