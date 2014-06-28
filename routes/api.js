@@ -261,33 +261,42 @@ function calculateVotes(groupId, req){
 
 }
 
-//TODO Check time and state to determine if a caluclate vote or resetvotes needs to be done!
-function shouldChangeState(lunchTime, state){
+/*
+* A function that returns the current state by comparing current time with lunchtime.
+* @param {lunchTime} a String formatted as: "HH:MM"
+* @return a String with either "vote" or "voted" as it's value. 
+*/
+function calculateState(lunchTime){
     var res = lunchTime.split(":");
     var d = new Date();
-    var H = parseInt(res[0]);
+    var H = parseInt(res[0])%24;
     var M = parseInt(res[1]);
+    var state = "vote";
     for(var i = 0, interval = 6; i<=interval;i++){
-        console.log(H);
         if(d.getHours() === H){
             if(i === 0){
                 if(M - d.getMinutes() <= 0){
-                    console.log("too late!"); 
-                }else{
-                    console.log("still time to vote");
+                    state = "voted";
+                    break;
                 }
             }else if(i === interval){
                 if(M - d.getMinutes() >= 0){
-                    console.log("voting not yet started");
-                }else {
-                    console.log("voting just started!");
+                    state = "voted";
+                    break;
                 }
             }else{
-                console.log("voting closed!");
+                state = "voted";
+                break;
             }
         }
         H = (H+1)%24;
     } //all other times are in voting range. For example if lunch time is 12:00 the for-loop would indicate that the voting is closed between times 12:00-18:00
+    return state;
+}
+
+//TODO Check current time, lunchtime and state to determine if a caluclate vote or resetvotes needs to be done!
+function shouldChangeState(lunchTime, state){
+
 }
 /**
  * @api {GET} /shop/retrieve Get a specified shop information via external web API such as Gurunabi
