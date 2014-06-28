@@ -1,6 +1,6 @@
 var express = require('express');
 var fs = require('fs');
-var http = require('http');
+var request=require('request');
 var url = require('url');
 var fbAuth = require('./modules/fbAuth');
 var xml2json = require('xml2json');
@@ -283,21 +283,14 @@ router.get('/shop/retrieve', function(req, res) {
                 id: sid
             }
         });
-        var apiReq = http.get(urlStr, function(apiRes) {
-            apiRes.setEncoding('utf8');
-            var body = '';
-            apiRes.on('data', function(chunk) {
-                body += chunk;
-            });
-            apiRes.on('end', function() {
+        var apiReq=request(urlStr, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+                response.setEncoding('utf8');
                 var json = xml2json.toJson(body);
                 res.contentType('application/json');
                 res.send(json);
-            });
-        }).on('error', function(e) {
-            console.log(e);
+            };
         });
-        apiReq.end();
     };
 
     var shopURL = req.query.shopURL;
@@ -312,22 +305,17 @@ router.get('/shop/retrieve', function(req, res) {
         }
     }else{
         // the id in URL is not same as sid sometimes for PC site
-        var shopURLReq = http.get(shopURL, function(shopURLRes) {
-            shopURLRes.setEncoding('utf8');
-            var shopHTMLContent = '';
-            shopURLRes.on('data', function(chunk) {
-                shopHTMLContent += chunk;
-            });
-            shopURLRes.on('end', function() {
+        var shopURLReq=request(shopURL, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                response.setEncoding('utf8');
                 var re = /<body.*data-r.*\"sid\":\"(\w+)\",\"/g;
-                var result = re.exec(shopHTMLContent);
+                var result = re.exec(body);
                 if(result && result[1]){
                     callAPI(result[1]);
-                }
-            });
-        }).on('error', function(e) {
-            console.log(e);
+                };
+            };
         });
+
         shopURLReq.end();
     }  
 });
