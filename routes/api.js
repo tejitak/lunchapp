@@ -32,9 +32,40 @@ var getVoteState = function(group){
     return (0 < diffHours && diffHours < 6) ? "voted": "vote";
 };
 
-var calcDecidedShop = function(group){
-    // TODO: imple
-    return group.shops && group.shops[0] && group.shops[0].id;
+var calcDecidedShop = function(group, excludeShopId){
+    if(!group.shops || group.shops.length == 0){ return; }
+    var shops = clone(group.shops);
+    // descending sort by votedCount
+    shops.sort(function(s1, s2){
+        return s2.votedBy.length - s1.votedBy.length;
+    });
+    var highScore = shops[0].votedBy.length;
+    var highScoreList = [];
+    for(var i=0, len=shops.length; i<len; i++){
+        if(highScore === shops[i].votedBy.length && shops[i].id !== excludeShopId){
+            highScoreList.push(shops[i]);
+        }
+    }
+    // ascending sort by 
+    highScoreList.sort(function(s1, s2){
+        return s1.visitedCount - s2.visitedCount;
+    });
+    // first, highscore and less visited shop will be choosen
+    // if same visited counts exist, return with random
+    var lessVisited = highScoreList[0].visitedCount;
+    var sameVisitedCountList = [];
+    for(var i=0, len=highScoreList.length; i<len; i++){
+        if(lessVisited === highScoreList[i].visitedCount){
+            sameVisitedCountList.push(highScoreList[i]);
+        }
+    }
+    // console.dir(sameVisitedCountList);
+    var decidedShop = (sameVisitedCountList.length > 1) ? sameVisitedCountList[Math.floor(Math.random() * sameVisitedCountList.length)] : sameVisitedCountList[0];
+    return decidedShop && decidedShop.id || "";
+};
+
+var clone = function(obj) {
+   return JSON.parse(JSON.stringify(obj));
 };
 
 /**
@@ -55,17 +86,19 @@ router.get('/groups', function(req, res) {
         // filter by FB authenticated user
         var userId = authResponse.data.user_id;
         req.db.groups.find({"members.id": userId}, function(err, items){
-            // TODO: set state by checking current time and group configured time
+            // set state by checking current time and group configured time
             if(items){
                 for(var i=0, len=items.length; i<len; i++){
                     var group = items[i];
                     // set vote state "vote" or "voted"
                     var state = group.state = getVoteState(group);
                     if(state == "voted" && !group.decidedShop){
-                        // first access for vote result time 
+                        // first access for vote result time and set decidedShop entry
                         group.decidedShop = calcDecidedShop(group);
+                        // update DB
+                        req.db.groups.update({"_id": group._id}, group, {upsert: true}, function(err, numReplaced, newDoc) {});                    
                     }else if(state == "vote" && group.decidedShop){
-                        // first access for voting time
+                        // first access for voting time, reset will clear decidedShop entry
                         resetVotes(group, req);
                     }
                 }
@@ -277,6 +310,10 @@ function resetVotesByGroupId(groupId, req){
 }
 
 function resetVotes(group, req){
+    // the decided shop's visited count will be incremented for first access to voting time
+    if(group.decidedShop){
+        group.visitedCount = (visitedCount.visitedCount - 0) + 1;
+    }
     group.decidedShop = "";
     group.state = "vote"
     for(var i=0, len=group.shops.length; i<len; i++){

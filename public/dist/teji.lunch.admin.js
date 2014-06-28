@@ -18923,6 +18923,13 @@ define('teji/lunch/view/admin/GroupAddView',[
                 var key = this.ADD_SHOP_INPUT_KEYS[i];
                 var $input = this.$("#addShopInput_" + key);
                 info[key] = $input.val();
+                if(key == "visitedCount"){
+                    info[key] = info[key] - 0;
+                }
+            }
+            // If no ID was assigned, create one!
+            if(!info["id"]){
+                info["id"]= 'id'+ (new Date()).getTime();
             }
             // If no ID was assigned, create one!
             if(!info["id"]){
