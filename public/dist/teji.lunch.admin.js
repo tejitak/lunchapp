@@ -18931,10 +18931,6 @@ define('teji/lunch/view/admin/GroupAddView',[
             if(!info["id"]){
                 info["id"]= 'id'+ (new Date()).getTime();
             }
-            // If no ID was assigned, create one!
-            if(!info["id"]){
-                info["id"]= 'id'+ (new Date()).getTime();
-            }
             return info;
         },
 
