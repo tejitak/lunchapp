@@ -16,23 +16,29 @@ var params = {
     }
 };
 
-var updateAccessToken = function(){
+var updateAccessToken = function(callback){
     var urlStr = url.format(params);
-    var req = request(urlStr, function (error, response, body) {
+    request(urlStr, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             response.setEncoding('utf8');
             access_token = body.split('=')[1];
-        };
+        } else {
+            console.log('error: ' + response.statusCode);
+            console.log(body);
+        }
+        if (callback) {
+            callback();
+        }
     });
 };
 
 var fbAuth = {
 
-    setClientSecret: function(clientSecret){
+    setClientSecret: function(clientSecret, callback){
         if(clientSecret){
             params.query['client_secret'] = clientSecret;
         }
-        updateAccessToken();
+        updateAccessToken(callback);
     },
 
     checkAccessToken: function(inputToken, callback){
@@ -46,16 +52,19 @@ var fbAuth = {
             }
         };
         var urlStr = url.format(params);
-        var req = request(urlStr, function (error, response, body) {
+        request(urlStr, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 response.setEncoding('utf8');
                 var resJson = JSON.parse(body);
                 if (!resJson.data || !resJson.data.is_valid) {
                     throw new Error('Invalid access token');
                 };
-                if(callback){
+                if (callback){
                     callback(resJson);
                 }
+            } else {
+                console.log('error: ' + response.statusCode);
+                console.log(body);
             }
         });
     }
