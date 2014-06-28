@@ -18195,7 +18195,10 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
                 $(".fnResultViewFilterection").hide();
                 // show no groups messages
                 this.$el.append($('<div class="alert alert-info"></div>').html("No Groups - Please create a new group or join to an existing group."));
-            }else{
+                this.$el.append($('<button type="button" class="btn btn-primary"></button>').html("Manage Groups").click(function(){
+                    location.href = "/admin";
+                }));
+           }else{
                 $(".fnResultViewFilterection").show();
                 // TODO: switch UI between result and vote
                 this._renderGroup(models[0]);
