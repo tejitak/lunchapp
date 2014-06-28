@@ -310,16 +310,16 @@ function resetVotesByGroupId(groupId, req){
 }
 
 function resetVotes(group, req){
-    // the decided shop's visited count will be incremented for first access to voting time
-    if(group.decidedShop){
-        group.visitedCount = (group.visitedCount - 0) + 1;
-    }
-    group.decidedShop = "";
-    group.state = "vote"
     for(var i=0, len=group.shops.length; i<len; i++){
         var shop = group.shops[i];
+        // the decided shop's visited count will be incremented for first access to voting time
+        if(shop.id === group.decidedShop){
+            shop.visitedCount = (shop.visitedCount - 0) + 1;
+        }
         shop.votedBy = [];
     }
+    group.state = "vote"
+    group.decidedShop = "";
     req.db.groups.update({"_id": group._id}, group, {upsert: true}, function(err, numReplaced, newDoc) {});    
 }
 

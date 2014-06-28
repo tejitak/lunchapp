@@ -13,14 +13,14 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
             // clearShops node
             this.clearShops();
             if(models.length == 0){
-                $(".fnResultViewFilterection").hide();
+                $(".fnResultViewFilterSection").hide();
                 // show no groups messages
                 this.$el.append($('<div class="alert alert-info"></div>').html("No Groups - Please create a new group or join to an existing group."));
                 this.$el.append($('<button type="button" class="btn btn-primary"></button>').html("Manage Groups").click(function(){
                     location.href = "/admin";
                 }));
            }else{
-                $(".fnResultViewFilterection").show();
+                $(".fnResultViewFilterSection").show();
                 // TODO: switch UI between result and vote
                 this._renderGroup(models[0]);
                 // show group selector
@@ -64,6 +64,7 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
                     });
                     this._renderShops(filteredShops);
                 }, this));
+                $(".fnMainContent").removeClass("resultView");
             }else if(model.get("state") === "voted"){
                 //TODO Make nice view for decided shop.
                 var decidedShopId = model.get("decidedShop");
@@ -71,10 +72,12 @@ define(["backbone", "underscore", "teji/lunch/view/ShopView", "flipsnap"], funct
                     return shop.id === decidedShopId;
                 })[0];
                 var shopView = new ShopView({model: decidedShop});
-                shopView.render().$el.addClass("resultView");
-                this.$el.append(shopView.$el);
+                this.$el.append(shopView.render().$el);
+                // add class for result view
+                $(".fnMainContent").addClass("resultView");
             }else{
                 this.$el.append($('<div class="alert alert-danger"></div>').html("Something went wrong..."));
+                $(".fnMainContent").removeClass("resultView");
             }
         },
 
