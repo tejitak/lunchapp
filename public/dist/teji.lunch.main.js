@@ -17528,7 +17528,7 @@ define('text',['module'], function (module) {
 });
 
 
-define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail">\n\t<h4><%=name%></h4>\n    <img src="<%=imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">\n    <div class="caption">\n    \t<p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button">投票</a>\n    \t   <a href="#" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hide" role="button">UNDO</a></p>\n\t\t<p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n    </div>\n</div>';});
+define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail shopViewItem">\n    <h4><%=name%></h4>\n    <img src="<%=imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">\n    <div class="caption shopViewButtons">\n        <p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button">投票</a>\n           <a href="#" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hide" role="button">UNDO</a></p>\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n    </div>\n    <div class="caption resultViewItemInfo">\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n        <div>投票数: <%=votedBy.length%></div>\n        <div>投票者: \n            <% _.each(votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        </div>\n    </div>\n</div>';});
 
 define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], function(Backbone, _, $, tmpl){
     var ShopView = Backbone.View.extend({
@@ -18245,8 +18245,13 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "teji/lunch/vie
                 }, this));
             }else if(model.get("state") === "voted"){
                 //TODO Make nice view for decided shop.
-                var decidedShop = model.get("decidedShop");
-                this.$el.append($('<div class="alert alert-info"></div>').html("The selected shop is: " + decidedShop));
+                var decidedShopId = model.get("decidedShop");
+                var decidedShop = $.grep(model.get("shops"), function(shop){
+                    return shop.id === decidedShopId;
+                })[0];
+                var shopView = new ShopView({model: decidedShop});
+                shopView.render().$el.addClass("resultView");
+                this.$el.append(shopView.$el);
             }else{
                 this.$el.append($('<div class="alert alert-danger"></div>').html("Something went wrong..."));
             }
