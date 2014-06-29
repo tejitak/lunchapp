@@ -88,6 +88,14 @@
 .resultView .resultViewFilterSection {
     display: none;
 }
+.overflow {
+    width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
 
 /*** shop view items end ***/
 

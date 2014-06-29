@@ -32,8 +32,10 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
             this.$(".fnBtnVote").click($.proxy(function(){ this.onVoteClick(this.model); }, this));
             this.$(".fnBtnUndoVote").click($.proxy(function(){ this.onUndoVoteClick(this.model); }, this));
             this.$(".fnBtnInfo").click($.proxy(this.model.showInfo, this.model))
-
-
+            this.$(".fnBtnShopnameExpand").click($.proxy(function(){
+                var titleNode = this.$(".shopViewItem h4");
+                titleNode.hasClass('overflow') ? titleNode.removeClass('overflow') : titleNode.addClass('overflow');
+            }, this));
             return this;
         },
 
