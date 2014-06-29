@@ -5,17 +5,28 @@
         <p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button">投票</a>
            <a href="#" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hide" role="button">UNDO</a></p>
         <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> 
-    </div>
-    <div class="caption resultViewItemInfo">
-        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> 
-        <div>投票数: <%=votedBy.length%></div>
-        <% if(votedBy.length > 0) { %>
         <div>投票者: 
+        <% if(votedBy.length > 0) { %>
             <% _.each(votedBy, function(userId, key, arr){ %>
             <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">
             <% }); %>
+        <% } else { %>
+            -
+        <% }%>
         </div>
-        <% } %>
+    </div>
+    <div class="caption resultViewItemInfo">
+        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> 
         <div>訪問回数: <%=visitedCount%></div>
+        <div>投票数: <%=votedBy.length%></div>
+        <div>投票者: 
+        <% if(votedBy.length > 0) { %>
+            <% _.each(votedBy, function(userId, key, arr){ %>
+            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">
+            <% }); %>
+        <% } else { %>
+            -
+        <% }%>
+        </div>
     </div>
 </div>

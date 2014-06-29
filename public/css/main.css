@@ -92,13 +92,27 @@
 /*** shop view items end ***/
 
 /*** PC version start ***/
+/* for smart phone */
 @media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+    .container>.navbar-header {
+        margin: 0;
+    }
     .container, .jumbotron {
         padding-left: 8px;
         padding-right: 8px;
-    }    
+    }
+    .viewport {
+        margin: 0 -15px;
+        width: auto;
+    }
+    .resultView .viewport {
+        margin: 0 auto;
+    }
 }
-
+/* for middle size screen */
 @media (min-width: 768px) {
     .viewport {
         width: 600px;
@@ -110,7 +124,7 @@
         display: block;
     }
 }
-
+/* for large size screen */
 @media (min-width: 1024px) {
     .viewport {
         width: 820px;

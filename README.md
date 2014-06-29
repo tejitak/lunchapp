@@ -15,15 +15,21 @@
 e.g. "/private/etc/hosts" for mac  
 127.0.0.1       localhost dev.tejitak.com
 
-3. Run "dscacheutil -flushcache" for reloading host file settings.
+3. Create a file "apikey.json" under lunchapp dir with the following content  
+    {  
+        "fb_client_secret": "{your_facebook_app_secret}",  
+        "gurunabi": "{your_grunavi_api_key}"  
+    }  
 
-4. Run "npm install" (just for once to initialize dev environment)
+4. Run "dscacheutil -flushcache" for reloading host file settings.
+
+6. Run "npm install" (just for once to initialize dev environment)
   
     Note: If you get an EACCES warning, use sudo chown -R <username> ~/.npm
     See https://github.com/npm/npm/issues/3537 and https://github.com/npm/npm/pull/3506.
 
-5. Run "grunt server"
+7. Run "grunt server"
 
-6. Access to http://dev.tejitak.com:3000/
+8. Access to http://dev.tejitak.com:3000/
 
-7. Run "grunt" to run watch task
+8. Run "grunt" to run watch task
