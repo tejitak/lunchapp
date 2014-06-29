@@ -100,8 +100,7 @@
     }
     .viewport {
         margin: 0 -15px;
-        width: 100%;
-        overflow: visible;
+        width: auto;
     }
     .resultView .viewport {
         margin: 0 auto;
