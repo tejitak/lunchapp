@@ -1,4 +1,4 @@
-define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "flipsnap"], function(Backbone, _, cookie, ShopView, flipsnap){
+define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "flipsnap", "moment"], function(Backbone, _, cookie, ShopView, flipsnap, moment){
     var ShopListView = Backbone.View.extend({
 
         COOKIE_SELECTED_GROUP: "teji.lunch.selectedGroup",
@@ -48,8 +48,27 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
             }
         },
 
+        showTimer: function(lunchTime){
+                var lunchTime = moment(lunchTime, "HH:mm");
+                var currentTime = moment();
+                console.log(lunchTime.diff(currentTime, 'minutes') < 10);
+                // Do countdown
+                if(lunchTime.diff(currentTime, 'minutes') < 10){
+                    setInterval(function () {
+                        currentTime = moment();
+                        var countDownMinutes = lunchTime.diff(currentTime, 'minutes');
+                        var countDownSeconds = lunchTime.diff(currentTime, 'seconds');
+                        $(".fnResultViewTitle").html("Voting countdown: " + countDownMinutes + ":" + ((countDownSeconds%60 < 10) ? "0" : "") + countDownSeconds%60);
+                        if(countDownSeconds <= 0){
+                            location.reload();
+                        }
+                    }, 1000);
+                }
+        },
+
         _renderGroup: function(model){
             if(model.get("state") === "vote"){
+                this.showTimer(model.get("lunchTime"));
                 this._votedShopId = model.getVotedShopId(fbInit.me.id);
                 var shops = model.get("shops");
                 this._renderShops(model.get("shops"));

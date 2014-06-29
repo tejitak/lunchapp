@@ -102,6 +102,12 @@
 /*** PC version start ***/
 /* for smart phone */
 @media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+    .container>.navbar-header {
+        margin: 0;
+    }
     .container, .jumbotron {
         padding-left: 8px;
         padding-right: 8px;
