@@ -323,11 +323,6 @@ function resetVotes(group, req){
     req.db.groups.update({"_id": group._id}, group, {upsert: true}, function(err, numReplaced, newDoc) {});    
 }
 
-//TODO Count votes and change status to voted and set decidedShop (and maybe update visited or something)
-function calculateVotes(groupId, req){
-
-}
-
 /*
 * A function that returns the current state by comparing current time with lunchtime.
 * @param {lunchTime} a String formatted as: "HH:MM"
@@ -359,11 +354,6 @@ function calculateState(lunchTime){
         H = (H+1)%24;
     } //all other times are in voting range. For example if lunch time is 12:00 the for-loop would indicate that the voting is closed between times 12:00-18:00
     return state;
-}
-
-//TODO Check current time, lunchtime and state to determine if a caluclate vote or resetvotes needs to be done!
-function shouldChangeState(lunchTime, state){
-
 }
 /**
  * @api {GET} /shop/retrieve Get a specified shop information via external web API such as Gurunabi
