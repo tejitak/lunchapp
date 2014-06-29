@@ -9,7 +9,8 @@ requirejs.config({
         "underscore": "lib/underscore/underscore",
         "flipsnap":  "lib/flipsnap/flipsnap",
         "velocity": "lib/velocity/jquery.velocity",
-        "facebook": "//connect.facebook.net/en_US/all"
+        "facebook": "//connect.facebook.net/en_US/all",
+        "moment": "lib/moment/moment"
     },
     shim: {
         "jquery.cookie": {
