@@ -20963,7 +20963,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                 var currentTime = moment();
                 console.log(lunchTime.diff(currentTime, 'minutes') < 10);
                 // Do countdown
-                if(lunchTime.diff(currentTime, 'minutes') < 10){
+                if(lunchTime.diff(currentTime, 'minutes') < 10 && lunchTime.diff(currentTime, 'minutes') > 0){
                     setInterval(function () {
                         currentTime = moment();
                         var countDownMinutes = lunchTime.diff(currentTime, 'minutes');

@@ -53,7 +53,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 var currentTime = moment();
                 console.log(lunchTime.diff(currentTime, 'minutes') < 10);
                 // Do countdown
-                if(lunchTime.diff(currentTime, 'minutes') < 10){
+                if(lunchTime.diff(currentTime, 'minutes') < 10 && lunchTime.diff(currentTime, 'minutes') > 0){
                     setInterval(function () {
                         currentTime = moment();
                         var countDownMinutes = lunchTime.diff(currentTime, 'minutes');
