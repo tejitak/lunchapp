@@ -54,8 +54,31 @@ describe('Group', function() {
             if (err) done(err);
             Group.findOneByGroupId('testid', aGroup._id, function(err, group) {
                 if (err) done(err);
-                console.log(group)
                 assert.equal(group.shops[0].votedBy[0], 'testid');
+                done();
+            });
+        });
+    });
+  });
+  describe('#visited()', function() {
+    it('visited test', function(done) {
+        Group.visited(aGroup._id, function(err, group) {
+            if (err) done(err);
+            Group.findOneByGroupId('testid', aGroup._id, function(err, group) {
+                if (err) done(err);
+                assert.equal(group.shops[0].visitedCount, 1);
+                done();
+            });
+        });
+    });
+  });
+  describe('#unvote()', function() {
+    it('unvote test', function(done) {
+        Group.unvote('testid', aGroup._id, 'shop', function(err) {
+            if (err) done(err);
+            Group.findOneByGroupId('testid', aGroup._id, function(err, group) {
+                if (err) done(err);
+                assert.equal(group.shops[0].votedBy.length, 0);
                 done();
             });
         });
