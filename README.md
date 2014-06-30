@@ -6,6 +6,10 @@
    * Manage restaurants for each group
    * Manage facebook users in your group
 
+####Prereq
+1. mongodb (see http://www.mongodb.org)
+2. nodejs
+3. grunt
 
 ####Development setup
 
