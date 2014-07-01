@@ -1,11 +1,11 @@
 var assert = require("assert");
-var Group = require('../models/group.js');
-var mongoose = require('mongoose');
+var models = require('../models');
+var Group = models.Group;
 
 describe('Group', function() {
-  mongoose.connect('mongodb://localhost/test');
   var aGroup;
   before(function(done) {
+      models.init('localhost','unittest');
       aGroup = Group.createGroup({
           'name':'A',
           'members':[{'id':'testid','name':'Mr. A'}],
@@ -62,11 +62,23 @@ describe('Group', function() {
   });
   describe('#visited()', function() {
     it('visited test', function(done) {
-        Group.visited(aGroup._id, function(err, group) {
+        Group.visited('testid', aGroup._id, function(err, group) {
             if (err) done(err);
             Group.findOneByGroupId('testid', aGroup._id, function(err, group) {
                 if (err) done(err);
                 assert.equal(group.shops[0].visitedCount, 1);
+                done();
+            });
+        });
+    });
+  });
+  describe('#setDecidedShpw()', function() {
+    it('visited test', function(done) {
+        Group.setDecidedShop('testid', aGroup._id, 'decidedShop', function(err, group) {
+            if (err) done(err);
+            Group.findOneByGroupId('testid', aGroup._id, function(err, group) {
+                if (err) done(err);
+                assert.equal(group.decidedShop, 'decidedShop');
                 done();
             });
         });
@@ -84,9 +96,16 @@ describe('Group', function() {
         });
     });
   });
+  describe('#remove()', function() {
+    it('remove test', function(done) {
+        Group.removeGroup('admin', aGroup._id, function(err) {
+            if (err) done(err);
+            done();
+        });
+    });
+  });
   after(function(done) {
       Group.remove();
-      mongoose.disconnect(done);
-      done();
+      models.destroy(done);
   });
 });

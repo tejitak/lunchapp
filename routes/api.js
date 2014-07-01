@@ -46,7 +46,7 @@ var calcDecidedShop = function(group, excludeShopId){
             highScoreList.push(shops[i]);
         }
     }
-    // ascending sort by 
+    // ascending sort by
     highScoreList.sort(function(s1, s2){
         return s1.visitedCount - s2.visitedCount;
     });
@@ -96,7 +96,7 @@ router.get('/groups', function(req, res) {
                         // first access for vote result time and set decidedShop entry
                         group.decidedShop = calcDecidedShop(group);
                         // update DB
-                        req.db.groups.update({"_id": group._id}, group, {upsert: true}, function(err, numReplaced, newDoc) {});                    
+                        req.db.groups.update({"_id": group._id}, group, {upsert: true}, function(err, numReplaced, newDoc) {});
                     }else if(state == "vote" && group.decidedShop){
                         // first access for voting time, reset will clear decidedShop entry
                         resetVotes(group, req);
@@ -255,7 +255,7 @@ router.delete('/vote', function(req, res) {
 // Adds a shop[shopId].votedBy entry with userId into the database document for group._id = groupId
 function addVotedByEntry(groupId, shopId, userId, req){
     // store the userId to the target shop object as a votedBy entry
-    // 
+    //
     // TODO: Cannot change value in array of a sub document. It is maybe NeDB bug?
     //
     //   req.db.groups.update({"_id": groupId, "shops.id": shopId}, {$push: {"shops.$.votedBy": userId}}, {}, function(err, numReplaced, newDoc) {})
@@ -320,13 +320,13 @@ function resetVotes(group, req){
     }
     group.state = "vote"
     group.decidedShop = "";
-    req.db.groups.update({"_id": group._id}, group, {upsert: true}, function(err, numReplaced, newDoc) {});    
+    req.db.groups.update({"_id": group._id}, group, {upsert: true}, function(err, numReplaced, newDoc) {});
 }
 
 /*
 * A function that returns the current state by comparing current time with lunchtime.
 * @param {lunchTime} a String formatted as: "HH:MM"
-* @return a String with either "vote" or "voted" as it's value. 
+* @return a String with either "vote" or "voted" as it's value.
 */
 function calculateState(lunchTime){
     var res = lunchTime.split(":");
@@ -362,7 +362,7 @@ function calculateState(lunchTime){
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
- *     
+ *
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Unauthorized
@@ -415,7 +415,7 @@ router.get('/shop/retrieve', function(req, res) {
         });
 
         shopURLReq.end();
-    }  
+    }
 });
 
 module.exports = router;

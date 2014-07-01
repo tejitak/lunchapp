@@ -63,8 +63,14 @@ groupSchema.statics.unvote = function(memberId, groupId, shopId, completed) {
     });
 }
 
-groupSchema.statics.visited = function(groupId, completed) {
-    Group.findOne({'_id': groupId}, function(err, group) {
+groupSchema.statics.setDecidedShop = function(memberId, groupId, decidedShop, completed) {
+    Group.update({'_id': groupId, 'members.id': memberId }, {'decidedShop':decidedShop, 'state':'voted'}, {}, function(err, num, raw) {
+        completed(err);
+    });
+}
+
+groupSchema.statics.visited = function(memberId, groupId, completed) {
+    Group.findOne({'_id': groupId, 'members.id':memberId }, function(err, group) {
         for(var i=0, len=group.shops.length; i<len; i++){
             var shop = group.shops[i];
             if (shop.id === group.decidedShop) {
@@ -78,7 +84,6 @@ groupSchema.statics.visited = function(groupId, completed) {
     });
 }
 
-// deprecated
 groupSchema.statics.updateGroup = function(group, completed) {
     group.save(completed);
     return group;
@@ -88,6 +93,12 @@ groupSchema.statics.createGroup = function(group, completed) {
     var group = new Group({'name': group.name, 'members': group.members, 'shops': group.shops, 'administrator': group.administrator});
     group.save(completed);
     return group;
+}
+
+groupSchema.statics.removeGroup = function(adminId, groupId, completed) {
+    Group.remove({'_id':groupId, 'administrator':adminId}, function(err, num) {
+        completed(err);
+    });
 }
 
 var Group = mongoose.model('Group', groupSchema);
