@@ -47,25 +47,38 @@ groupSchema.statics.findByMemberId = function(id, completed) {
     Group.find({'members.id': id}).exec(completed);
 };
 
+groupSchema.statics.findByGroupId = function(memberId, groupId, completed) {
+    Group.find({'members.id': memberId, '_id': groupId}).exec(completed);
+}
+
 groupSchema.statics.findOneByGroupId = function(memberId, groupId, completed) {
     Group.findOne({'members.id': memberId, '_id': groupId}, completed);
 }
 
 groupSchema.statics.vote = function(memberId, groupId, shopId, completed) {
-    Group.update({'_id': groupId, 'shops.id': shopId}, {$addToSet: {'shops.$.votedBy': memberId}}, {}, function(err, num, raw) {
-        completed(err);
+    Group.update({'members.id': memberId, '_id': groupId, 'shops.id': shopId}, {$addToSet: {'shops.$.votedBy': memberId}}, {}, function(err, num, raw) {
+        if (err) console.log(err);
+        if (completed) {
+            completed(err);
+        }
     });
 }
 
 groupSchema.statics.unvote = function(memberId, groupId, shopId, completed) {
-    Group.update({'_id': groupId, 'shops.id': shopId}, {$pull: {'shops.$.votedBy': memberId}}, {}, function(err, num, raw) {
-        completed(err);
+    Group.update({'members.id': memberId, '_id': groupId, 'shops.id': shopId}, {$pull: {'shops.$.votedBy': memberId}}, {}, function(err, num, raw) {
+        if (err) console.log(err);
+        if (completed) {
+            completed(err);
+        }
     });
 }
 
 groupSchema.statics.setDecidedShop = function(memberId, groupId, decidedShop, completed) {
     Group.update({'_id': groupId, 'members.id': memberId }, {'decidedShop':decidedShop, 'state':'voted'}, {}, function(err, num, raw) {
-        completed(err);
+        if (err) console.log(err);
+        if (completed) {
+            completed(err);
+        }
     });
 }
 
@@ -85,19 +98,36 @@ groupSchema.statics.visited = function(memberId, groupId, completed) {
 }
 
 groupSchema.statics.updateGroup = function(group, completed) {
-    group.save(completed);
-    return group;
+    if (!group._id) {
+        Group.createGroup(group, completed);
+    } else {
+        Group.update({"_id": group._id}, group, {upsert: true}, function(err) {
+            if (err) console.log(err);
+            if (completed) {
+                completed(err);
+            }
+        });
+    }
 };
 
 groupSchema.statics.createGroup = function(group, completed) {
-    var group = new Group({'name': group.name, 'members': group.members, 'shops': group.shops, 'administrator': group.administrator});
+    var group = new Group({
+        'name': group.name,
+        'members': group.members,
+        'shops': group.shops,
+        'administrator': group.administrator,
+        'state':'vote'
+    });
     group.save(completed);
     return group;
 }
 
 groupSchema.statics.removeGroup = function(adminId, groupId, completed) {
     Group.remove({'_id':groupId, 'administrator':adminId}, function(err, num) {
-        completed(err);
+        if (err) console.log(err);
+        if (completed) {
+            completed(err);
+        }
     });
 }
 

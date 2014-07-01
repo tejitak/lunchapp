@@ -5,7 +5,7 @@ var Group = models.Group;
 describe('Group', function() {
   var aGroup;
   before(function(done) {
-      models.init('localhost','unittest');
+      models.init('mongodb://localhost','unittest');
       aGroup = Group.createGroup({
           'name':'A',
           'members':[{'id':'testid','name':'Mr. A'}],
