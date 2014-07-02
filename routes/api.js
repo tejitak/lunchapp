@@ -24,16 +24,20 @@ fs.readFile('apikey.json', 'UTF-8', function (err, data) {
  *  calculate diffrence between currenttime and configured time
  *  e.g.
  *  - current time: 11:00, configured time: 12:00
- *    moment().diff(moment("12:00", "HH:mm")) / (1000*60*60) -> -1
+ *    moment().diff(moment("12:00", "HH:mm")) / (1000*60*60) -> -1 (and then swapped to 23 ("vote"))
  *  - current time: 13:30, configured time: 13:00
  *    moment().diff(moment("13:00", "HH:mm")) / (1000*60*60) -> 0.5
+ *  - current time: 01:00, configured time: 21:00
+ *    moment().diff(moment("21:00", "HH:mm")) / (1000*60*60) -> -20 (and then changed to 4 ("voted"))
  */
 var calcVoteState = function(lunchTime){
     var diffHours = moment().diff(moment(lunchTime, "HH:mm")) / (1000 * 60 * 60);
+    diffHours = (diffHours + 24) % 24; // Makes sure diffHours isn't negative by adding another day (24h) and using the modulus operator.
     // console.log("Time diff (h): " + diffHours);
     // "voted" during 6 hours after configured time
-    return (0 < diffHours && diffHours < 6) ? "voted": "vote";
+    return (diffHours < 6) ? "voted": "vote";
 };
+
 
 var calcDecidedShop = function(group, excludeShopId){
     if(!group.shops || group.shops.length == 0){ return; }
