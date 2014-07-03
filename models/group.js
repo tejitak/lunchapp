@@ -56,48 +56,56 @@ groupSchema.statics.findOneByGroupId = function(memberId, groupId, completed) {
 }
 
 groupSchema.statics.vote = function(memberId, groupId, shopId, completed) {
-    Group.update({'members.id': memberId, '_id': groupId, 'shops.id': shopId}, {$addToSet: {'shops.$.votedBy': memberId}}, {}, function(err, num, raw) {
-        if (err) console.log(err);
-        if (completed) {
-            completed(err);
+    Group.update({'members.id': memberId, '_id': groupId, 'shops.id': shopId},
+        {$addToSet: {'shops.$.votedBy': memberId}},
+        {},
+        function(err, num, raw) {
+            if (err) console.log(err);
+            if (completed) {
+                completed(err);
+            }
         }
-    });
+    );
 }
 
 groupSchema.statics.unvote = function(memberId, groupId, shopId, completed) {
-    Group.update({'members.id': memberId, '_id': groupId, 'shops.id': shopId}, {$pull: {'shops.$.votedBy': memberId}}, {}, function(err, num, raw) {
-        if (err) console.log(err);
-        if (completed) {
-            completed(err);
-        }
-    });
-}
-
-groupSchema.statics.setDecidedShop = function(memberId, groupId, decidedShop, completed) {
-    Group.update({'_id': groupId, 'members.id': memberId }, {'decidedShop':decidedShop, 'state':'voted'}, {}, function(err, num, raw) {
-        if (err) console.log(err);
-        if (completed) {
-            completed(err);
-        }
-    });
-}
-
-groupSchema.statics.visited = function(memberId, groupId, completed) {
-    Group.findOne({'_id': groupId, 'members.id':memberId }, function(err, group) {
-        for(var i=0, len=group.shops.length; i<len; i++){
-            var shop = group.shops[i];
-            if (shop.id === group.decidedShop) {
-                shop.visitedCount += 1;
+    Group.update({'members.id': memberId, '_id': groupId, 'shops.id': shopId},
+        {$pull: {'shops.$.votedBy': memberId}},
+        {},
+        function(err, num, raw) {
+            if (err) console.log(err);
+            if (completed) {
+                completed(err);
             }
-            shop.votedBy = [];
         }
-        group.decidedShop = '';
-        group.state = 'vote';
-        group.save(completed);
+    );
+}
+
+groupSchema.statics.setDecidedShop = function(group, decidedShop, completed) {
+    group.decidedShop = decidedShop;
+    group.state = 'voted';
+    group.save(function(err, group) {
+            if (err) cosole.log(err);
+            completed(err, group);
     });
 }
 
-groupSchema.statics.updateGroup = function(group, completed) {
+groupSchema.statics.visited = function(group, completed) {
+    for(var i=0, len=group.shops.length; i<len; i++){
+        var shop = group.shops[i];
+        if (shop.id === group.decidedShop) {
+            shop.visitedCount += 1;
+        }
+        shop.votedBy = [];
+    }
+    group.state = 'vote';
+    group.save(function(err, group) {
+            if (err) cosole.log(err);
+            completed(err, group);
+    });
+}
+
+groupSchema.statics.updateGroupByJSON = function(group, completed) {
     if (!group._id) {
         Group.createGroup(group, completed);
     } else {
@@ -111,15 +119,13 @@ groupSchema.statics.updateGroup = function(group, completed) {
 };
 
 groupSchema.statics.createGroup = function(group, completed) {
-    var group = new Group({
+    Group.create({
         'name': group.name,
         'members': group.members,
         'shops': group.shops,
         'administrator': group.administrator,
         'state':'vote'
-    });
-    group.save(completed);
-    return group;
+    }, completed);
 }
 
 groupSchema.statics.removeGroup = function(adminId, groupId, completed) {

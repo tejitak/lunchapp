@@ -13,7 +13,11 @@ describe('Group', function() {
               {'id': 'shop'}
           ],
           'administrator':'admin'},
-      done);
+          function (err, group) {
+              aGroup = group;
+              done();
+          }
+      );
   });
   describe('#findByMemberId()', function() {
     it('find by member id test1', function(done) {
@@ -64,7 +68,7 @@ describe('Group', function() {
   });
   describe('#visited()', function() {
     it('visited test', function(done) {
-        Group.visited('testid', aGroup._id, function(err, group) {
+        Group.visited(aGroup, function(err, group) {
             if (err) done(err);
             Group.findOneByGroupId('testid', aGroup._id, function(err, group) {
                 if (err) done(err);
@@ -76,7 +80,7 @@ describe('Group', function() {
   });
   describe('#setDecidedShpw()', function() {
     it('visited test', function(done) {
-        Group.setDecidedShop('testid', aGroup._id, 'decidedShop', function(err, group) {
+        Group.setDecidedShop(aGroup, 'decidedShop', function(err, group) {
             if (err) done(err);
             Group.findOneByGroupId('testid', aGroup._id, function(err, group) {
                 if (err) done(err);

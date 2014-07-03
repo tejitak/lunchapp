@@ -89,6 +89,7 @@ router.get('/groups', function(req, res) {
         // filter by FB authenticated user
         var userId = authResponse.data.user_id;
         Group.findByMemberId(userId, function (err, items) {
+            if (err) console.log(err);
             // set state by checking current time and group configured time
             if(items){
                 for(var i=0, len=items.length; i<len; i++){
@@ -100,14 +101,15 @@ router.get('/groups', function(req, res) {
                         // first access for vote result time and set decidedShop entry
                         var decidedShop = calcDecidedShop(group);
                         // update DB
-                        Group.setDecidedShop(userId, group._id, decidedShop);
-                    }else if(state == "vote" && group.decidedShop){
+                        Group.setDecidedShop(group, decidedShop);
+                    } else if(state == "vote" && group.decidedShop){
                         // first access for voting time, reset will clear decidedShop entry
-                        Group.visited(userId, group._id);
+                        Group.visited(group);
                     }
                 }
             }
             res.contentType('application/json');
+            // Note: returns items not saved yet
             res.send(items);
         });
     };
@@ -164,7 +166,7 @@ router.post('/group', function(req, res) {
         var newGroup = entry.group;
         newGroup.administrator = authResponse.data.user_id;
         if(newGroup){
-            Group.updateGroup(newGroup, function() {
+            Group.updateGroupByJSON(newGroup, function() {
                 res.contentType('application/json');
                 res.send('{"success":true}');
             })
@@ -179,7 +181,7 @@ router.put('/group', function(req, res) {
     var callback = function(authResponse){
         var targetGroup = entry.group;
         if(targetGroup){
-            Group.updateGroup(targetGroup, function() {
+            Group.updateGroupByJSON(targetGroup, function() {
                 res.contentType('application/json');
                 res.send('{"success":true}');
             });
