@@ -17646,7 +17646,7 @@ define('text',['module'], function (module) {
 });
 
 
-define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail shopViewItem">\n    <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=name%></span></h4>\n    <img src="<%=imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">\n    <div class="caption shopViewButtons">\n        <p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button">投票</a>\n           <a href="#" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hide" role="button">UNDO</a></p>\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n        <div>投票者: \n        <% if(votedBy.length > 0) { %>\n            <% _.each(votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n    <div class="caption resultViewItemInfo">\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n        <div>訪問回数: <%=visitedCount%></div>\n        <div>投票数: <%=votedBy.length%></div>\n        <div>投票者: \n        <% if(votedBy.length > 0) { %>\n            <% _.each(votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n</div>';});
+define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail shopViewItem">\n    <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=name%></span></h4>\n    <img src="<%=imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">\n    <hr>\n    <div class="caption shopViewButtons">\n        <p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button">投票</a>\n           <a href="#" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hide" role="button">UNDO</a></p>\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n        <div>投票者: \n        <% if(votedBy.length > 0) { %>\n            <% _.each(votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n    <div class="caption resultViewItemInfo">\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n        <div>訪問回数: <%=visitedCount%></div>\n        <div>投票数: <%=votedBy.length%></div>\n        <div>投票者: \n        <% if(votedBy.length > 0) { %>\n            <% _.each(votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n</div>';});
 
 define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], function(Backbone, _, $, tmpl){
     var ShopView = Backbone.View.extend({
@@ -20959,19 +20959,21 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
         },
 
         showTimer: function(lunchTime){
+                var countdownMinutes = 10;
                 var lunchTime = moment(lunchTime, "HH:mm");
-                var currentTime = moment();
-                console.log(lunchTime.diff(currentTime, 'minutes') < 10);
-                // Do countdown
-                if(lunchTime.diff(currentTime, 'minutes') < 10 && lunchTime.diff(currentTime, 'minutes') > 0){
+                var diffMinutes = lunchTime.diff(moment()) / (1000 * 60);
+                diffMinutes = (diffMinutes + 24*60) % (24*60); // Makes sure diffMinutes isn't negative by adding another day (24*60m) and using the modulus operator.
+                //console.log("Minutes until lunch: " + diffMinutes);
+
+                if(diffMinutes < countdownMinutes){
                     setInterval(function () {
-                        currentTime = moment();
-                        var countDownMinutes = lunchTime.diff(currentTime, 'minutes');
-                        var countDownSeconds = lunchTime.diff(currentTime, 'seconds');
-                        $(".fnResultViewTitle").html("Voting countdown: " + countDownMinutes + ":" + ((countDownSeconds%60 < 10) ? "0" : "") + countDownSeconds%60);
-                        if(countDownSeconds <= 0){
+                        diffMinutes = lunchTime.diff(moment()) / (1000 * 60);
+                        diffMinutes = (diffMinutes + 24*60) % (24*60);
+                        diffSeconds = diffMinutes * 60;
+                        if(!(diffMinutes < countdownMinutes) || Math.floor(diffMinutes)===0 && Math.floor(diffSeconds)===0){
                             location.reload();
                         }
+                        $(".fnResultViewTitle").html("Voting countdown: " + Math.floor(diffMinutes) + ":" + ((diffSeconds%60 < 10) ? "0" : "") + Math.floor(diffSeconds%60));
                     }, 1000);
                 }
         },
