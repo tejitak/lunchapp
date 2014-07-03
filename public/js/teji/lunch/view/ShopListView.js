@@ -49,19 +49,21 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
         },
 
         showTimer: function(lunchTime){
+                var countdownMinutes = 10;
                 var lunchTime = moment(lunchTime, "HH:mm");
-                var currentTime = moment();
-                console.log(lunchTime.diff(currentTime, 'minutes') < 10);
-                // Do countdown
-                if(lunchTime.diff(currentTime, 'minutes') < 10 && lunchTime.diff(currentTime, 'minutes') > 0){
+                var diffMinutes = lunchTime.diff(moment()) / (1000 * 60);
+                diffMinutes = (diffMinutes + 24*60) % (24*60); // Makes sure diffMinutes isn't negative by adding another day (24*60m) and using the modulus operator.
+                //console.log("Minutes until lunch: " + diffMinutes);
+
+                if(diffMinutes < countdownMinutes){
                     setInterval(function () {
-                        currentTime = moment();
-                        var countDownMinutes = lunchTime.diff(currentTime, 'minutes');
-                        var countDownSeconds = lunchTime.diff(currentTime, 'seconds');
-                        $(".fnResultViewTitle").html("Voting countdown: " + countDownMinutes + ":" + ((countDownSeconds%60 < 10) ? "0" : "") + countDownSeconds%60);
-                        if(countDownSeconds <= 0){
+                        diffMinutes = lunchTime.diff(moment()) / (1000 * 60);
+                        diffMinutes = (diffMinutes + 24*60) % (24*60);
+                        diffSeconds = diffMinutes * 60;
+                        if(!(diffMinutes < countdownMinutes) || Math.floor(diffMinutes)===0 && Math.floor(diffSeconds)===0){
                             location.reload();
                         }
+                        $(".fnResultViewTitle").html("Voting countdown: " + Math.floor(diffMinutes) + ":" + ((diffSeconds%60 < 10) ? "0" : "") + Math.floor(diffSeconds%60));
                     }, 1000);
                 }
         },

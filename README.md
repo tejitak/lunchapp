@@ -27,6 +27,8 @@ e.g. "/private/etc/hosts" for mac
 
 4. Run "dscacheutil -flushcache" for reloading host file settings.
 
+5. Run "mongod" or "mongod -dbpath ~/db".
+
 6. Run "npm install" (just for once to initialize dev environment)
   
     Note: If you get an EACCES warning, use sudo chown -R <username> ~/.npm
