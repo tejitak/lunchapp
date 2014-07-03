@@ -139,3 +139,36 @@
     }
 }
 /*** PC version end ***/
+
+
+
+
+/*** Getting started start ***/
+.gettingStartedContainer {
+}
+
+.gettingStartedContainer .row p {
+    color: #888;
+}
+
+.gettingStartedContainer .gettingStartedImage {
+    width: 400px;
+    height: 260px;
+    background-color:
+    orange; margin: 20px;
+}
+
+
+@media (max-width: 768px) {
+    .gettingStartedContainer .row .col-xs-6 {
+        width: 100%;
+    }
+
+    .gettingStartedContainer .gettingStartedImage {
+        margin: 20px auto;
+        width: 200px; height: 130px;
+        background-color: orange; 
+    }
+}
+
+/*** Getting started end ***/
