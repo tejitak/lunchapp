@@ -68,7 +68,12 @@ describe('Group', function() {
   });
   describe('#visited()', function() {
     it('visited test', function(done) {
-        Group.visited(aGroup, function(err, group) {
+        assert.equal(!aGroup.decidedShop, false);
+        Group.changeStateIfRequired(aGroup, 'vote',
+        function () {
+            return 'decidedShop'
+        },
+        function(err, group) {
             if (err) done(err);
             Group.findOneByGroupId('testid', aGroup._id, function(err, group) {
                 if (err) done(err);
@@ -78,9 +83,13 @@ describe('Group', function() {
         });
     });
   });
-  describe('#setDecidedShpw()', function() {
+  describe('#setDecidedShop()', function() {
     it('visited test', function(done) {
-        Group.setDecidedShop(aGroup, 'decidedShop', function(err, group) {
+        Group.changeStateIfRequired(aGroup, 'voted',
+        function () {
+            return 'decidedShop'
+        },
+        function(err, group) {
             if (err) done(err);
             Group.findOneByGroupId('testid', aGroup._id, function(err, group) {
                 if (err) done(err);

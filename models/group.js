@@ -56,7 +56,7 @@ groupSchema.statics.findOneByGroupId = function(memberId, groupId, completed) {
 }
 
 groupSchema.statics.vote = function(memberId, groupId, shopId, completed) {
-    Group.update({'members.id': memberId, '_id': groupId, 'shops.id': shopId},
+    Group.update({'members.id': memberId, '_id': groupId, 'state':'vote', 'shops.id': shopId},
         {$addToSet: {'shops.$.votedBy': memberId}},
         {},
         function(err, num, raw) {
@@ -69,7 +69,7 @@ groupSchema.statics.vote = function(memberId, groupId, shopId, completed) {
 }
 
 groupSchema.statics.unvote = function(memberId, groupId, shopId, completed) {
-    Group.update({'members.id': memberId, '_id': groupId, 'shops.id': shopId},
+    Group.update({'members.id': memberId, '_id': groupId, 'state':'vote', 'shops.id': shopId},
         {$pull: {'shops.$.votedBy': memberId}},
         {},
         function(err, num, raw) {
@@ -81,16 +81,41 @@ groupSchema.statics.unvote = function(memberId, groupId, shopId, completed) {
     );
 }
 
-groupSchema.statics.setDecidedShop = function(group, decidedShop, completed) {
-    group.decidedShop = decidedShop;
-    group.state = 'voted';
+groupSchema.statics.changeStateIfRequired = function(group, expectedState, calcDecidedShop, completed) {
+    if (expectedState == "voted" && !group.decidedShop){
+
+        // first access for vote result time and set decidedShop entry
+        var decidedShop = calcDecidedShop(group);
+
+        group.decidedShop = decidedShop;
+        group.state = 'voted';
+        save(group, completed);
+    } else if(expectedState == "vote" && group.decidedShop){
+
+        incrementVisited(group, decidedShop);
+
+        group.decidedShop = '';
+        group.state = 'vote';
+        save(group, completed);
+    } else {
+        if (completed) {
+            completed();
+        }
+    }
+}
+
+var save = function(group, completed) {
     group.save(function(err, group) {
-            if (err) cosole.log(err);
+        if (err) cosole.log(err);
+        if (completed) {
             completed(err, group);
+        }
     });
 }
 
-groupSchema.statics.visited = function(group, completed) {
+// increment visitedCount and clear votedBy
+var incrementVisited = function(group, decidedShop) {
+    // first access for voting time, reset will clear decidedShop entry
     for(var i=0, len=group.shops.length; i<len; i++){
         var shop = group.shops[i];
         if (shop.id === group.decidedShop) {
@@ -98,11 +123,6 @@ groupSchema.statics.visited = function(group, completed) {
         }
         shop.votedBy = [];
     }
-    group.state = 'vote';
-    group.save(function(err, group) {
-            if (err) cosole.log(err);
-            completed(err, group);
-    });
 }
 
 groupSchema.statics.updateGroupByJSON = function(group, completed) {
@@ -124,7 +144,8 @@ groupSchema.statics.createGroup = function(group, completed) {
         'members': group.members,
         'shops': group.shops,
         'administrator': group.administrator,
-        'state':'vote'
+        'state':'vote',
+        'lunchTime':'12:00'
     }, completed);
 }
 

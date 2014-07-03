@@ -99,17 +99,9 @@ router.get('/groups', function(req, res) {
                 for(var i=0, len=items.length; i<len; i++){
                     var group = items[i];
                     // set vote state "vote" or "voted"
-                    var state = calcVoteState(group.lunchTime);
-                    if(state == "voted" && !group.decidedShop){
-                        // not yet
-                        // first access for vote result time and set decidedShop entry
-                        var decidedShop = calcDecidedShop(group);
-                        // update DB
-                        Group.setDecidedShop(group, decidedShop);
-                    } else if(state == "vote" && group.decidedShop){
-                        // first access for voting time, reset will clear decidedShop entry
-                        Group.visited(group);
-                    }
+                    var expectedState = calcVoteState(group.lunchTime);
+
+                    Group.changeStateIfRequired(group, expectedState, calcDecidedShop);
                 }
             }
             res.contentType('application/json');
