@@ -1,26 +1,25 @@
 <div class="addGroupModal">
     <div>
-        <div class="sectionTitle isEditHidden">Add a Group</div>
-        <div class="sectionTitle isEditShow">Edit a Group</div>
+        <div class="sectionTitle isEditHidden"><%=labels.admin_group_add_title%></div>
+        <div class="sectionTitle isEditShow"><%=labels.admin_group_edit_title%></div>
     </div>
     <div>
         <div class="form-group">
-            <label class="control-label" for="groupNameInput">Group Name</label>
-            <input type="text" class="form-control" id="groupNameInput" placeholder="Group Name">
+            <label class="control-label" for="groupNameInput"><%=labels.admin_group_add_name%></label>
+            <input type="text" class="form-control" id="groupNameInput" placeholder="<%=labels.admin_group_add_name%>">
         </div>
         <div class="form-group">
-            <label class="control-label" for="groupLunchTimeInput">Lunch Time</label>
+            <label class="control-label" for="groupLunchTimeInput"><%=labels.admin_group_add_lunchTime%></label>
             <div class="input-group">
                 <input id="groupLunchTimeInput" class="form-control" type="time">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label" for="friendAutoCompleteInput">Members (Your Facebook friends who started Lunch Timer can be added)</label>
-            <!--div class="col-sm-5 col-xs-12 col-lg-3"-->
+            <label class="control-label" for="friendAutoCompleteInput"><%=labels.admin_group_add_members%></label>
             <div class="input-group">
-                <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="Type your friends">
+                <input type="text" class="form-control" id="friendAutoCompleteInput" placeholder="<%=labels.admin_group_add_placeholder_members%>">
                 <span class="input-group-btn">
-                    <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled">Add</button>
+                    <button class="btn btn-default btn-primary fnAddFriendAutoCompleteBtn" type="button" disabled="disabled"><%=labels.common_btn_add%></button>
                 </span>
             </div>
             <div class="friendsAutoCompletedResults">
@@ -28,17 +27,17 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label">Restaurants</label>
+            <label class="control-label"><%=labels.admin_group_add_shops%></label>
             <div class="input-group adminToolbar">
-                <button type="button" class="btn btn-primary addShopModalBtn">Add Restaurant</button>
+                <button type="button" class="btn btn-primary addShopModalBtn"><%=labels.admin_group_add_btn_addShop%></button>
             </div>
             <div class="fnAdminShopListTable"></div>
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default fnCancelSaveGroupBtn">Cancel</button>
-        <button type="button" class="btn btn-primary displayAddGroup fnSaveAddGroupBtn isEditHidden">Add Group</button>
-        <button type="button" class="btn btn-primary fnSaveEditGroupBtn isEditShow">Update Group</button>
+        <button type="button" class="btn btn-default fnCancelSaveGroupBtn"><%=labels.common_btn_cancel%></button>
+        <button type="button" class="btn btn-primary displayAddGroup fnSaveAddGroupBtn isEditHidden"><%=labels.admin_group_add_btn_addGroup%></button>
+        <button type="button" class="btn btn-primary fnSaveEditGroupBtn isEditShow"><%=labels.admin_group_add_btn_updateGroup%></button>
     </div>
 </div>
 
@@ -47,15 +46,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title isEditHidden">Add a Restaurant</h4>
-                <h4 class="modal-title isEditShow">Edit a Restaurant</h4>
+                <h4 class="modal-title isEditHidden"><%=labels.admin_group_shop_title_add%></h4>
+                <h4 class="modal-title isEditShow"><%=labels.admin_group_shop_title_edit%></h4>
             </div>
             <div class="modal-body">
                 <div class="isEditHidden">
                     <div class="input-group">
-                        <input type="text" class="form-control fnGetShopURLInput" placeholder="ぐるなびURL">
+                        <input type="text" class="form-control fnGetShopURLInput" placeholder="<%=labels.admin_group_shop_placeholder_getShopInfo%>">
                         <span class="input-group-btn">
-                            <button class="btn btn-default btn-primary fnGetShopInfoBtn" type="button">GET</button>
+                            <button class="btn btn-default btn-primary fnGetShopInfoBtn" type="button"><%=labels.admin_group_shop_btn_getShopInfo%></button>
                         </span>
                     </div>
                     <div style="">
@@ -67,46 +66,46 @@
                 </div>
                 <div>
                     <div class="form-group" style="display: none;">
-                        <label class="control-label" for="addShopInput_id">ID</label>
+                        <label class="control-label" for="addShopInput_id"><%=labels.admin_group_shop_input_id%></label>
                         <input type="text" class="form-control" id="addShopInput_id">
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="addShopInput_name">Restaurant Name</label>
+                        <label class="control-label" for="addShopInput_name"><%=labels.admin_group_shop_input_name%></label>
                         <input type="text" class="form-control" id="addShopInput_name">
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="addShopInput_category">Category</label>
+                        <label class="control-label" for="addShopInput_category"><%=labels.admin_group_shop_input_category%></label>
                         <input type="text" class="form-control" id="addShopInput_category">
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="addShopInput_address">Address</label>
+                        <label class="control-label" for="addShopInput_address"><%=labels.admin_group_shop_input_address%></label>
                         <input type="text" class="form-control" id="addShopInput_address">
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="addShopInput_tel">TEL</label>
+                        <label class="control-label" for="addShopInput_tel"><%=labels.admin_group_shop_input_tel%></label>
                         <input type="text" class="form-control" id="addShopInput_tel">
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="addShopInput_imageURL">Restaurant Photo Image URL</label>
+                        <label class="control-label" for="addShopInput_imageURL"><%=labels.admin_group_shop_input_imageURL%></label>
                         <input type="text" class="form-control" id="addShopInput_imageURL">
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="addShopInput_url_mobile">Restaurant URL</label>
+                        <label class="control-label" for="addShopInput_url_mobile"><%=labels.admin_group_shop_input_url_mobile%></label>
                         <input type="text" class="form-control" id="addShopInput_url_mobile">
                     </div>
                     <div class="isEditShow">
                         <hr>
                         <div class="form-group">
-                            <label class="control-label" for="addShopInput_visitedCount">Visited Count</label>
+                            <label class="control-label" for="addShopInput_visitedCount"><%=labels.admin_group_shop_input_visitedCount%></label>
                             <input type="text" class="form-control" id="addShopInput_visitedCount">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary fnModalAddShopBtn isEditHidden">Add Restaurant</button>
-                <button type="button" class="btn btn-primary fnModalEditShopBtn isEditShow">Update</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><%=labels.common_btn_cancel%></button>
+                <button type="button" class="btn btn-primary fnModalAddShopBtn isEditHidden"><%=labels.admin_group_shop_input_btn_add%></button>
+                <button type="button" class="btn btn-primary fnModalEditShopBtn isEditShow"><%=labels.admin_group_shop_input_btn_update%></button>
             </div>
         </div>
     </div>

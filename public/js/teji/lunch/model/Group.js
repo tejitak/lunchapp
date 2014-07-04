@@ -2,9 +2,8 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
     var Group = Backbone.Model.extend({
 
         defaults: {
-            state: "", //TODO A function somewhere (server or client?) to change state. also init value not set properly (please help :)
+            state: "",
             decidedShop: "",
-            votedShop: "", //maybe not a good idea to have it in database, would . I think it's better to retrieve it from the shops.votedBy entry.
             id: "",
             name: "",
             lunchTime: "",
@@ -99,8 +98,6 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
                 processData: false,
                 data: JSON.stringify({inputToken: fbInit.accessToken, groupId: this.get("_id"), shopId: shopId})
             }).done($.proxy(function(response){
-                // TODO: 
-                console.log(response);
                 if(callback){
                     callback();
                 }
@@ -114,8 +111,6 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
                 processData: false,
                 data: JSON.stringify({inputToken: fbInit.accessToken, groupId: this.get("_id"), shopId: shopId})
             }).done($.proxy(function(response){
-                // TODO: 
-                console.log(response);
                 if(callback){
                     callback();
                 }

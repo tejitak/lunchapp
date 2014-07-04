@@ -2,8 +2,8 @@
     <thead>
         <tr>
             <th style="width: 4%;"></th>
-            <th>Restaurant Name</th>
-            <th style="width: 16%;">Visited Count</th>
+            <th><%=labels.admin_group_myGroups_shop_table_name%></th>
+            <th style="width: 16%;"><%=labels.admin_group_myGroups_shop_table_visitedCount%></th>
             <th style="width: 16%;" data-defaultsort="disabled"></th>
         </tr>
     </thead>
@@ -14,8 +14,8 @@
             <td><span><%=shop.name%></span></td>
             <td><span><%=shop.visitedCount%></span></td>
             <td>
-                <a class="fnShopListTableEditBtn" data-shop-id="<%=shop.id%>" href="javascript:;">Edit</a>
-                <a class="fnShopListTableDeleteBtn" data-shop-id="<%=shop.id%>" href="javascript:;">Delete</a>
+                <a class="fnShopListTableEditBtn" data-shop-id="<%=shop.id%>" href="javascript:;"><%=labels.common_btn_edit%></a>
+                <a class="fnShopListTableDeleteBtn" data-shop-id="<%=shop.id%>" href="javascript:;"><%=labels.common_btn_delete%></a>
             </td>
         </tr>
         <% }); %>

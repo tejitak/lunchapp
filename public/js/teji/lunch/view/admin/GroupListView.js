@@ -18,7 +18,7 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/model/Group", "
 
         _renderItems: function(models){
             var groupsJson = $.map(models, function(model){ return model.toJSON(); });
-            this.$el.html(this.template({groups: groupsJson}));
+            this.$el.html(this.template({groups: groupsJson, labels: lunch.constants.labels}));
             // bind onclick edit
             this.$(".fnGroupListViewEditBtn").bind("click", $.proxy(function($e){
                 var $target = $($e.target);
@@ -38,7 +38,7 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/model/Group", "
                 var targetModel = $.grep(models, function(model){
                     return model.get("_id") === groupId;
                 })[0];
-                if(targetModel && window.confirm("Are you sure you want to delete [" + targetModel.get("name") + "] ?")){
+                if(targetModel && window.confirm(lunch.constants.labels.admin_group_confirm_delete_group.replace(/\{0\}/, targetModel.get("name")))){
                     // TODO: to be changed
                     var callback = function(){ location.href = lunch.constants.config.CONTEXT_PATH + "/admin"; };
                     targetModel.deleteGroup(groupId, callback);

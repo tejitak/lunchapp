@@ -17644,7 +17644,7 @@ define('text',['module'], function (module) {
 });
 
 
-define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail shopViewItem">\n    <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=name%></span></h4>\n    <img src="<%=imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">\n    <hr>\n    <div class="caption shopViewButtons">\n        <p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button">投票</a>\n           <a href="#" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hide" role="button">UNDO</a></p>\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n        <div>投票者: \n        <% if(votedBy.length > 0) { %>\n            <% _.each(votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n    <div class="caption resultViewItemInfo">\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> \n        <div>訪問回数: <%=visitedCount%></div>\n        <div>投票数: <%=votedBy.length%></div>\n        <div>投票者: \n        <% if(votedBy.length > 0) { %>\n            <% _.each(votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n</div>';});
+define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail shopViewItem">\n    <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=item.name%></span></h4>\n    <img src="<%=item.imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">\n    <hr>\n    <div class="caption shopViewButtons">\n        <p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button"><%=labels.main_resultItem_vote%></a>\n           <a href="#" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hide" role="button"><%=labels.main_resultItem_unvote%></a></p>\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> \n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n    <div class="caption resultViewItemInfo">\n        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> \n        <div><%=labels.main_resultItem_visitedCount%>: <%=item.visitedCount%></div>\n        <div><%=labels.main_resultItem_votedCount%>: <%=item.votedBy.length%></div>\n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n</div>';});
 
 define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], function(Backbone, _, $, tmpl){
     var ShopView = Backbone.View.extend({
@@ -17667,7 +17667,7 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./t
             if(!json.imageURL){
                 json.imageURL = this.defaultImgURL;
             }
-            this.$el.html(this.template(json));
+            this.$el.html(this.template({item: json, labels: lunch.constants.labels}));
 
             if(!enableVote){
                 this.$(".fnBtnVote").addClass('disabled'); 
@@ -20924,7 +20924,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
             if(models.length == 0){
                 $(".fnResultViewFilterSection").hide();
                 // show no groups messages
-                this.$el.append($('<div class="alert alert-info"></div>').html("No Groups - Please create a new group or join to an existing group."));
+                this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_groups));
                 this.$el.append($('<button type="button" class="btn btn-primary"></button>').html("Manage Groups").click(function(){
                     location.href = lunch.constants.config.CONTEXT_PATH + "/admin";
                 }));
@@ -20957,23 +20957,23 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
         },
 
         showTimer: function(lunchTime){
-                var countdownMinutes = 10;
-                var lunchTime = moment(lunchTime, "HH:mm");
-                var diffMinutes = lunchTime.diff(moment()) / (1000 * 60);
-                diffMinutes = (diffMinutes + 24*60) % (24*60); // Makes sure diffMinutes isn't negative by adding another day (24*60m) and using the modulus operator.
-                //console.log("Minutes until lunch: " + diffMinutes);
+            var countdownMinutes = 10;
+            var lunchTime = moment(lunchTime, "HH:mm");
+            var diffMinutes = lunchTime.diff(moment()) / (1000 * 60);
+            diffMinutes = (diffMinutes + 24*60) % (24*60); // Makes sure diffMinutes isn't negative by adding another day (24*60m) and using the modulus operator.
+            //console.log("Minutes until lunch: " + diffMinutes);
 
-                if(diffMinutes < countdownMinutes){
-                    setInterval(function () {
-                        diffMinutes = lunchTime.diff(moment()) / (1000 * 60);
-                        diffMinutes = (diffMinutes + 24*60) % (24*60);
-                        diffSeconds = diffMinutes * 60;
-                        if(!(diffMinutes < countdownMinutes) || Math.floor(diffMinutes)===0 && Math.floor(diffSeconds)===0){
-                            location.reload();
-                        }
-                        $(".fnResultViewTitle").html("Voting countdown: " + Math.floor(diffMinutes) + ":" + ((diffSeconds%60 < 10) ? "0" : "") + Math.floor(diffSeconds%60));
-                    }, 1000);
-                }
+            if(diffMinutes < countdownMinutes){
+                setInterval(function () {
+                    diffMinutes = lunchTime.diff(moment()) / (1000 * 60);
+                    diffMinutes = (diffMinutes + 24*60) % (24*60);
+                    diffSeconds = diffMinutes * 60;
+                    if(!(diffMinutes < countdownMinutes) || Math.floor(diffMinutes)===0 && Math.floor(diffSeconds)===0){
+                        location.reload();
+                    }
+                    $(".fnResultViewTitle").html("Voting countdown: " + Math.floor(diffMinutes) + ":" + ((diffSeconds%60 < 10) ? "0" : "") + Math.floor(diffSeconds%60));
+                }, 1000);
+            }
         },
 
         _renderGroup: function(model){
@@ -20986,7 +20986,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                 var uniqueCategories = model.getUniqueCategories();
                 var $categoryFilterSelect = $(".fnCategoryFilter");
                 $categoryFilterSelect.empty();
-                $("<option></option>").val("all").html("All (" + shops.length + ")").appendTo($categoryFilterSelect);
+                $("<option></option>").val("all").html(lunch.constants.labels.main_filter_category_all + " (" + shops.length + ")").appendTo($categoryFilterSelect);
                 for(var i=0, len=uniqueCategories.length; i<len; i++){
                     $("<option></option>").val(uniqueCategories[i].name).html(uniqueCategories[i].name + " (" + uniqueCategories[i].count + ")").appendTo($categoryFilterSelect);
                 }
@@ -21002,7 +21002,6 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                 }, this));
                 $(".fnMainContent").removeClass("resultView");
             }else if(model.get("state") === "voted"){
-                //TODO Make nice view for decided shop.
                 var decidedShopId = model.get("decidedShop");
                 var decidedShop = $.grep(model.get("shops"), function(shop){
                     return shop.id === decidedShopId;
@@ -21012,7 +21011,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                 // add class for result view
                 $(".fnMainContent").addClass("resultView");
             }else{
-                this.$el.append($('<div class="alert alert-danger"></div>').html("Something went wrong..."));
+                this.$el.append($('<div class="alert alert-danger"></div>').html(lunch.constants.labels.main_error_vote_result));
                 $(".fnMainContent").removeClass("resultView");
             }
         },
@@ -21020,7 +21019,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
         _renderShops: function(shops){
             var len = shops.length;
             if(len == 0){
-                this.$el.append($('<div class="alert alert-info"></div>').html("There is no restaurants in this group"));
+                this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_shops));
             }else{
                 var w = (len * 220/*item width*/) + 95/* padding */;
                 var $node = this._createShopsNode(shops).addClass("flipsnap").width(w + "px");
@@ -21110,7 +21109,7 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
             votedBy: []
         },
 
-        initialize: function(){
+        initialize: function(obj){
         },
 
         initWithTaberoguResponse: function(result){
@@ -21146,9 +21145,8 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
     var Group = Backbone.Model.extend({
 
         defaults: {
-            state: "", //TODO A function somewhere (server or client?) to change state. also init value not set properly (please help :)
+            state: "",
             decidedShop: "",
-            votedShop: "", //maybe not a good idea to have it in database, would . I think it's better to retrieve it from the shops.votedBy entry.
             id: "",
             name: "",
             lunchTime: "",
@@ -21243,8 +21241,6 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
                 processData: false,
                 data: JSON.stringify({inputToken: fbInit.accessToken, groupId: this.get("_id"), shopId: shopId})
             }).done($.proxy(function(response){
-                // TODO: 
-                console.log(response);
                 if(callback){
                     callback();
                 }
@@ -21258,8 +21254,6 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
                 processData: false,
                 data: JSON.stringify({inputToken: fbInit.accessToken, groupId: this.get("_id"), shopId: shopId})
             }).done($.proxy(function(response){
-                // TODO: 
-                console.log(response);
                 if(callback){
                     callback();
                 }

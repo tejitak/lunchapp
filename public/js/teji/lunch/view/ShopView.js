@@ -19,7 +19,7 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
             if(!json.imageURL){
                 json.imageURL = this.defaultImgURL;
             }
-            this.$el.html(this.template(json));
+            this.$el.html(this.template({item: json, labels: lunch.constants.labels}));
 
             if(!enableVote){
                 this.$(".fnBtnVote").addClass('disabled'); 

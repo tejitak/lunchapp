@@ -16,7 +16,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
             if(models.length == 0){
                 $(".fnResultViewFilterSection").hide();
                 // show no groups messages
-                this.$el.append($('<div class="alert alert-info"></div>').html("No Groups - Please create a new group or join to an existing group."));
+                this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_groups));
                 this.$el.append($('<button type="button" class="btn btn-primary"></button>').html("Manage Groups").click(function(){
                     location.href = lunch.constants.config.CONTEXT_PATH + "/admin";
                 }));
@@ -49,23 +49,23 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
         },
 
         showTimer: function(lunchTime){
-                var countdownMinutes = 10;
-                var lunchTime = moment(lunchTime, "HH:mm");
-                var diffMinutes = lunchTime.diff(moment()) / (1000 * 60);
-                diffMinutes = (diffMinutes + 24*60) % (24*60); // Makes sure diffMinutes isn't negative by adding another day (24*60m) and using the modulus operator.
-                //console.log("Minutes until lunch: " + diffMinutes);
+            var countdownMinutes = 10;
+            var lunchTime = moment(lunchTime, "HH:mm");
+            var diffMinutes = lunchTime.diff(moment()) / (1000 * 60);
+            diffMinutes = (diffMinutes + 24*60) % (24*60); // Makes sure diffMinutes isn't negative by adding another day (24*60m) and using the modulus operator.
+            //console.log("Minutes until lunch: " + diffMinutes);
 
-                if(diffMinutes < countdownMinutes){
-                    setInterval(function () {
-                        diffMinutes = lunchTime.diff(moment()) / (1000 * 60);
-                        diffMinutes = (diffMinutes + 24*60) % (24*60);
-                        diffSeconds = diffMinutes * 60;
-                        if(!(diffMinutes < countdownMinutes) || Math.floor(diffMinutes)===0 && Math.floor(diffSeconds)===0){
-                            location.reload();
-                        }
-                        $(".fnResultViewTitle").html("Voting countdown: " + Math.floor(diffMinutes) + ":" + ((diffSeconds%60 < 10) ? "0" : "") + Math.floor(diffSeconds%60));
-                    }, 1000);
-                }
+            if(diffMinutes < countdownMinutes){
+                setInterval(function () {
+                    diffMinutes = lunchTime.diff(moment()) / (1000 * 60);
+                    diffMinutes = (diffMinutes + 24*60) % (24*60);
+                    diffSeconds = diffMinutes * 60;
+                    if(!(diffMinutes < countdownMinutes) || Math.floor(diffMinutes)===0 && Math.floor(diffSeconds)===0){
+                        location.reload();
+                    }
+                    $(".fnResultViewTitle").html("Voting countdown: " + Math.floor(diffMinutes) + ":" + ((diffSeconds%60 < 10) ? "0" : "") + Math.floor(diffSeconds%60));
+                }, 1000);
+            }
         },
 
         _renderGroup: function(model){
@@ -78,7 +78,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 var uniqueCategories = model.getUniqueCategories();
                 var $categoryFilterSelect = $(".fnCategoryFilter");
                 $categoryFilterSelect.empty();
-                $("<option></option>").val("all").html("All (" + shops.length + ")").appendTo($categoryFilterSelect);
+                $("<option></option>").val("all").html(lunch.constants.labels.main_filter_category_all + " (" + shops.length + ")").appendTo($categoryFilterSelect);
                 for(var i=0, len=uniqueCategories.length; i<len; i++){
                     $("<option></option>").val(uniqueCategories[i].name).html(uniqueCategories[i].name + " (" + uniqueCategories[i].count + ")").appendTo($categoryFilterSelect);
                 }
@@ -94,7 +94,6 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 }, this));
                 $(".fnMainContent").removeClass("resultView");
             }else if(model.get("state") === "voted"){
-                //TODO Make nice view for decided shop.
                 var decidedShopId = model.get("decidedShop");
                 var decidedShop = $.grep(model.get("shops"), function(shop){
                     return shop.id === decidedShopId;
@@ -104,7 +103,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 // add class for result view
                 $(".fnMainContent").addClass("resultView");
             }else{
-                this.$el.append($('<div class="alert alert-danger"></div>').html("Something went wrong..."));
+                this.$el.append($('<div class="alert alert-danger"></div>').html(lunch.constants.labels.main_error_vote_result));
                 $(".fnMainContent").removeClass("resultView");
             }
         },
@@ -112,7 +111,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
         _renderShops: function(shops){
             var len = shops.length;
             if(len == 0){
-                this.$el.append($('<div class="alert alert-info"></div>').html("There is no restaurants in this group"));
+                this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_shops));
             }else{
                 var w = (len * 220/*item width*/) + 95/* padding */;
                 var $node = this._createShopsNode(shops).addClass("flipsnap").width(w + "px");

@@ -14,7 +14,7 @@ define(["backbone", "jquery"], function(Backbone, $){
             votedBy: []
         },
 
-        initialize: function(){
+        initialize: function(obj){
         },
 
         initWithTaberoguResponse: function(result){

@@ -124,7 +124,7 @@ define([
         },
 
         render: function(){
-            this.$el.html(this.template({}));
+            this.$el.html(this.template({labels: lunch.constants.labels}));
         },
 
         updateView: function(groupModel, isEdit){
@@ -179,7 +179,7 @@ define([
             var shopsJson = $.map(this._currentModel.get("shops"), function(shopModel){
                 return shopModel.toJSON();
             });
-            $table.html(this.shopListTableTemplate({shops: shopsJson}));
+            $table.html(this.shopListTableTemplate({shops: shopsJson, labels: lunch.constants.labels}));
             // enable sort
             $.bootstrapSortable();
             // attach event for edit button
@@ -192,7 +192,7 @@ define([
             // attach event for delete button
             this.$(".fnShopListTableDeleteBtn").click($.proxy(function($e){
                 var targetModel = this._getShopModelByNode($($e.target));
-                if(targetModel && window.confirm("Are you sure you want to delete [" + targetModel.get("name") + "] ?")){
+                if(targetModel && window.confirm(lunch.constants.labels.admin_group_confirm_delete_shop.replace(/\{0\}/, targetModel.get("name")))){
                     // remove from array
                     var shopModels = this._currentModel.get("shops");
                     // TOOD: should be handled in model?

@@ -1,14 +1,14 @@
 <div class="thumbnail shopViewItem">
-    <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=name%></span></h4>
-    <img src="<%=imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">
+    <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=item.name%></span></h4>
+    <img src="<%=item.imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">
     <hr>
     <div class="caption shopViewButtons">
-        <p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button">投票</a>
-           <a href="#" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hide" role="button">UNDO</a></p>
-        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> 
-        <div>投票者: 
-        <% if(votedBy.length > 0) { %>
-            <% _.each(votedBy, function(userId, key, arr){ %>
+        <p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button"><%=labels.main_resultItem_vote%></a>
+           <a href="#" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hide" role="button"><%=labels.main_resultItem_unvote%></a></p>
+        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> 
+        <div><%=labels.main_resultItem_voter%>: 
+        <% if(item.votedBy.length > 0) { %>
+            <% _.each(item.votedBy, function(userId, key, arr){ %>
             <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">
             <% }); %>
         <% } else { %>
@@ -17,12 +17,12 @@
         </div>
     </div>
     <div class="caption resultViewItemInfo">
-        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> More information</a></p> 
-        <div>訪問回数: <%=visitedCount%></div>
-        <div>投票数: <%=votedBy.length%></div>
-        <div>投票者: 
-        <% if(votedBy.length > 0) { %>
-            <% _.each(votedBy, function(userId, key, arr){ %>
+        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> 
+        <div><%=labels.main_resultItem_visitedCount%>: <%=item.visitedCount%></div>
+        <div><%=labels.main_resultItem_votedCount%>: <%=item.votedBy.length%></div>
+        <div><%=labels.main_resultItem_voter%>: 
+        <% if(item.votedBy.length > 0) { %>
+            <% _.each(item.votedBy, function(userId, key, arr){ %>
             <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">
             <% }); %>
         <% } else { %>

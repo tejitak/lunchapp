@@ -1,6 +1,10 @@
 {
     "product_name": "LunchTimer",
 
+    "common_btn_add": "Add",
+    "common_btn_edit": "Edit",
+    "common_btn_delete": "Delete",
+    "common_btn_cancel": "Cancel",
 
     "menu_gettingStarted": "はじめての方へ",
     "menu_admin_group": "グループ管理",
@@ -15,6 +19,19 @@
     "main_section_title": "本日のランチ",
     "main_section_input_group": "グループ",
     "main_section_input_category": "カテゴリー",
+
+    "main_filter_category_all": "All",
+
+    "main_warning_no_groups": "No Groups - Please create a new group or join to an existing group.",
+    "main_warning_no_shops": "There is no restaurants in this group",
+    "main_error_vote_result": "Something went wrong...",
+
+    "main_resultItem_vote": "投票",
+    "main_resultItem_unvote": "Cancel",
+    "main_resultItem_shopInfo": "More information",
+    "main_resultItem_voter": "投票者",
+    "main_resultItem_votedCount": "投票数",
+    "main_resultItem_visitedCount": "訪問回数",
 
 
     "gettingStarted_title": "Lunch Timer! - Getting Started - ",
@@ -31,9 +48,40 @@
     "admin_group_intro_section_title": "Lunch Timer Group Management",
     "admin_group_intro_section_description": "<p>ランチグループの管理ができます</p><p>まずはFacebookログインをしてはじめましょう</p>",
     "admin_group_myGroups_title": "My Groups",
+    "admin_group_myGroups_name": "Group Name",
+    "admin_group_myGroups_members": "Members",
+    "admin_group_myGroups_shop_table_name": "Restaurant Name",
+    "admin_group_myGroups_shop_table_visitedCount": "Visited count",
     "admin_group_myGroups_button_add": "Add Group",
     "admin_group_myGroups_button_edit": "Edit Group",
-    
-    
+    "admin_group_confirm_delete_group": "Are you sure you want to delete [{0}] ?",
+
+    "admin_group_add_title": "Add a Group",
+    "admin_group_edit_title": "Edit a Group",
+    "admin_group_add_name": "Group Name",
+    "admin_group_add_lunchTime": "Lunch Time",
+    "admin_group_add_members": "Members (Your Facebook friends who started Lunch Timer can be added)",
+    "admin_group_add_placeholder_members": "Type your friends",
+    "admin_group_add_shops": "Restaurants",
+    "admin_group_add_btn_addShop": "Add Restaurant",
+    "admin_group_add_btn_addGroup": "Add Group",
+    "admin_group_add_btn_updateGroup": "Update Group",
+    "admin_group_confirm_delete_shop": "Are you sure you want to delete [{0}] ?",
+
+    "admin_group_shop_title_add": "Add a Restaurant",
+    "admin_group_shop_title_edit": "Edit a Restaurant",
+    "admin_group_shop_placeholder_getShopInfo": "ぐるなびURL",
+    "admin_group_shop_btn_getShopInfo": "GET",
+    "admin_group_shop_input_id": "ID",
+    "admin_group_shop_input_name": "Restaurant name",
+    "admin_group_shop_input_category": "Category",
+    "admin_group_shop_input_address": "Address",
+    "admin_group_shop_input_tel": "TEL",
+    "admin_group_shop_input_imageURL": "Restaurant photo image URL",
+    "admin_group_shop_input_url_mobile": "Restaurant URL",
+    "admin_group_shop_input_visitedCount": "Visited count",
+    "admin_group_shop_input_btn_add": "Add Restaurant",
+    "admin_group_shop_input_btn_update": "Update",
+
     "dummy": ""
 }
