@@ -23,6 +23,14 @@ a {
 }
 /*** bootstrap override end ***/
 
+/*** Smart phone ***/
+@media (max-width: 768px) {
+    .container>.navbar-header {
+        margin: 0;
+    }
+}
+/*** Smart phone end ***/
+
 /*** header start ***/
 .navbar {
     margin-bottom: 0px;
@@ -42,6 +50,11 @@ a {
 
 .loginUserImage img {
     margin-top: -2px;
+}
+
+.navbar .fbLoginBtn {
+    margin-top: 12px;
+    padding-left: 14px;
 }
 /*** header end ***/
 

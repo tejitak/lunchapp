@@ -118,9 +118,6 @@
     body {
         overflow-x: hidden;
     }
-    .container>.navbar-header {
-        margin: 0;
-    }
     .viewport {
         margin: 0 -15px;
         width: auto;

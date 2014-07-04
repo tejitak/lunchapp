@@ -24,7 +24,8 @@ app.engine('html', require('consolidate').underscore);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 
-app.use(favicon());
+// app.use(favicon());
+app.use(favicon(__dirname + '/public/favicon.ico', {}));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
