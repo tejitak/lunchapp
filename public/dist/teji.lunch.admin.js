@@ -18647,7 +18647,7 @@ define('teji/lunch/view/admin/GroupListView',["backbone", "underscore", "teji/lu
                 })[0];
                 if(targetModel && window.confirm("Are you sure you want to delete [" + targetModel.get("name") + "] ?")){
                     // TODO: to be changed
-                    var callback = function(){ location.href = "/admin"; };
+                    var callback = function(){ location.href = lunch.constants.config.CONTEXT_PATH + "/admin"; };
                     targetModel.deleteGroup(groupId, callback);
                 }
             });
@@ -18885,7 +18885,7 @@ define('teji/lunch/view/admin/GroupAddView',[
                     return;
                 }
                 // TODO: to be changed
-                var callback = function(){ location.href = "/admin"; };
+                var callback = function(){ location.href = lunch.constants.config.CONTEXT_PATH + "/admin"; };
                 this.collection.postGroup(result.model, callback);
             }, this));
 
@@ -18897,7 +18897,7 @@ define('teji/lunch/view/admin/GroupAddView',[
                     return;
                 }
                 // TODO: to be changed
-                var callback = function(){ location.href = "/admin"; };
+                var callback = function(){ location.href = lunch.constants.config.CONTEXT_PATH + "/admin"; };
                 this.collection.updateGroup(result.model, callback);
             }, this));
 
@@ -19117,9 +19117,7 @@ require(["jquery",
         $(".fnAdminGroupList").hide();
     };
     fbInit.logoutCallback = function(){
-        // $(".fnAdminGroupList").hide();
-        // $(".fnDefaultContent").show();
-        location.href = "/admin";
+        location.href = lunch.constants.config.CONTEXT_PATH + "/admin";
     };
     var fbOnLoadCallback = function(){
         // show main content

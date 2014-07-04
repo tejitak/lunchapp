@@ -82,7 +82,7 @@ define([
                     return;
                 }
                 // TODO: to be changed
-                var callback = function(){ location.href = "/admin"; };
+                var callback = function(){ location.href = lunch.constants.config.CONTEXT_PATH + "/admin"; };
                 this.collection.postGroup(result.model, callback);
             }, this));
 
@@ -94,7 +94,7 @@ define([
                     return;
                 }
                 // TODO: to be changed
-                var callback = function(){ location.href = "/admin"; };
+                var callback = function(){ location.href = lunch.constants.config.CONTEXT_PATH + "/admin"; };
                 this.collection.updateGroup(result.model, callback);
             }, this));
 

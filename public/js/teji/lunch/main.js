@@ -59,10 +59,7 @@ require([
         $(".fnMainContent").hide();
     };
     fbInit.logoutCallback = function(){
-        // shopListView.clear();
-        // $(".fnDefaultContent").show();
-        // $(".fnMainContent").hide();
-        location.href = "/";
+        location.href = lunch.constants.config.CONTEXT_PATH + "/";
     };
     fbInit.checkLoginState(function(){
         // initial callback to show main content

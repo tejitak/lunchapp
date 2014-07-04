@@ -20926,7 +20926,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                 // show no groups messages
                 this.$el.append($('<div class="alert alert-info"></div>').html("No Groups - Please create a new group or join to an existing group."));
                 this.$el.append($('<button type="button" class="btn btn-primary"></button>').html("Manage Groups").click(function(){
-                    location.href = "/admin";
+                    location.href = lunch.constants.config.CONTEXT_PATH + "/admin";
                 }));
            }else{
                 $(".fnResultViewFilterSection").show();
@@ -21381,10 +21381,7 @@ require([
         $(".fnMainContent").hide();
     };
     fbInit.logoutCallback = function(){
-        // shopListView.clear();
-        // $(".fnDefaultContent").show();
-        // $(".fnMainContent").hide();
-        location.href = "/";
+        location.href = lunch.constants.config.CONTEXT_PATH + "/";
     };
     fbInit.checkLoginState(function(){
         // initial callback to show main content

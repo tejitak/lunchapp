@@ -40,7 +40,7 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/model/Group", "
                 })[0];
                 if(targetModel && window.confirm("Are you sure you want to delete [" + targetModel.get("name") + "] ?")){
                     // TODO: to be changed
-                    var callback = function(){ location.href = "/admin"; };
+                    var callback = function(){ location.href = lunch.constants.config.CONTEXT_PATH + "/admin"; };
                     targetModel.deleteGroup(groupId, callback);
                 }
             });

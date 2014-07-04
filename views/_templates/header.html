@@ -1,3 +1,4 @@
+<link rel="apple-touch-icon-precomposed" href="<%=config.CONTEXT_PATH%>/apple-touch-icon-precomposed.png">
 <script>
     // global scope constants
     var lunch = {constants: {}};
@@ -13,7 +14,10 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="<%=config.CONTEXT_PATH%>/" class="navbar-brand"><img class="headerLogo" src="<%=config.CONTEXT_PATH%>/img/logo/header_logo_64.png" width="32" height="32"><%=labels.product_name%></a>
+            <a href="<%=config.CONTEXT_PATH%>/" class="navbar-brand">
+                <img class="headerLogo" src="<%=config.CONTEXT_PATH%>/img/logo/header_logo_64.png" width="32" height="32">
+                <span class="headerProductName"><%=labels.product_name%></span>
+            </a>
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">

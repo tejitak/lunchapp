@@ -68,9 +68,7 @@ require(["jquery",
         $(".fnAdminGroupList").hide();
     };
     fbInit.logoutCallback = function(){
-        // $(".fnAdminGroupList").hide();
-        // $(".fnDefaultContent").show();
-        location.href = "/admin";
+        location.href = lunch.constants.config.CONTEXT_PATH + "/admin";
     };
     var fbOnLoadCallback = function(){
         // show main content

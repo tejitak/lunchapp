@@ -18,7 +18,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 // show no groups messages
                 this.$el.append($('<div class="alert alert-info"></div>').html("No Groups - Please create a new group or join to an existing group."));
                 this.$el.append($('<button type="button" class="btn btn-primary"></button>').html("Manage Groups").click(function(){
-                    location.href = "/admin";
+                    location.href = lunch.constants.config.CONTEXT_PATH + "/admin";
                 }));
            }else{
                 $(".fnResultViewFilterSection").show();
