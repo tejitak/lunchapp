@@ -121,10 +121,6 @@
     .container>.navbar-header {
         margin: 0;
     }
-    .container, .jumbotron {
-        padding-left: 8px;
-        padding-right: 8px;
-    }
     .viewport {
         margin: 0 -15px;
         width: auto;

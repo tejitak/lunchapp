@@ -24,6 +24,18 @@ a {
 /*** bootstrap override end ***/
 
 /*** header start ***/
+.navbar {
+    margin-bottom: 0px;
+}
+
+.navbar .navbar-brand {
+    padding: 9px;
+}
+
+.navbar .headerLogo {
+    margin-right: 9px;
+}
+
 .loginUserImage {
     margin: 0 6px
 }
@@ -38,7 +50,7 @@ a {
     width: 100%;
     font-weight: bold;
     font-size: 20px;
-    padding: 8px 0;
+    padding: 16px 0;
 }
 /*** modules end ***/
 

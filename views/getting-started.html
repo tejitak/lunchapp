@@ -5,20 +5,20 @@
     <title><%=title%></title>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="/js/lib/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/main.css">
-    <script data-main="/js//teji/lunch/gettingStarted.js" src="/js/lib/requirejs/require.js"></script>    
+    <link rel="stylesheet" href="<%=config.CONTEXT_PATH%>/js/lib/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="<%=config.CONTEXT_PATH%>/css/main.css">
+    <script data-main="<%=config.CONTEXT_PATH%>/js/teji/lunch/gettingStarted.js" src="<%=config.CONTEXT_PATH%>/js/lib/requirejs/require.js"></script>    
 </head>
-<%=header%>
+<%=templates.header%>
 <div class="container gettingStartedContainer">
     <div>
-        <h2>Lunch Timer!</h2>
+        <div class="sectionTitle"><%=labels.gettingStarted_section_title%></div>
     </div>
     <hr>
     <div class="row">
         <div class="col-xs-6 pull-left">
-            <h3>投票</h3>
-            <p>投票についての説明の説明 投票についての説明の説明 投票についての説明の説明 投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明</p>
+            <h3><%=labels.gettingStarted_section_vote_title%></h3>
+            <p><%=labels.gettingStarted_section_vote_description%></p>
         </div>
         <div class="col-xs-6 pull-right">
             <div class="gettingStartedImage"></div>
@@ -30,15 +30,15 @@
             <div class="gettingStartedImage"></div>
         </div>
         <div class="col-xs-6 pull-right">
-            <h3>具体例</h3>
-            <p>投票についての説明の説明 投票についての説明の説明 投票についての説明の説明 投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明</p>
+            <h3><%=labels.gettingStarted_section_example_title%></h3>
+            <p><%=labels.gettingStarted_section_example_description%></p>
         </div>
     </div>
     <hr class="clearfix">    
     <div class="row">
         <div class="col-xs-6 pull-left">
-            <h3>管理画面</h3>
-            <p>投票についての説明の説明 投票についての説明の説明 投票についての説明の説明 投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明</p>
+            <h3><%=labels.gettingStarted_section_admin_title%></h3>
+            <p><%=labels.gettingStarted_section_admin_description%></p>
         </div>
         <div class="col-xs-6 pull-right">
             <div class="gettingStartedImage"></div>
@@ -46,11 +46,6 @@
     </div>
     <hr class="clearfix">
 </div>
-<footer class="bs-docs-footer" role="contentinfo">
-    <div class="container">
-        <p>Designed and built with all the love in the world by <a href="http://twitter.com/tejitak" target="_blank">@tejitak</a>, <a href="http://twitter.com/makinoy" target="_blank">@makinoy</a>, <a href="http://twitter.com/slashilashi" target="_blank">@slashilashi</a>, <a href="http://twitter.com/skeryo" target="_blank">@ryoashi</a>.</p>
-        <p><a href="https://github.com/tejitak/lunchapp" target="_blank">View on GitHub</a></p>
-    </div>
-</footer>
+<%=templates.footer%>
 </body>
 </html>

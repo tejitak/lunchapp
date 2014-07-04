@@ -5,53 +5,45 @@
     <title><%=title%></title>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="/js/lib/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/main.css">
-    <script data-main="/dist/teji.lunch.main.js" src="/js/lib/requirejs/require.js"></script>    
+    <link rel="stylesheet" href="<%=config.CONTEXT_PATH%>/js/lib/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="<%=config.CONTEXT_PATH%>/css/main.css">
+    <script data-main="<%=config.CONTEXT_PATH%>/dist/teji.lunch.main.js" src="<%=config.CONTEXT_PATH%>/js/lib/requirejs/require.js"></script>
 </head>
 <body>
-<%=header%>
+<%=templates.header%>
 <div class="container fnMainContainer opacityHide">
     <div class="">
         <div class="bs-docs-section">
             <div class="mainContent fnMainContent" style="display: none;">
-                <div class="sectionTitle fnResultViewTitle">本日のランチ</div>
+                <div class="sectionTitle fnResultViewTitle"><%=labels.main_section_title%></div>
                 <div class="viewport fnResultViewList">
                     <div class="flipsnapPrevArrow fnPrevShopBtn"></div>
-                    <div class="flipsnapNextArrow fnNextShopBtn"></div>                    
+                    <div class="flipsnapNextArrow fnNextShopBtn"></div> 
                 </div>
                 <div class="row fnGroupSelectContainer" style="display: none;">
                     <div class="col-sm-4 col-sm-offset-4">
-                        <h5>Groups</h5>
+                        <h5><%=labels.main_section_input_group%></h5>
                         <select class="form-control col-sm-5 fnGroupSelect"></select>
                     </div>
                 </div>
                 <div class="row resultViewFilterSection fnResultViewFilterSection" style="display: none;">
                     <div class="col-sm-4 col-sm-offset-4">
-                        <h5>Category</h5>
+                        <h5><%=labels.main_section_input_category%></h5>
                         <select class="form-control col-sm-5 fnCategoryFilter"></select>
                     </div>
                 </div>
             </div>
             <div class="fnDefaultContent" style="display: none;">
-                <div class="sectionTitle">Lunch Timer</div>
-                <p class="lead">Lunch Timerは毎日のランチグループメンバーとのお店を調整するアプリです</p>
-                <ul>
-                    <li>ランチの時間までに投票をしてください</li>
-                    <li>ランチ時間になったら本日のランチのお店が決定されます！</li>
-                </ul>
-                <div>まずはFacebookログインをしてはじめましょう</div>
+                <div class="sectionTitle"><%=labels.main_intro_title%></div>
+                <p class="lead"><%=labels.main_intro_lead%></p>
+                <div><%=labels.main_intro_description%></div>
+                <fb:login-button size="large" scope="public_profile,user_friends" onlogin="fbInit.checkLoginState();"></fb:login-button>
             </div>
         </div>
     </div>
     <!--div class="fb-like-box" data-href="http://www.tejitak.com:3000/" data-width="288px" data-height="234px" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div-->
 </div>
 <hr>
-<footer class="bs-docs-footer" role="contentinfo">
-    <div class="container">
-        <p>Designed and built with all the love in the world by <a href="http://twitter.com/tejitak" target="_blank">@tejitak</a>, <a href="http://twitter.com/makinoy" target="_blank">@makinoy</a>, <a href="http://twitter.com/slashilashi" target="_blank">@slashilashi</a>, <a href="http://twitter.com/skeryo" target="_blank">@ryoashi</a>.</p>
-        <p><a href="https://github.com/tejitak/lunchapp" target="_blank">View on GitHub</a></p>
-    </div>
-</footer>
+<%=templates.footer%>
 </body>
 </html>

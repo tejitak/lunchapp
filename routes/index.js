@@ -1,21 +1,28 @@
 var express = require('express');
-var fs = require('fs');
+var templates = require('./modules/templates');
+var resourceBundle = require('./modules/resourceBundle');
+var local_settings = require('../local_settings').settings;
 var router = express.Router();
-
-// load templates
-var _templates = {};
-fs.readFile('./views/_templates/header.html', 'UTF-8', function (err, data) {
-    if (err){ throw err; }
-    _templates.header = data;
-});
 
 /* GET home page. */
 router.get('/', function(req, res) {
-    res.render('index', { title: 'Lunch Timer!', header: _templates.header});
+    var labels = resourceBundle.getLabels(req);
+    res.render('index', {
+        title: labels.main_title,
+        templates: templates(req),
+        config: local_settings,
+        labels: labels
+    });
 });
 
 router.get('/getting-started', function(req, res) {
-    res.render('getting-started', { title: 'Lunch Timer - Getting Started', header: _templates.header});
+    var labels = resourceBundle.getLabels(req);
+    res.render('getting-started', {
+        title: labels.gettingStarted_title,
+        templates: templates(req),
+        config: local_settings,
+        labels: labels
+    });
 });
 
 module.exports = router;

@@ -1,0 +1,39 @@
+{
+    "product_name": "LunchTimer",
+
+
+    "menu_gettingStarted": "はじめての方へ",
+    "menu_admin_group": "グループ管理",
+    "menu_logout": "Logout",
+
+
+    "main_title": "Lunch Timer!",
+    "main_intro_title": "Lunch Timer",
+    "main_intro_lead": "Lunch Timerは毎日のランチグループメンバーとのお店を調整するアプリです",
+    "main_intro_description": "<p>ランチの時間までに投票をしてください</p><p>ランチ時間になったら本日のランチのお店が決定されます！</p><p>まずはFacebookログインをしてはじめましょう</p>",
+
+    "main_section_title": "本日のランチ",
+    "main_section_input_group": "グループ",
+    "main_section_input_category": "カテゴリー",
+
+
+    "gettingStarted_title": "Lunch Timer! - Getting Started - ",
+    "gettingStarted_section_title": "Getting Started",
+    "gettingStarted_section_vote_title": "投票について",
+    "gettingStarted_section_vote_description": "投票についての説明の説明 投票についての説明の説明 投票についての説明の説明 投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明",
+    "gettingStarted_section_example_title": "具体例",
+    "gettingStarted_section_example_description": "投票についての説明の説明 投票についての説明の説明 投票についての説明の説明 投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明",
+    "gettingStarted_section_admin_title": "具体例",
+    "gettingStarted_section_admin_description": "投票についての説明の説明 投票についての説明の説明 投票についての説明の説明 投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明",
+
+
+    "admin_group_title": "Lunch Timer! - Group Management - ",
+    "admin_group_intro_section_title": "Lunch Timer Group Management",
+    "admin_group_intro_section_description": "<p>ランチグループの管理ができます</p><p>まずはFacebookログインをしてはじめましょう</p>",
+    "admin_group_myGroups_title": "My Groups",
+    "admin_group_myGroups_button_add": "Add Group",
+    "admin_group_myGroups_button_edit": "Edit Group",
+    
+    
+    "dummy": ""
+}

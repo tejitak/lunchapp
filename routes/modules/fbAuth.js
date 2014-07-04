@@ -48,7 +48,7 @@ var fbAuth = {
             protocol: 'https',
             query: {
                 'input_token': inputToken,
-                'access_token': access_token,
+                'access_token': access_token
             }
         };
         var urlStr = url.format(params);
@@ -68,6 +68,6 @@ var fbAuth = {
             }
         });
     }
-}
+};
 
 module.exports = fbAuth;

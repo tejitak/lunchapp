@@ -5,27 +5,25 @@
     <title><%=title%></title>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="/js/lib/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/admin.css">
-    <script data-main="/dist/teji.lunch.admin.js" src="/js/lib/requirejs/require.js"></script>
+    <link rel="stylesheet" href="<%=config.contextPath%>/js/lib/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="<%=config.contextPath%>/css/admin.css">
+    <script data-main="<%=config.contextPath%>/dist/teji.lunch.admin.js" src="<%=config.contextPath%>/js/lib/requirejs/require.js"></script>
 </head>
 <body>
-<%=header%>
+<%=templates.header%>
     <!-- Main Page -->
     <div class="container fnMainContainer opacityHide">
         <div class="fnDefaultContent" style="display: none;">
-            <div class="sectionTitle">Lunch Timer Admin</div>
-            <ul>
-                <li>ランチグループの管理ができます</li>
-            </ul>
-            <div>まずはFacebookログインをしてはじめましょう</div>
+            <div class="sectionTitle"><%=labels.admin_group_intro_section_title%></div>
+            <div><%=labels.admin_group_intro_section_description%></div>
+            <fb:login-button size="large" scope="public_profile,user_friends" onlogin="fbInit.checkLoginState();"></fb:login-button>
         </div>
         <div class="fnAdminGroupList" style="display: none;">
             <div>
-                <h4>My Groups</h4>
+                <div class="sectionTitle"><%=labels.admin_group_myGroups_title%></div>
             </div> 
             <div class="adminToolbar">
-                <button class="btn btn-primary btn-default fnAdminAddGroup">Add Group</button>
+                <button class="btn btn-primary btn-default fnAdminAddGroup"><%=labels.admin_group_myGroups_button_add%></button>
             </div>
             <div class="fnGroupListView"></div>
         </div>

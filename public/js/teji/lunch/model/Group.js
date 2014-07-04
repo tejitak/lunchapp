@@ -57,7 +57,7 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
 
         deleteGroup: function(groupId, callback){
             $.ajax({type: "DELETE",
-                url: "/api/group/" + groupId + "/?inputToken=" + fbInit.accessToken
+                url: lunch.constants.config.CONTEXT_PATH + "/api/group/" + groupId + "/?inputToken=" + fbInit.accessToken
             }).done($.proxy(function(response){
                 if(callback){
                     callback();
@@ -67,7 +67,7 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
 
         retriveShopInfo: function(shopURL, callback){
             $.ajax({type: "GET",
-                url: "/api/shop/retrieve?inputToken=" + fbInit.accessToken + "&shopURL=" + shopURL
+                url: lunch.constants.config.CONTEXT_PATH + "/api/shop/retrieve?inputToken=" + fbInit.accessToken + "&shopURL=" + shopURL
             }).done($.proxy(function(json){
                 // create a new shop model from response
                 if(!json.response || !json.response.rest){
@@ -94,7 +94,7 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
 
         vote: function(shopId, callback){
             $.ajax({type: "POST",
-                url: "/api/vote",
+                url: lunch.constants.config.CONTEXT_PATH + "/api/vote",
                 contentType: "application/json; charset=utf-8",
                 processData: false,
                 data: JSON.stringify({inputToken: fbInit.accessToken, groupId: this.get("_id"), shopId: shopId})
@@ -109,7 +109,7 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
 
         undoVote: function(shopId, callback){
             $.ajax({type: "DELETE",
-                url: "/api/vote",
+                url: lunch.constants.config.CONTEXT_PATH + "/api/vote",
                 contentType: "application/json; charset=utf-8",
                 processData: false,
                 data: JSON.stringify({inputToken: fbInit.accessToken, groupId: this.get("_id"), shopId: shopId})

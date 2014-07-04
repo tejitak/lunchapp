@@ -1,19 +1,24 @@
-<!--script src="/js/teji/lunch/fbInit.js"></script-->
+<script>
+    // global scope constants
+    var lunch = {constants: {}};
+    lunch.constants.config = <%=JSON.stringify(config)%>;
+    lunch.constants.labels = <%=JSON.stringify(labels)%>;
+</script>
 <header class="navbar navbar-custom navbar-static-top" role="banner">
     <div class="container">
         <div class="navbar-header">
             <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
+                <span class="sr-only"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/" class="navbar-brand">LunchTimer</a>
+            <a href="<%=config.CONTEXT_PATH%>/" class="navbar-brand"><img class="headerLogo" src="<%=config.CONTEXT_PATH%>/img/logo/header_logo_64.png" width="32" height="32"><%=labels.product_name%></a>
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="/getting-started">Getting started</a>
+                    <a href="<%=config.CONTEXT_PATH%>/getting-started"><%=labels.menu_gettingStarted%></a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right" id="loginBtnMenu" style="display:none;">
@@ -25,8 +30,8 @@
                 <li class="dropdown open">
                 <a data-toggle="dropdown" class="dropdown-toggle" role="button" href="#"><span id="loginUserImage" class="loginUserImage"></span><span id="dropDownLoginName"></span><b class="caret"></b></a>
                     <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="javascript:;" onclick="location.href='/admin/'">Admin</a></li>
-                        <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem" onclick="fbInit.logout();">Logout</a></li>
+                        <li role="presentation"><a href="javascript:;" onclick="location.href='<%=config.CONTEXT_PATH%>/admin/'"><%=labels.menu_admin_group%></a></li>
+                        <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem" onclick="fbInit.logout();"><%=labels.menu_logout%></a></li>
                     </ul>
                 </li>
             </ul>

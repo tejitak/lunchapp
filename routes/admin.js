@@ -1,17 +1,18 @@
 var express = require('express');
-var fs = require('fs');
 var fbAuth = require('./modules/fbAuth');
+var templates = require('./modules/templates');
+var resourceBundle = require('./modules/resourceBundle');
+var local_settings = require('../local_settings').settings;
 var router = express.Router();
 
-// load templates
-var _templates = {};
-fs.readFile('./views/_templates/header.html', 'UTF-8', function (err, data) {
-    if (err){ throw err; }
-    _templates.header = data;
-});
-
 router.get('/', function(req, res){
-    res.render('admin/index', {title: 'Lunch Timer Admin', header: _templates.header});
+    var labels = resourceBundle.getLabels(req);
+    res.render('admin/index', {
+        title: labels.admin_group_title,
+        templates: templates(req),
+        config: local_settings,
+        labels: labels
+    });
 });
 
 module.exports = router;
