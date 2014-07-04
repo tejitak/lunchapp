@@ -20925,7 +20925,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                 $(".fnResultViewFilterSection").hide();
                 // show no groups messages
                 this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_groups));
-                this.$el.append($('<button type="button" class="btn btn-primary"></button>').html("Manage Groups").click(function(){
+                this.$el.append($('<button type="button" class="btn btn-primary"></button>').html(lunch.constants.labels.main_no_group_loginBtn).click(function(){
                     location.href = lunch.constants.config.CONTEXT_PATH + "/admin";
                 }));
            }else{
