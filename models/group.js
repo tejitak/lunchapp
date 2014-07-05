@@ -126,11 +126,11 @@ var incrementVisited = function(group, decidedShop) {
     }
 }
 
-groupSchema.statics.updateGroupByJSON = function(group, completed) {
+groupSchema.statics.updateGroupByJSON = function(userId, group, completed) {
     if (!group._id) {
-        Group.createGroup(group, completed);
+        Group.createGroup(userId, group, completed);
     } else {
-        Group.update({"_id": group._id}, group, {upsert: true}, function(err) {
+        Group.update({'members.id': userId, '_id': group._id}, group, {upsert: true}, function(err) {
             if (err) console.log(err);
             if (completed) {
                 completed(err);
@@ -139,12 +139,12 @@ groupSchema.statics.updateGroupByJSON = function(group, completed) {
     }
 };
 
-groupSchema.statics.createGroup = function(group, completed) {
+groupSchema.statics.createGroup = function(adminId, group, completed) {
     Group.create({
         'name': group.name,
         'members': group.members,
         'shops': group.shops,
-        'administrator': group.administrator,
+        'administrator': adminId,
         'state':'vote',
         'lunchTime':'12:00'
     }, completed);

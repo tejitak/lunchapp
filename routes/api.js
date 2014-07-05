@@ -160,9 +160,9 @@ router.post('/group', function(req, res) {
     var entry = req.body;
     var callback = function(authResponse){
         var newGroup = entry.group;
-        newGroup.administrator = authResponse.data.user_id;
         if(newGroup){
-            Group.updateGroupByJSON(newGroup, function() {
+            var userId = authResponse.data.user_id;
+            Group.updateGroupByJSON(userId, newGroup, function() {
                 res.contentType('application/json');
                 res.send('{"success":true}');
             })
@@ -177,7 +177,8 @@ router.put('/group', function(req, res) {
     var callback = function(authResponse){
         var targetGroup = entry.group;
         if(targetGroup){
-            Group.updateGroupByJSON(targetGroup, function() {
+            var userId = authResponse.data.user_id;
+            Group.updateGroupByJSON(userId, targetGroup, function() {
                 res.contentType('application/json');
                 res.send('{"success":true}');
             });

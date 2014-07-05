@@ -6,13 +6,15 @@ describe('Group', function() {
   var aGroup;
   before(function(done) {
       models.init('mongodb://localhost','unittest');
-      aGroup = Group.createGroup({
-          'name':'A',
-          'members':[{'id':'testid','name':'Mr. A'}],
-          'shops':[
-              {'id': 'shop'}
-          ],
-          'administrator':'admin'},
+      aGroup = Group.createGroup(
+          'administrator',
+          {
+              'name':'A',
+              'members':[{'id':'testid','name':'Mr. A'}],
+              'shops':[
+                  {'id': 'shop'}
+                  ],
+          },
           function (err, group) {
               aGroup = group;
               done();
