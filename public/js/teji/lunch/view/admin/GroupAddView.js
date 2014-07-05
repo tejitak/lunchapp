@@ -60,6 +60,10 @@ define([
             this.$(".fnModalAddShopBtn").click($.proxy(function(){
                 // trigger onUpdateShopModel
                 var shopInfo = this.createShopInfoFromInputs();
+                if($.trim(shopInfo.name) === ""){
+                    alert("お店の名前を入力してください");
+                    return;
+                }
                 this._currentModel.addShop(new Shop(shopInfo));
                 this.$("#addShopModal").modal('hide')
             }, this));
@@ -71,7 +75,12 @@ define([
                     return shopModel.cid === targetId;
                 })[0];
                 if(targetShopModel){
-                    targetShopModel.updateValues(this.createShopInfoFromInputs());
+                    var shopInfo = this.createShopInfoFromInputs();
+                    if($.trim(shopInfo.name) === ""){
+                        alert("お店の名前を入力してください");
+                        return;
+                    }
+                    targetShopModel.updateValues(shopInfo);
                     this.renderShopListTable();
                 }
                 this.$("#addShopModal").modal('hide')
@@ -81,7 +90,7 @@ define([
             this.$(".fnSaveAddGroupBtn").click($.proxy(function(){
                 var result = this.updateModelByUI();
                 if(result.hasError){
-                    // TODO: show error message with model validate
+                    alert(result.message);
                     return;
                 }
                 // TODO: to be changed
@@ -93,7 +102,7 @@ define([
             this.$(".fnSaveEditGroupBtn").click($.proxy(function(){
                 var result = this.updateModelByUI();
                 if(result.hasError){
-                    // TODO: show error message with model validate
+                    alert(result.message);
                     return;
                 }
                 // TODO: to be changed
@@ -151,14 +160,26 @@ define([
 
         updateModelByUI: function(){
             var result = {};
+            if(!this._currentModel){ return result; }
             var model = result.model = this._currentModel;
-            var groupName =  this.$("#groupNameInput").val();
-            if(!this._currentModel || !groupName){
+            var groupName = this.$("#groupNameInput").val();
+            // check group name
+            if($.trim(groupName) === ""){
                 result.hasError = true;
+                // TODO: nls
+                result.message = "グループ名を入力してください。";
                 return result;
             }
+            // lunch time
+            var lunchTime =  $("#groupLunchTimeInput").val();
+            if($.trim(lunchTime) === ""){
+                result.hasError = true;
+                // TODO: nls
+                result.message = "ランチの時間を入力してください。";
+                return result;
+            }            
             model.set("name", groupName);
-            model.set("lunchTime", $("#groupLunchTimeInput").val());
+            model.set("lunchTime", lunchTime);
             return result;
         },
 
