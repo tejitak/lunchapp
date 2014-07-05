@@ -72,7 +72,8 @@ a {
 .snsBtnWrapper {
     overflow: hidden;
     display: table;
-    margin: 0 auto;
+    margin: 0px auto 4px auto;
+    padding-left: 36px; /* adjust for twitter white padding */
 }
 .snsBtnWrapper>div {
     display: table-cell;
