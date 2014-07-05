@@ -152,7 +152,7 @@ define([
             this.$personResultContainer.empty();            
             var members = targetModel.get("members") || [];
             _.each(members, $.proxy(function(member){
-                fbInit.addAutoCompleteResult(this.$personResultContainer, member, $.proxy(this.onRemoveMember, this), this._currentModel.get("administrator"));
+                fbInit.addAutoCompleteResult(this.$personResultContainer, member, $.proxy(this.onRemoveMember, this), isEdit ? this._currentModel.get("administrator") : fbInit.me.id);
             }, this));
             // update shop list table view
             this.renderShopListTable();
