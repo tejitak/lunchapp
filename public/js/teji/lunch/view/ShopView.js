@@ -26,8 +26,9 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
                 this.$(".fnBtnVote").prop('disabled', true); 
             }
             if(isVoted){
-                this.$(".fnBtnVote").addClass('hide');
-                this.$(".fnBtnUndoVote").removeClass('hide');
+                this.$(".fnBtnVote").addClass('hidden');
+                this.$(".fnBtnUndoVote").removeClass('hidden');
+                this.$('.fnBtnUndoVote').insertBefore(this.$('.fnBtnVote'));
             }
             this.$(".fnBtnVote").click($.proxy(function(){ this.onVoteClick(this.model); }, this));
             this.$(".fnBtnUndoVote").click($.proxy(function(){ this.onUndoVoteClick(this.model); }, this));
