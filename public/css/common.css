@@ -11,6 +11,10 @@ a {
     display: none;
     opacity: 0;
 }
+
+.introDescription {
+    color: #888;
+}
 /*** base style end ***/
 
 /*** bootstrap override start ***/

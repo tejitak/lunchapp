@@ -14,7 +14,7 @@
     "main_title": "Lunch Timer!",
     "main_intro_title": "Lunch Timer",
     "main_intro_lead": "Lunch Timerは毎日のランチグループメンバーと楽しくお店を選べるアプリです",
-    "main_intro_description": "<p>決められたランチの時間までに投票をしてください</p><p>ランチ時間になったら本日のランチのお店が決定します！</p><p>まずはFacebookログインをしてはじめましょう</p>",
+    "main_intro_description": "<p>決められたランチの時間までに行きたいお店に投票してください</p><p>ランチの時間になったら本日のランチのお店が決定します！</p><p>まずはFacebookログインをしてはじめましょう</p>",
 
     "main_section_title": "本日のランチ",
     "main_section_input_group": "グループ",
@@ -37,12 +37,12 @@
 
     "gettingStarted_title": "Lunch Timer - はじめての方へ - ",
     "gettingStarted_section_title": "Lunch Timerとは",
-    "gettingStarted_section_vote_title": "投票",
-    "gettingStarted_section_vote_description": "投票についての説明の説明 投票についての説明の説明 投票についての説明の説明 投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明",
-    "gettingStarted_section_example_title": "使用例",
-    "gettingStarted_section_example_description": "投票についての説明の説明 投票についての説明の説明 投票についての説明の説明 投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明",
+    "gettingStarted_section_vote_title": "Lunch Timerって何？",
+    "gettingStarted_section_vote_description": "職場等でいつものメンバーとランチへ行く時に、どこへ行こうかと悩んでなかなか決まらないなんてことはありませんか？<br><br>都会のビジネス街にはランチのお店が多すぎて選べない、グループの皆が誰かが行きたいお店があれば合わせるという考える人が多くて決まらない、など様々な理由があるでしょう。<br><br>近年多様化したランチのジャンルやグループのメンバーの嗜好に対して、<strong>Lunch Timerはあなたのランチグループの中で気軽な『投票』の仕組を提供し、毎日の意思決定を楽しくします！</strong>",
+    "gettingStarted_section_example_title": "使い方",
+    "gettingStarted_section_example_description": "決められた投票の時間までにLunch Timerを開くと投票画面が表示されます。投票ボタンを押して行きたいお店に投票しましょう！<br><br>ランチの時間を過ぎると投票結果が集計され、結果ページが表示されます。<br><br>投票の結果が同じランチのお店があった場合は、そのグループ内で過去に行ったことがある回数が少ないものが優先的に選ばれます。<br><br>結果の表示から６時間経つと、自動的に次の日の投票画面に戻ります。",
     "gettingStarted_section_admin_title": "グループの管理について",
-    "gettingStarted_section_admin_description": "投票についての説明の説明 投票についての説明の説明 投票についての説明の説明 投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明　投票についての説明の説明",
+    "gettingStarted_section_admin_description": "投票を行う前に事前にランチグループを作成する必要があります。管理者はグループを作成時にグループ名、ランチの時間、メンバー(LunchTimerを使用しているFacebook上の友人)、お店を登録しましょう。<br><br>メンバーに追加されたユーザーがLunch Timerにログインすると、お店が見えるようになります。なお、管理者以外の参加メンバーもメンバーの追加やランチのお店の追加などができます（グループの削除は管理者のみ可能）。",
 
 
     "admin_group_title": "Lunch Timer! - グループ管理 - ",
