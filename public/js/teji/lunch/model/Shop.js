@@ -7,6 +7,7 @@ define(["backbone", "jquery"], function(Backbone, $){
             category: "",
             address: "",
             tel: "",
+            url: "",
             url_mobile: "",
             imageURL: "",
             rating: 0,
@@ -24,6 +25,7 @@ define(["backbone", "jquery"], function(Backbone, $){
             this.set("category", result["category"]);
             this.set("address", result["address"]);
             this.set("tel", result["tel"]);
+            this.set("url", result["url"]);
             this.set("url_mobile", result["url_mobile"]);
             this.set("imageURL", result.image_url["shop_image1"] || "");
             this.set("votedBy", []);
@@ -39,8 +41,8 @@ define(["backbone", "jquery"], function(Backbone, $){
         },
 
         showInfo: function(){
-            // TODO: set proper URL attribute. Swicth URL for mobile and PC.
-            window.open(this.get('url_mobile'));
+            var isMobile = $(window).width() < 768;
+            window.open(isMobile ? this.get('url_mobile') : this.get('url'));
         }
     });
     return Shop;

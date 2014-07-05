@@ -22,6 +22,7 @@ var groupSchema = new mongoose.Schema({
         address: String,
         tel: String,
         imageURL: String,
+        url: String,
         url_mobile: String,
         visitedCount: {
             type: Number,

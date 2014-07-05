@@ -10,7 +10,7 @@ define([
     
     var GroupListView = Backbone.View.extend({
 
-        ADD_SHOP_INPUT_KEYS: ["id", "name", "category", "address", "tel", "imageURL", "url_mobile", "visitedCount"],
+        ADD_SHOP_INPUT_KEYS: ["id", "name", "category", "address", "tel", "imageURL", "url", "url_mobile", "visitedCount"],
 
         template: _.template(tmpl),
         shopListTableTemplate: _.template(shopListTableTmpl),
