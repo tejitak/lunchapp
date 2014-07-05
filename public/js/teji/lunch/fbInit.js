@@ -77,7 +77,7 @@ define("teji/lunch/fbInit", ["facebook", "jquery"], function(facebook, $){
                     minChars: 1,
 
                     parse: function (data) {
-                        console.log(data);
+                        // console.log(data);
                         var rows = new Array();
                         data = data.data;
                         for (var i=0; i<data.length; i++) {

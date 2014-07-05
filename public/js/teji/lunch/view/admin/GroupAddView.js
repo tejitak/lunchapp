@@ -25,7 +25,10 @@ define([
             // setup FB friends autocomplete
             fbInit.autoCompleteInit(this.$("#friendAutoCompleteInput"), this.$(".fnAddFriendAutoCompleteBtn"), $.proxy(function(personResult){
                 // callback when member add button is clicked. Add a member if the member does not exist in current group
-                if($.inArray(personResult.id, this._currentModel.get("members")) === -1){
+                var isNew = $.grep(this._currentModel.get("members"), function(member) {
+                    return member.id === personResult.id;
+                }).length == 0;
+                if(isNew){
                     fbInit.addAutoCompleteResult(this.$personResultContainer, personResult, $.proxy(this.onRemoveMember, this), this._currentModel.get("administrator"));
                     this._currentModel.get("members").push(personResult);
                 }

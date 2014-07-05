@@ -3,9 +3,9 @@
     <img src="<%=item.imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">
     <hr>
     <div class="caption shopViewButtons">
-        <p><a href="#" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button"><%=labels.main_resultItem_vote%></a>
-           <a href="#" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hidden" role="button"><%=labels.main_resultItem_unvote%></a></p>
-        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> 
+        <p><a href="javascript:;" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button"><%=labels.main_resultItem_vote%></a>
+           <a href="javascript:;" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hidden" role="button"><%=labels.main_resultItem_unvote%></a></p>
+        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> 
         <div><%=labels.main_resultItem_voter%>: 
         <% if(item.votedBy.length > 0) { %>
             <% _.each(item.votedBy, function(userId, key, arr){ %>
@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="caption resultViewItemInfo">
-        <p><a href="#" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> 
+        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> 
         <div><%=labels.main_resultItem_visitedCount%>: <%=item.visitedCount%></div>
         <div><%=labels.main_resultItem_votedCount%>: <%=item.votedBy.length%></div>
         <div><%=labels.main_resultItem_voter%>: 
