@@ -67,6 +67,25 @@ a {
 }
 /*** header end ***/
 
+
+/*** footer start ***/
+.snsBtnWrapper {
+    overflow: hidden;
+    display: table;
+    margin: 0 auto;
+}
+.snsBtnWrapper>div {
+    display: table-cell;
+    padding: 0 4px;
+}
+.snsBtnWrapper .fb-like{
+    top: -3px;
+}
+.snsBtnWrapper iframe {
+    margin: 0 !important;
+}
+/*** footer end ***/
+
 /*** modules start ***/
 .sectionTitle {
     width: 100%;
