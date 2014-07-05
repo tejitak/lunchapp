@@ -9189,6 +9189,8 @@ return jQuery;
 
 }));
 
+define("jquery", function(){});
+
 /*
  * jQuery Autocomplete plugin 1.2.3
  *
@@ -19043,7 +19045,7 @@ define('teji/lunch/view/admin/GroupAddView',[
 });
 
 requirejs.config({
-    baseUrl: "/js",
+    baseUrl: "./js",
     paths: {
         "jquery": "lib/jquery/jquery",
         "jquery.autocomplete": "lib/jquery.autocomplete/jquery.autocomplete",

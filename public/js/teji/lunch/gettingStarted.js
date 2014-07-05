@@ -1,5 +1,5 @@
 requirejs.config({
-    baseUrl: "/js",
+    baseUrl: "./js",
     paths: {
         "jquery": "lib/jquery/jquery",
         "text": "lib/requirejs-text/text",
