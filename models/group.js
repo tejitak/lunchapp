@@ -30,9 +30,8 @@ var groupSchema = new mongoose.Schema({
         },
         votedBy: [String]
     }],
-    lunchTime: {
-        type: String // FIXME use Date type
-    },
+    lunchTime: String,
+    timezone: String,
     administrator: {
         type: String,
         required: true
@@ -146,7 +145,8 @@ groupSchema.statics.createGroup = function(adminId, group, completed) {
         'shops': group.shops,
         'administrator': adminId,
         'state':'vote',
-        'lunchTime':'12:00'
+        'lunchTime':'12:00',
+        'timezone':'Asia/Tokyo'
     }, completed);
 }
 

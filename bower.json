@@ -24,7 +24,8 @@
     "velocity": "~0.1.0",
     "bootstrap-sortable": "~1.9.0",
     "jquery.cookie": "~1.4.1",
-    "moment": "~2.7.0"
+    "moment": "~2.7.0",
+    "moment-timezone": "~0.1.0"
   },
   "exportsOverride": {
     "bootstrap": {

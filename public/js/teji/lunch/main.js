@@ -10,7 +10,8 @@ requirejs.config({
         "flipsnap":  "lib/flipsnap/flipsnap",
         "velocity": "lib/velocity/jquery.velocity",
         "facebook": "//connect.facebook.net/en_US/all",
-        "moment": "lib/moment/moment"
+        "moment": "lib/moment/moment",
+        "moment.timzone": "lib/moment-timezone/moment-timezone-with-data-2010-2020"
     },
     shim: {
         "jquery.cookie": {
