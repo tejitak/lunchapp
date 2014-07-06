@@ -20,4 +20,14 @@ describe('fbAuth', function() {
       });
     });
   });
+  describe('#checkAccessToken()', function() {
+    it('test check access token', function(done) {
+      fbAuth.checkAccessToken("invalid token", function(err, response) {
+        //   console.log(err.message);
+          assert.equal(err != null, true);
+          assert.equal(response == null, true);
+          done();
+      });
+    });
+  });
 });

@@ -57,10 +57,12 @@ var fbAuth = {
                 response.setEncoding('utf8');
                 var resJson = JSON.parse(body);
                 if (!resJson.data || !resJson.data.is_valid) {
-                    throw new Error('Invalid access token');
+                    var invalidAccessError = new Error('Invalid access token');
+                    callback(invalidAccessError, null);
+                    return;
                 };
                 if (callback){
-                    callback(resJson);
+                    callback(null, resJson);
                 }
             } else {
                 console.log('error: ' + response.statusCode);
