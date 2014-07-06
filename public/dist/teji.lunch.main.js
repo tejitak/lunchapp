@@ -21927,8 +21927,12 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                 var decidedShop = $.grep(model.get("shops"), function(shop){
                     return shop.id === decidedShopId;
                 })[0];
-                var shopView = new ShopView({model: decidedShop});
-                this.$el.append(shopView.render().$el);
+                if(decidedShop){
+                    var shopView = new ShopView({model: decidedShop});
+                    this.$el.append(shopView.render().$el);
+                }else{
+                    this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_shops));
+                }
                 // add class for result view
                 $(".fnMainContent").addClass("resultView");
             }else{
