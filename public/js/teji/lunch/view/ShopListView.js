@@ -1,4 +1,4 @@
-define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "flipsnap", "moment"], function(Backbone, _, cookie, ShopView, flipsnap, moment){
+define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "flipsnap", "moment", "moment.timzone"], function(Backbone, _, cookie, ShopView, flipsnap, moment, momentTz){
     var ShopListView = Backbone.View.extend({
 
         COOKIE_SELECTED_GROUP: "teji.lunch.selectedGroup",
@@ -48,9 +48,10 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
             }
         },
 
-        showTimer: function(lunchTime){
+        showTimer: function(lunchTime, timezone){
             var countdownMinutes = 10;
-            var lunchTime = moment(lunchTime, "HH:mm");
+            // TODO: format timezone 
+            var lunchTime = moment.tz(lunchTime, "HH:mm", timezone);
             var diffMinutes = lunchTime.diff(moment()) / (1000 * 60);
             diffMinutes = (diffMinutes + 24*60) % (24*60); // Makes sure diffMinutes isn't negative by adding another day (24*60m) and using the modulus operator.
             //console.log("Minutes until lunch: " + diffMinutes);
@@ -70,7 +71,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
 
         _renderGroup: function(model){
             if(model.get("state") === "vote"){
-                this.showTimer(model.get("lunchTime"));
+                this.showTimer(model.get("lunchTime"), model.get("timezone"));
                 this._votedShopId = model.getVotedShopId(fbInit.me.id);
                 var shops = model.get("shops");
                 this._renderShops(model.get("shops"));
@@ -98,8 +99,12 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 var decidedShop = $.grep(model.get("shops"), function(shop){
                     return shop.id === decidedShopId;
                 })[0];
-                var shopView = new ShopView({model: decidedShop});
-                this.$el.append(shopView.render().$el);
+                if(decidedShop){
+                    var shopView = new ShopView({model: decidedShop});
+                    this.$el.append(shopView.render().$el);
+                }else{
+                    this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_shops));
+                }
                 // add class for result view
                 $(".fnMainContent").addClass("resultView");
             }else{

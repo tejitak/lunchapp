@@ -7,6 +7,7 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
             id: "",
             name: "",
             lunchTime: "",
+            timezone: "",
             members: [],
             shops: []
         },
@@ -20,6 +21,7 @@ define(["backbone", "jquery", "teji/lunch/model/Shop"], function(Backbone, $, Sh
             obj.members = obj.members || [];
             obj.shops = obj.shops || [];
             obj.lunchTime = obj.lunchTime || "12:00";
+            obj.timezone = obj.timezone || "Asia/Tokyo";
             // change json to Shop model
             this.set("shops", $.map(obj.shops, function(n, i){
                 return new Shop(n);

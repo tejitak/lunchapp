@@ -147,6 +147,7 @@ define([
             isEdit ? this.$(".addGroupModal").addClass("isEdit") : this.$(".addGroupModal").removeClass("isEdit");
             // update group name input
             this.$("#groupNameInput").val(targetModel.get("name"));
+            // TODO: remove timezone?
             this.$("#groupLunchTimeInput").val(targetModel.get("lunchTime"));
             // update members view
             this.$personResultContainer.empty();            
@@ -180,6 +181,9 @@ define([
             }            
             model.set("name", groupName);
             model.set("lunchTime", lunchTime);
+            // TODO: need timezone select box
+            model.set("timezone", "Asia/Tokyo");
+            // model.set("timezone", "Europe/London");
             return result;
         },
 

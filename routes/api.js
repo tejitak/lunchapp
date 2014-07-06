@@ -5,6 +5,7 @@ var url = require('url');
 var fbAuth = require('./modules/fbAuth');
 var xml2json = require('xml2json');
 var moment = require('moment');
+var momentTz = require('moment-timezone');
 var router = express.Router();
 var apiKeys = {};
 
@@ -30,8 +31,10 @@ fs.readFile('apikey.json', 'UTF-8', function (err, data) {
  *  - current time: 01:00, configured time: 21:00
  *    moment().diff(moment("21:00", "HH:mm")) / (1000*60*60) -> -20 (and then changed to 4 ("voted"))
  */
-var calcVoteState = function(lunchTime){
-    var diffHours = moment().diff(moment(lunchTime, "HH:mm")) / (1000 * 60 * 60);
+var calcVoteState = function(lunchTime, timezone){
+    // Z -> +0000 (GMT), +0900 (JST)
+    console.log(timezone);
+    var diffHours = moment().diff(moment.tz(lunchTime, "HH:mm", timezone)) / (1000 * 60 * 60);
     diffHours = (diffHours + 24) % 24; // Makes sure diffHours isn't negative by adding another day (24h) and using the modulus operator.
     // console.log("Time diff (h): " + diffHours);
     // "voted" during 6 hours after configured time
@@ -99,8 +102,7 @@ router.get('/groups', function(req, res) {
                 for(var i=0, len=items.length; i<len; i++){
                     var group = items[i];
                     // set vote state "vote" or "voted"
-                    var expectedState = calcVoteState(group.lunchTime);
-
+                    var expectedState = calcVoteState(group.lunchTime, group.timezone);
                     Group.changeStateIfRequired(group, expectedState, calcDecidedShop);
                 }
             }

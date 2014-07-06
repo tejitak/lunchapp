@@ -18046,6 +18046,7 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
             id: "",
             name: "",
             lunchTime: "",
+            timezone: "",
             members: [],
             shops: []
         },
@@ -18059,6 +18060,7 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
             obj.members = obj.members || [];
             obj.shops = obj.shops || [];
             obj.lunchTime = obj.lunchTime || "12:00";
+            obj.timezone = obj.timezone || "Asia/Tokyo";
             // change json to Shop model
             this.set("shops", $.map(obj.shops, function(n, i){
                 return new Shop(n);
@@ -18949,6 +18951,7 @@ define('teji/lunch/view/admin/GroupAddView',[
             isEdit ? this.$(".addGroupModal").addClass("isEdit") : this.$(".addGroupModal").removeClass("isEdit");
             // update group name input
             this.$("#groupNameInput").val(targetModel.get("name"));
+            // TODO: remove timezone?
             this.$("#groupLunchTimeInput").val(targetModel.get("lunchTime"));
             // update members view
             this.$personResultContainer.empty();            
@@ -18982,6 +18985,9 @@ define('teji/lunch/view/admin/GroupAddView',[
             }            
             model.set("name", groupName);
             model.set("lunchTime", lunchTime);
+            // TODO: need timezone select box
+            model.set("timezone", "Asia/Tokyo");
+            // model.set("timezone", "Europe/London");
             return result;
         },
 
@@ -19131,7 +19137,7 @@ require(["jquery",
         $('.fnAdminAddGroup').click(function(e){
             util.showPage(1);
             // clear view with a new model and me
-            var newGroup = new Group({id: "", name: "", members: [{id: fbInit.me.id, name: fbInit.me.name}], shops: [], lunchTime: "12:00"});
+            var newGroup = new Group({id: "", name: "", members: [{id: fbInit.me.id, name: fbInit.me.name}], shops: [], lunchTime: "12:00", timezone: "Asia/Tokyo"});
             groupAddView.updateView(newGroup);
         });
     };

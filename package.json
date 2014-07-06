@@ -19,7 +19,8 @@
     "request": "^2.36.0",
     "static-favicon": "~1.0.0",
     "underscore": "^1.6.0",
-    "mongoose": "3.8.12"
+    "mongoose": "3.8.12",
+    "moment-timezone": "^0.1.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

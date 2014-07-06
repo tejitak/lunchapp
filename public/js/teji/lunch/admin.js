@@ -59,7 +59,7 @@ require(["jquery",
         $('.fnAdminAddGroup').click(function(e){
             util.showPage(1);
             // clear view with a new model and me
-            var newGroup = new Group({id: "", name: "", members: [{id: fbInit.me.id, name: fbInit.me.name}], shops: [], lunchTime: "12:00"});
+            var newGroup = new Group({id: "", name: "", members: [{id: fbInit.me.id, name: fbInit.me.name}], shops: [], lunchTime: "12:00", timezone: "Asia/Tokyo"});
             groupAddView.updateView(newGroup);
         });
     };
