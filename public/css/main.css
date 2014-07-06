@@ -158,12 +158,23 @@
 }
 
 .gettingStartedContainer .gettingStartedImage {
-    width: 400px;
-    height: 260px;
-    background-color:
-    orange; margin: 20px;
+    width: 600px;
+    height: 400px;
+    background-size: 600px 400px;
+    margin: 5px;
 }
 
+.gettingStartedContainer .gettingStartedImage.screen1 {
+    background-image: url("../img/screen1.png");
+}
+
+.gettingStartedContainer .gettingStartedImage.screen2 {
+    background-image: url("../img/screen2.png");
+}
+
+.gettingStartedContainer .gettingStartedImage.screen3 {
+    background-image: url("../img/screen3.png");
+}
 
 @media (max-width: 768px) {
     .gettingStartedContainer .row .col-xs-6 {
@@ -172,8 +183,9 @@
 
     .gettingStartedContainer .gettingStartedImage {
         margin: 20px auto;
-        width: 200px; height: 130px;
-        background-color: orange; 
+        width: 300px;
+        height: 200px;
+        background-size: 300px 200px;
     }
 }
 
