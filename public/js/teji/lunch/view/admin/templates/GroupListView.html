@@ -18,7 +18,9 @@
                 </td>
                 <td>
                     <a class="fnGroupListViewEditBtn" data-group-id="<%=group._id%>" href="javascript:;"><%=labels.common_btn_edit%></a>
+                    <% if(group.administrator == loginUserId){ %>
                     <a class="fnGroupListViewDeleteBtn" data-group-id="<%=group._id%>" href="javascript:;"><%=labels.common_btn_delete%></a>
+                    <% } %>
                 </td>
             </tr>
         <% }); %>

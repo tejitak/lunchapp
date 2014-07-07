@@ -9189,6 +9189,8 @@ return jQuery;
 
 }));
 
+define("jquery", function(){});
+
 /*
  * jQuery Autocomplete plugin 1.2.3
  *
@@ -18604,7 +18606,7 @@ define('text',['module'], function (module) {
 });
 
 
-define('text!teji/lunch/view/admin/templates/GroupListView.html',[],function () { return '<% if(groups.length > 0) { %>\n<table class="table table-striped table-bordered">\n    <thead>\n        <tr>\n            <th style="width: 30%;"><%=labels.admin_group_myGroups_name%></th>\n            <th style="width: 50%;"><%=labels.admin_group_myGroups_members%></th>\n            <th style="width: 20%;"></th>\n        </tr>\n    </thead>\n    <tbody class="fnAdminGroupListTable">\n        <% _.each(groups, function(group, key, arr) { %>\n            <tr>\n                <td><span><%-group.name%></span></td>\n                <td>\n                    <% _.each(group.members, function(member, key, arr){ %>\n                    <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=member.id%>/picture?type=square" title="<%-member.name%>" alt="<%-member.name%>">\n                    <% }); %>\n                </td>\n                <td>\n                    <a class="fnGroupListViewEditBtn" data-group-id="<%=group._id%>" href="javascript:;"><%=labels.common_btn_edit%></a>\n                    <a class="fnGroupListViewDeleteBtn" data-group-id="<%=group._id%>" href="javascript:;"><%=labels.common_btn_delete%></a>\n                </td>\n            </tr>\n        <% }); %>\n    </tbody>\n</table>\n<% } %>\n';});
+define('text!teji/lunch/view/admin/templates/GroupListView.html',[],function () { return '<% if(groups.length > 0) { %>\n<table class="table table-striped table-bordered">\n    <thead>\n        <tr>\n            <th style="width: 30%;"><%=labels.admin_group_myGroups_name%></th>\n            <th style="width: 50%;"><%=labels.admin_group_myGroups_members%></th>\n            <th style="width: 20%;"></th>\n        </tr>\n    </thead>\n    <tbody class="fnAdminGroupListTable">\n        <% _.each(groups, function(group, key, arr) { %>\n            <tr>\n                <td><span><%-group.name%></span></td>\n                <td>\n                    <% _.each(group.members, function(member, key, arr){ %>\n                    <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=member.id%>/picture?type=square" title="<%-member.name%>" alt="<%-member.name%>">\n                    <% }); %>\n                </td>\n                <td>\n                    <a class="fnGroupListViewEditBtn" data-group-id="<%=group._id%>" href="javascript:;"><%=labels.common_btn_edit%></a>\n                    <% if(group.administrator == loginUserId){ %>\n                    <a class="fnGroupListViewDeleteBtn" data-group-id="<%=group._id%>" href="javascript:;"><%=labels.common_btn_delete%></a>\n                    <% } %>\n                </td>\n            </tr>\n        <% }); %>\n    </tbody>\n</table>\n<% } %>\n';});
 
 define('teji/lunch/view/admin/GroupListView',["backbone", "underscore", "teji/lunch/util", "teji/lunch/model/Group", "text!./templates/GroupListView.html"], function(Backbone, _, util, Group, tmpl){
     var GroupListView = Backbone.View.extend({
@@ -18626,7 +18628,7 @@ define('teji/lunch/view/admin/GroupListView',["backbone", "underscore", "teji/lu
 
         _renderItems: function(models){
             var groupsJson = $.map(models, function(model){ return model.toJSON(); });
-            this.$el.html(this.template({groups: groupsJson, labels: lunch.constants.labels}));
+            this.$el.html(this.template({groups: groupsJson, labels: lunch.constants.labels, loginUserId: fbInit.me.id}));
             // bind onclick edit
             this.$(".fnGroupListViewEditBtn").bind("click", $.proxy(function($e){
                 var $target = $($e.target);
@@ -19011,27 +19013,31 @@ define('teji/lunch/view/admin/GroupAddView',[
             var shopsJson = $.map(this._currentModel.get("shops"), function(shopModel){
                 return shopModel.toJSON();
             });
-            $table.html(this.shopListTableTemplate({shops: shopsJson, labels: lunch.constants.labels}));
-            // enable sort
-            $.bootstrapSortable();
-            // attach event for edit button
-            this.$(".fnShopListTableEditBtn").click($.proxy(function($e){
-                this.clearAddShopModal();
-                var targetModel = this._getShopModelByNode($($e.target));
-                this.$("#addShopModal").addClass("isEdit").modal("show").data("target-shop-id", targetModel.cid);
-                this.updateAddShopModalByModel(targetModel);
-            }, this));
-            // attach event for delete button
-            this.$(".fnShopListTableDeleteBtn").click($.proxy(function($e){
-                var targetModel = this._getShopModelByNode($($e.target));
-                if(targetModel && window.confirm(lunch.constants.labels.admin_group_confirm_delete_shop.replace(/\{0\}/, targetModel.get("name")))){
-                    // remove from array
-                    var shopModels = this._currentModel.get("shops");
-                    // TOOD: should be handled in model?
-                    shopModels.splice($.inArray(targetModel, shopModels), 1);
-                    this.renderShopListTable();
-                }
-            }, this));
+            if(!shopsJson || shopsJson.length == 0){
+                $table.hide();
+            }else{   
+                $table.show().html(this.shopListTableTemplate({shops: shopsJson, labels: lunch.constants.labels}));
+                // enable sort
+                $.bootstrapSortable();
+                // attach event for edit button
+                this.$(".fnShopListTableEditBtn").click($.proxy(function($e){
+                    this.clearAddShopModal();
+                    var targetModel = this._getShopModelByNode($($e.target));
+                    this.$("#addShopModal").addClass("isEdit").modal("show").data("target-shop-id", targetModel.cid);
+                    this.updateAddShopModalByModel(targetModel);
+                }, this));
+                // attach event for delete button
+                this.$(".fnShopListTableDeleteBtn").click($.proxy(function($e){
+                    var targetModel = this._getShopModelByNode($($e.target));
+                    if(targetModel && window.confirm(lunch.constants.labels.admin_group_confirm_delete_shop.replace(/\{0\}/, targetModel.get("name")))){
+                        // remove from array
+                        var shopModels = this._currentModel.get("shops");
+                        // TOOD: should be handled in model?
+                        shopModels.splice($.inArray(targetModel, shopModels), 1);
+                        this.renderShopListTable();
+                    }
+                }, this));
+            }
         },
 
         _getShopModelByNode: function($target){
