@@ -27,6 +27,8 @@
     "main_warning_no_shops": "There is no restaurants in this group",
     "main_error_vote_result": "Something went wrong...",
 
+    "main_resultList_voting_countdown": "Voting countdown: ",
+    
     "main_resultItem_vote": "Vote",
     "main_resultItem_unvote": "Cancel",
     "main_resultItem_shopInfo": "More information",

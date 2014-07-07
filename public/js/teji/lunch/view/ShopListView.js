@@ -23,7 +23,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
            }else{
                 $(".fnResultViewFilterSection").show();
                 // read id from cookie
-                var initialSelectedGroupId = $.cookie(this.COOKIE_SELECTED_GROUP);
+                var initialSelectedGroupId = $.cookie(this.COOKIE_SELECTED_GROUP, {expires: 7});
                 for(var i=0, len=models.length; i<len; i++){
                     var groupId = models[i].get("_id");
                     var $option = $("<option></option>").val(groupId).html(models[i].get("name"));
@@ -64,7 +64,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                     if(!(diffMinutes < countdownMinutes) || Math.floor(diffMinutes)===0 && Math.floor(diffSeconds)===0){
                         location.reload();
                     }
-                    $(".fnResultViewTitle").html("Voting countdown: " + Math.floor(diffMinutes) + ":" + ((diffSeconds%60 < 10) ? "0" : "") + Math.floor(diffSeconds%60));
+                    $(".fnResultViewTitle").html(lunch.constants.labels.main_resultList_voting_countdown + Math.floor(diffMinutes) + ":" + ((diffSeconds%60 < 10) ? "0" : "") + Math.floor(diffSeconds%60));
                 }, 1000);
             }
         },
@@ -145,6 +145,11 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
         },
 
         _createShopsNode: function(shops){
+            // TODO: sort shold be an option?
+            // sort by current voting count
+            shops.sort(function(obj1, obj2){
+                return obj1.get("votedBy").length < obj2.get("votedBy").length;
+            });
             var $div = $("<div></div>");
             _.each(shops, function(shop){
                 var shopView = new ShopView({model: shop});

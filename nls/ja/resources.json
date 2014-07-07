@@ -27,6 +27,8 @@
     "main_warning_no_shops": "このグループにはお店が登録されていません。",
     "main_error_vote_result": "エラーが起きました。",
 
+    "main_resultList_voting_countdown": "投票〆切までの時間: ",
+
     "main_resultItem_vote": "投票",
     "main_resultItem_unvote": "キャンセル",
     "main_resultItem_shopInfo": "お店の情報",
