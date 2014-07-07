@@ -207,27 +207,31 @@ define([
             var shopsJson = $.map(this._currentModel.get("shops"), function(shopModel){
                 return shopModel.toJSON();
             });
-            $table.html(this.shopListTableTemplate({shops: shopsJson, labels: lunch.constants.labels}));
-            // enable sort
-            $.bootstrapSortable();
-            // attach event for edit button
-            this.$(".fnShopListTableEditBtn").click($.proxy(function($e){
-                this.clearAddShopModal();
-                var targetModel = this._getShopModelByNode($($e.target));
-                this.$("#addShopModal").addClass("isEdit").modal("show").data("target-shop-id", targetModel.cid);
-                this.updateAddShopModalByModel(targetModel);
-            }, this));
-            // attach event for delete button
-            this.$(".fnShopListTableDeleteBtn").click($.proxy(function($e){
-                var targetModel = this._getShopModelByNode($($e.target));
-                if(targetModel && window.confirm(lunch.constants.labels.admin_group_confirm_delete_shop.replace(/\{0\}/, targetModel.get("name")))){
-                    // remove from array
-                    var shopModels = this._currentModel.get("shops");
-                    // TOOD: should be handled in model?
-                    shopModels.splice($.inArray(targetModel, shopModels), 1);
-                    this.renderShopListTable();
-                }
-            }, this));
+            if(!shopsJson || shopsJson.length == 0){
+                $table.hide();
+            }else{   
+                $table.show().html(this.shopListTableTemplate({shops: shopsJson, labels: lunch.constants.labels}));
+                // enable sort
+                $.bootstrapSortable();
+                // attach event for edit button
+                this.$(".fnShopListTableEditBtn").click($.proxy(function($e){
+                    this.clearAddShopModal();
+                    var targetModel = this._getShopModelByNode($($e.target));
+                    this.$("#addShopModal").addClass("isEdit").modal("show").data("target-shop-id", targetModel.cid);
+                    this.updateAddShopModalByModel(targetModel);
+                }, this));
+                // attach event for delete button
+                this.$(".fnShopListTableDeleteBtn").click($.proxy(function($e){
+                    var targetModel = this._getShopModelByNode($($e.target));
+                    if(targetModel && window.confirm(lunch.constants.labels.admin_group_confirm_delete_shop.replace(/\{0\}/, targetModel.get("name")))){
+                        // remove from array
+                        var shopModels = this._currentModel.get("shops");
+                        // TOOD: should be handled in model?
+                        shopModels.splice($.inArray(targetModel, shopModels), 1);
+                        this.renderShopListTable();
+                    }
+                }, this));
+            }
         },
 
         _getShopModelByNode: function($target){

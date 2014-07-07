@@ -37,7 +37,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                     var selectedGroup = this.getSelectedGroup();
                     this._renderGroup(selectedGroup);
                     // set id to cookie
-                    $.cookie(this.COOKIE_SELECTED_GROUP, selectedGroup.get("_id"));
+                    $.cookie(this.COOKIE_SELECTED_GROUP, selectedGroup.get("_id"), {expires: 7});
                 }, this));
                 this._renderGroup(this.getSelectedGroupById(initialSelectedGroupId) || models[0]);
                 if(models.length > 1){
@@ -64,7 +64,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                     if(!(diffMinutes < countdownMinutes) || Math.floor(diffMinutes)===0 && Math.floor(diffSeconds)===0){
                         location.reload();
                     }
-                    $(".fnResultViewTitle").html("Voting countdown: " + Math.floor(diffMinutes) + ":" + ((diffSeconds%60 < 10) ? "0" : "") + Math.floor(diffSeconds%60));
+                    $(".fnResultViewTitle").html(lunch.constants.labels.main_resultList_voting_countdown + Math.floor(diffMinutes) + ":" + ((diffSeconds%60 < 10) ? "0" : "") + Math.floor(diffSeconds%60));
                 }, 1000);
             }
         },
@@ -145,6 +145,11 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
         },
 
         _createShopsNode: function(shops){
+            // TODO: sort shold be an option?
+            // sort by current voting count
+            shops.sort(function(obj1, obj2){
+                return obj1.get("votedBy").length < obj2.get("votedBy").length;
+            });
             var $div = $("<div></div>");
             _.each(shops, function(shop){
                 var shopView = new ShopView({model: shop});

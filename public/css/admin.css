@@ -42,7 +42,15 @@
 }
 
 .ac_loading {
-        background : Window url('/zx0000/images/indicator.gif') right center no-repeat;
+    animation-name: rotateThis;
+    animation-duration: .5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes "rotateThis" {
+    from { transform: scale( 1 ) rotate( 0deg ); }
+    to { transform: scale( 1 ) rotate( 360deg ); }
 }
 
 .ac_over {

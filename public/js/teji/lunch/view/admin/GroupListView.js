@@ -18,7 +18,7 @@ define(["backbone", "underscore", "teji/lunch/util", "teji/lunch/model/Group", "
 
         _renderItems: function(models){
             var groupsJson = $.map(models, function(model){ return model.toJSON(); });
-            this.$el.html(this.template({groups: groupsJson, labels: lunch.constants.labels}));
+            this.$el.html(this.template({groups: groupsJson, labels: lunch.constants.labels, loginUserId: fbInit.me.id}));
             // bind onclick edit
             this.$(".fnGroupListViewEditBtn").bind("click", $.proxy(function($e){
                 var $target = $($e.target);

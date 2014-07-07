@@ -14111,17 +14111,19 @@ define("teji/lunch/fbInit", ["facebook", "jquery"], function(facebook, $){
                 var _selectedItem = "";
                 $input.autocomplete("https://graph.facebook.com/me/friends?access_token=" + fbInit.accessToken + "&callback=?", {
                     height: 400,
-                    max: 10,
+                    // max: 10,
                     dataType: 'jsonp',
-                    cacheLength: 10,
+                    // cacheLength: 10,
                     minChars: 1,
 
                     parse: function (data) {
                         // console.log(data);
                         var rows = new Array();
                         data = data.data;
-                        for (var i=0; i<data.length; i++) {
-                            rows[i] = {data: data[i], value: data[i].name, result: data[i].name};
+                        if(data){
+                            for (var i=0; i<data.length; i++) {
+                                rows[i] = {data: data[i], value: data[i].name, result: data[i].name};
+                            }                            
                         }
                         return rows;
                     },
@@ -17646,7 +17648,7 @@ define('text',['module'], function (module) {
 });
 
 
-define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail shopViewItem">\n    <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=item.name%></span></h4>\n    <img src="<%=item.imageURL%>" class="img-rounded" alt="photo" style="width: 300px; height: 200px;">\n    <hr>\n    <div class="caption shopViewButtons">\n        <p><a href="javascript:;" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button"><%=labels.main_resultItem_vote%></a>\n           <a href="javascript:;" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hidden" role="button"><%=labels.main_resultItem_unvote%></a></p>\n        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> \n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n    <div class="caption resultViewItemInfo">\n        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> \n        <div><%=labels.main_resultItem_visitedCount%>: <%=item.visitedCount%></div>\n        <div><%=labels.main_resultItem_votedCount%>: <%=item.votedBy.length%></div>\n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n</div>';});
+define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail shopViewItem">\n    <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=item.name%></span></h4>\n    <img src="<%=item.imageURL%>" class="img-rounded" alt="photo" style="width: 200px; height: 200px;">\n    <hr>\n    <div class="caption shopViewButtons">\n        <p><a href="javascript:;" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button"><%=labels.main_resultItem_vote%></a>\n           <a href="javascript:;" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hidden" role="button"><%=labels.main_resultItem_unvote%></a></p>\n        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> \n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n    <div class="caption resultViewItemInfo">\n        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> \n        <div><%=labels.main_resultItem_visitedCount%>: <%=item.visitedCount%></div>\n        <div><%=labels.main_resultItem_votedCount%>: <%=item.votedBy.length%></div>\n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n</div>';});
 
 define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], function(Backbone, _, $, tmpl){
     var ShopView = Backbone.View.extend({
@@ -17655,6 +17657,7 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./t
         className: "flipsnapItem",
         template: _.template(tmpl),
         defaultImgURL: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjE5cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MzAweDIwMDwvdGV4dD48L3N2Zz4=",
+        // defaultImgURL: lunch.constants.config.CONTEXT_PATH + "/img/logo/logo_200.png",
         
         initialize: function() {
         },
@@ -21865,7 +21868,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                     var selectedGroup = this.getSelectedGroup();
                     this._renderGroup(selectedGroup);
                     // set id to cookie
-                    $.cookie(this.COOKIE_SELECTED_GROUP, selectedGroup.get("_id"));
+                    $.cookie(this.COOKIE_SELECTED_GROUP, selectedGroup.get("_id"), {expires: 7});
                 }, this));
                 this._renderGroup(this.getSelectedGroupById(initialSelectedGroupId) || models[0]);
                 if(models.length > 1){
@@ -21892,7 +21895,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                     if(!(diffMinutes < countdownMinutes) || Math.floor(diffMinutes)===0 && Math.floor(diffSeconds)===0){
                         location.reload();
                     }
-                    $(".fnResultViewTitle").html("Voting countdown: " + Math.floor(diffMinutes) + ":" + ((diffSeconds%60 < 10) ? "0" : "") + Math.floor(diffSeconds%60));
+                    $(".fnResultViewTitle").html(lunch.constants.labels.main_resultList_voting_countdown + Math.floor(diffMinutes) + ":" + ((diffSeconds%60 < 10) ? "0" : "") + Math.floor(diffSeconds%60));
                 }, 1000);
             }
         },
@@ -21973,6 +21976,11 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
         },
 
         _createShopsNode: function(shops){
+            // TODO: sort shold be an option?
+            // sort by current voting count
+            shops.sort(function(obj1, obj2){
+                return obj1.get("votedBy").length < obj2.get("votedBy").length;
+            });
             var $div = $("<div></div>");
             _.each(shops, function(shop){
                 var shopView = new ShopView({model: shop});

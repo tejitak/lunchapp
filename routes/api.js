@@ -92,7 +92,12 @@ var clone = function(obj) {
  *     }
  */
 router.get('/groups', function(req, res) {
-    var callback = function(authResponse){
+    var callback = function(err, authResponse){
+        if (err) {
+            res.contentType('application/json');
+            res.send('{"error":' + error.message + '}')
+            return;
+        }
         // filter by FB authenticated user
         var userId = authResponse.data.user_id;
         Group.findByMemberId(userId, function (err, items) {
@@ -130,13 +135,18 @@ router.get('/groups', function(req, res) {
  *     }
  */
 router.get('/group/:id', function(req, res) {
-    var callback = function(authResponse) {
-      var userId = authResponse.data.user_id;
-      var id = req.param("id");
-      Group.findByGroupId(userId, id, function(err, items) {
-          res.contentType('application/json');
-          res.send(items);
-      });
+    var callback = function(err, authResponse) {
+        if (err) {
+            res.contentType('application/json');
+            res.send('{"error":' + err.message + '}')
+            return;
+        }
+        var userId = authResponse.data.user_id;
+        var id = req.param("id");
+        Group.findByGroupId(userId, id, function(err, items) {
+            res.contentType('application/json');
+            res.send(items);
+        });
     }
     fbAuth.checkAccessToken(req.query.inputToken, callback);
 });
@@ -160,7 +170,12 @@ router.get('/group/:id', function(req, res) {
  */
 router.post('/group', function(req, res) {
     var entry = req.body;
-    var callback = function(authResponse){
+    var callback = function(err, authResponse){
+        if (err) {
+            res.contentType('application/json');
+            res.send('{"error":' + err.message + '}')
+            return;
+        }
         var newGroup = entry.group;
         if(newGroup){
             var userId = authResponse.data.user_id;
@@ -176,7 +191,12 @@ router.post('/group', function(req, res) {
 // TODO validation is required
 router.put('/group', function(req, res) {
     var entry = req.body;
-    var callback = function(authResponse){
+    var callback = function(err, authResponse){
+        if (err) {
+            res.contentType('application/json');
+            res.send('{"error":' + error.message + '}')
+            return;
+        }
         var targetGroup = entry.group;
         if(targetGroup){
             var userId = authResponse.data.user_id;
@@ -206,7 +226,12 @@ router.put('/group', function(req, res) {
  */
 router.delete('/group/:id', function(req, res) {
     var target = req.param("id");
-    var callback = function(authResponse){
+    var callback = function(err, authResponse){
+        if (err) {
+            res.contentType('application/json');
+            res.send('{"error":' + error.message + '}')
+            return;
+        }
         var userId = authResponse.data.user_id;
         Group.removeGroup(userId, target, function(err, num) {
             res.contentType('application/json');
@@ -234,7 +259,12 @@ router.delete('/group/:id', function(req, res) {
  */
 router.post('/vote', function(req, res) {
     var entry = req.body;
-    var callback = function(authResponse){
+    var callback = function(err, authResponse){
+        if (err) {
+            res.contentType('application/json');
+            res.send('{"error":' + error.message + '}')
+            return;
+        }
         var groupId = entry.groupId;
         var shopId = entry.shopId;
         var userId = authResponse.data.user_id;
@@ -248,7 +278,12 @@ router.post('/vote', function(req, res) {
 
 router.delete('/vote', function(req, res) {
     var entry = req.body;
-    var callback = function(authResponse){
+    var callback = function(err, authResponse){
+        if (err) {
+            res.contentType('application/json');
+            res.send('{"error":' + error.message + '}')
+            return;
+        }
         var groupId = entry.groupId;
         var shopId = entry.shopId;
         var userId = authResponse.data.user_id;
