@@ -9189,8 +9189,6 @@ return jQuery;
 
 }));
 
-define("jquery", function(){});
-
 /*!
  * Bootstrap v3.1.1 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -14111,17 +14109,19 @@ define("teji/lunch/fbInit", ["facebook", "jquery"], function(facebook, $){
                 var _selectedItem = "";
                 $input.autocomplete("https://graph.facebook.com/me/friends?access_token=" + fbInit.accessToken + "&callback=?", {
                     height: 400,
-                    max: 10,
+                    // max: 10,
                     dataType: 'jsonp',
-                    cacheLength: 10,
+                    // cacheLength: 10,
                     minChars: 1,
 
                     parse: function (data) {
                         // console.log(data);
                         var rows = new Array();
                         data = data.data;
-                        for (var i=0; i<data.length; i++) {
-                            rows[i] = {data: data[i], value: data[i].name, result: data[i].name};
+                        if(data){
+                            for (var i=0; i<data.length; i++) {
+                                rows[i] = {data: data[i], value: data[i].name, result: data[i].name};
+                            }                            
                         }
                         return rows;
                     },
