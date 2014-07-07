@@ -21854,7 +21854,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
            }else{
                 $(".fnResultViewFilterSection").show();
                 // read id from cookie
-                var initialSelectedGroupId = $.cookie(this.COOKIE_SELECTED_GROUP, {expires: 7});
+                var initialSelectedGroupId = $.cookie(this.COOKIE_SELECTED_GROUP);
                 for(var i=0, len=models.length; i<len; i++){
                     var groupId = models[i].get("_id");
                     var $option = $("<option></option>").val(groupId).html(models[i].get("name"));
@@ -21868,7 +21868,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                     var selectedGroup = this.getSelectedGroup();
                     this._renderGroup(selectedGroup);
                     // set id to cookie
-                    $.cookie(this.COOKIE_SELECTED_GROUP, selectedGroup.get("_id"));
+                    $.cookie(this.COOKIE_SELECTED_GROUP, selectedGroup.get("_id"), {expires: 7});
                 }, this));
                 this._renderGroup(this.getSelectedGroupById(initialSelectedGroupId) || models[0]);
                 if(models.length > 1){
