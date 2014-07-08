@@ -39,12 +39,12 @@
 
     "gettingStarted_title": "Lunch Timer! - Getting Started - ",
     "gettingStarted_section_title": "Getting Started",
-    "gettingStarted_section_vote_title": "Vote",
-    "gettingStarted_section_vote_description": "Vote description Vote description Vote description Vote description Vote description Vote description Vote description ",
-    "gettingStarted_section_example_title": "Example",
-    "gettingStarted_section_example_description": "Vote description Vote description Vote description Vote description Vote description Vote description Vote description ",
+    "gettingStarted_section_vote_title": "What is Lunch Timer?",
+    "gettingStarted_section_vote_description": "Do you have a little trouble on a decision of lunch place every day in your colleagues?<br><br>It may be because there are a lot of restaurants in city or nobody decide a place in your lunch group.<br><br>If so, <strong>Lunch Timer can help you and your group to decide a lunch place with your votes and it makes the decision very fun!</strong>",
+    "gettingStarted_section_example_title": "Usage",
+    "gettingStarted_section_example_description": "Lunch Timer's shows a page for votes by a configured time. Please vote for a candidate!<br><br>After the configured time, the page will be changed for the result. You can confirm today's lunch.<br><br>If there are results which have same voted count, less visited place in your group will be choosen.<br><br>After 6 hours later, the page will be automatically changed to a page for votes next day.",
     "gettingStarted_section_admin_title": "Group Management",
-    "gettingStarted_section_admin_description": "Vote description Vote description Vote description Vote description Vote description Vote description Vote description ",
+    "gettingStarted_section_admin_description": "Before the voting, you need to create a lunch group. At the creation, Administrators need to configure the group name, lunch time, members who already started Lunch Timer on Facebook, restaurants.<br><br>When users who invided by administrators login to Lunch Timer, they can see the group and be ready for votes. The join members also can edit members and restaurants except a deletion of the group.",
 
 
     "admin_group_title": "Lunch Timer! - Group Management - ",
