@@ -9189,8 +9189,6 @@ return jQuery;
 
 }));
 
-define("jquery", function(){});
-
 /*!
  * Bootstrap v3.1.1 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -21979,7 +21977,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
             // TODO: sort shold be an option?
             // sort by current voting count
             shops.sort(function(obj1, obj2){
-                return obj1.get("votedBy").length < obj2.get("votedBy").length;
+                return obj2.get("votedBy").length - obj1.get("votedBy").length;
             });
             var $div = $("<div></div>");
             _.each(shops, function(shop){
