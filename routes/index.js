@@ -33,7 +33,12 @@ router.get('/evernote', function(req, res) {
     var oauthTokenSecret = evernote._client.oauthTokenSecret;
     var callback = function(error, oauthAccessToken, oauthAccessTokenSecret, results){
         // TODO: set reminder
-        var note = new evernote.Evernote.Note();
+        var now = (new Date()).getTime();
+        var noteAttr = new evernote.Evernote.NoteAttributes({
+            reminderOrder: now,
+            reminderTime: now + 3600000
+        });
+        var note = new evernote.Evernote.Note({attributes: noteAttr});
         note.title = "API test";
         note.content = '<?xml version="1.0" encoding="UTF-8"?>';
         note.content += '<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">';
