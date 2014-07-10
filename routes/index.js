@@ -39,18 +39,12 @@ router.get('/evernote', function(req, res) {
         note.content += '<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">';
         note.content += '<en-note>Here is the Evernote logo:<br/>';
         note.content += '</en-note>';
-        var client = evernote.newClient({token: oauthAccessToken});
-        console.log(client);
+        var client = evernote.newClient(oauthAccessToken);
         var noteStore = client.getNoteStore();
         noteStore.createNote(note, function(err, createdNote) {
-            console.log("createNote callback");
             if(err){
-                console.log(err);
                 res.redirect("/");
-            } else {
-                console.log();
-                console.log("Creating a new note in the default notebook");
-                console.log();
+            }else{
                 console.log("Successfully created a new note with GUID: " + createdNote.guid);
                 res.redirect("/");
             }
