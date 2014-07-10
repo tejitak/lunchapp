@@ -6,6 +6,7 @@ var fbAuth = require('./modules/fbAuth');
 var xml2json = require('xml2json');
 var moment = require('moment');
 var momentTz = require('moment-timezone');
+var evernote = require('./modules/evernote');
 var router = express.Router();
 var apiKeys = {};
 
@@ -17,7 +18,8 @@ fs.readFile('apikey.json', 'UTF-8', function (err, data) {
     if (err){ console.warn('Please create a file "apikey.json"'); throw err; }
     apiKeys = JSON.parse(data);
     // set FB client_secret
-    fbAuth.setClientSecret(apiKeys["fb_client_secret"]);
+    fbAuth.init(apiKeys["fb_client_id"], apiKeys["fb_client_secret"]);
+    evernote.init(apiKeys["evernote_consumerKey"], apiKeys["evernote_consumerSecret"], apiKeys["evernote_sandbox"]);
 });
 
 
@@ -33,7 +35,6 @@ fs.readFile('apikey.json', 'UTF-8', function (err, data) {
  */
 var calcVoteState = function(lunchTime, timezone){
     // Z -> +0000 (GMT), +0900 (JST)
-    console.log(timezone);
     var diffHours = moment().diff(moment.tz(lunchTime, "HH:mm", timezone)) / (1000 * 60 * 60);
     diffHours = (diffHours + 24) % 24; // Makes sure diffHours isn't negative by adding another day (24h) and using the modulus operator.
     // console.log("Time diff (h): " + diffHours);
@@ -356,6 +357,10 @@ router.get('/shop/retrieve', function(req, res) {
 
         shopURLReq.end();
     }
+});
+
+router.get('/evernote/authenticate', function(req, res) {
+    evernote.authenticate(req, res);
 });
 
 module.exports = router;

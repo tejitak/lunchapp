@@ -9,8 +9,8 @@ var params = {
     pathname: '/oauth/access_token',
     protocol: 'https',
     query: {
-        'client_id': '1437481033176694',
-        // read from _apikey.json and set with setClientSecret
+        // read from _apikey.json and set with init
+        // 'client_id': '1437481033176694',
         // 'client_secret': '',
         'grant_type': 'client_credentials'
     }
@@ -34,8 +34,9 @@ var updateAccessToken = function(callback){
 
 var fbAuth = {
 
-    setClientSecret: function(clientSecret, callback){
+    init: function(clientId, clientSecret, callback){
         if(clientSecret){
+            params.query['client_id'] = clientId;
             params.query['client_secret'] = clientSecret;
         }
         updateAccessToken(callback);

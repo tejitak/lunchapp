@@ -31,6 +31,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//Use session
+// app.use(express.session({secret: "LunchTimer" }));
+// app.dynamicHelpers({
+//     session: function(req, res){
+//         return req.session;
+//     }
+// });
 
 // create data collection
 var db = {};
