@@ -54,6 +54,23 @@ require([
         groupCollection.loadList();
         $(".fnDefaultContent").hide();
         $(".fnMainContent").show();
+        // setup evernote
+        $(".fnEvernoteReminderUpdateBtn").click(function(){
+            var votingTimeReminder = $("#evernote_votingTime_reminder_checkbox").is(':checked');
+            var resultTimeReminder = $("#evernote_resultTime_reminder_checkbox").is(':checked');
+            $.ajax({type: "POST",
+                url: lunch.constants.config.CONTEXT_PATH + "/evernote/reminder",
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify({
+                    url: location.href,
+                    votingTimeReminder: votingTimeReminder,
+                    resultTimeReminder: resultTimeReminder
+                })
+            }).done($.proxy(function(response){
+                location.href = lunch.constants.config.CONTEXT_PATH + "/";
+            }, this));
+        });
     };
     fbInit.loginFailCallback = function(response){
         $(".fnDefaultContent").show();

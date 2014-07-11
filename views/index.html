@@ -34,8 +34,26 @@
                         <select class="form-control col-sm-5 fnCategoryFilter"></select>
                     </div>
                 </div>
+                <div style="margin: 32px auto; width: 320px;">
+                <% if(session.evernoteAccessToken){ %>
+                <div style="text-align: left;">
+                    <div class="checkbox">
+                        <input id="evernote_votingTime_reminder_checkbox" type="checkbox"><label for="evernote_votingTime_reminder_checkbox">投票〆切の10分前にリマインダーを送信する</label></div>
+                    <div class="checkbox">
+                        <input id="evernote_resultTime_reminder_checkbox" type="checkbox"><label for="evernote_resultTime_reminder_checkbox">投票結果が出たら通知する</label>
+                    </div>
+                </div>
                 <div>
-                <button class="btn btn-primary btn-default" onclick="location.href=location.href + 'api/evernote/authenticate?callback=' + location.href + 'evernote'">Evernote</button>
+                    <button class="btn btn-primary btn-default fnEvernoteReminderUpdateBtn">Reminderを設定する</button>
+                </div>
+                <div style="margin-top: 8px;">
+                    <a href="<%=config.CONTEXT_PATH%>/evernote/logout">Evernoteをログアウトする</a>
+                </div>
+                <% }else{ %>
+                <div>
+                    <button class="btn btn-primary btn-default" onclick="location.href=location.href + 'api/evernote/authenticate?callback=' + location.href + 'evernote'">Evernoteにログインして通知の設定をする</button>
+                </div>
+                <% } %>
                 </div>
             </div>
             <div class="fnDefaultContent" style="display: none;">

@@ -5,10 +5,12 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var routes = require('./routes/index');
 var adminRoutes = require('./routes/admin');
 var apiRoutes = require('./routes/api');
+var evernoteRoutes = require('./routes/evernote');
 
 var models = require('./models');
 var Datastore = require('nedb');
@@ -30,14 +32,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
+app.use(session({secret: 'lunchTimer'}))
 app.use(express.static(path.join(__dirname, 'public')));
-//Use session
-// app.use(express.session({secret: "LunchTimer" }));
-// app.dynamicHelpers({
-//     session: function(req, res){
-//         return req.session;
-//     }
-// });
 
 // create data collection
 var db = {};
@@ -71,6 +67,7 @@ if (app.get('env') === 'development') {
 app.use('/', routes);
 app.use('/admin', adminRoutes);
 app.use('/api', apiRoutes);
+app.use('/evernote', evernoteRoutes);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
