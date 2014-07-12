@@ -57,15 +57,16 @@ require([
         // setup evernote
         $(".fnEvernoteReminderUpdateBtn").click(function(){
             var votingTimeReminder = $("#evernote_votingTime_reminder_checkbox").is(':checked');
-            var resultTimeReminder = $("#evernote_resultTime_reminder_checkbox").is(':checked');
             $.ajax({type: "POST",
                 url: lunch.constants.config.CONTEXT_PATH + "/evernote/reminder",
                 contentType: "application/json; charset=utf-8",
                 processData: false,
                 data: JSON.stringify({
-                    url: location.href,
-                    votingTimeReminder: votingTimeReminder,
-                    resultTimeReminder: resultTimeReminder
+                    lunchTimerURL: location.href,
+                    inputToken: fbInit.accessToken,
+                    userId: fbInit.me.id,
+                    groupId: shopListView.getSelectedGroup().get("_id"),
+                    votingTimeReminder: votingTimeReminder
                 })
             }).done($.proxy(function(response){
                 location.href = lunch.constants.config.CONTEXT_PATH + "/";

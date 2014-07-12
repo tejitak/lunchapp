@@ -25,6 +25,8 @@ var evernote = {
             if (error){
                 return res.send("Error getting OAuth request token : " + error, 500);
             }
+            console.log("authenticate");
+            console.log(results);
             // store token and secret in session
             req.session.evernoteOAuthTokenSecret = oauthTokenSecret;
             res.redirect(c.getAuthorizeUrl(oauthToken));

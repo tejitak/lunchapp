@@ -1,6 +1,6 @@
 var express = require('express');
 var fs = require('fs');
-var request=require('request');
+var request = require('request');
 var url = require('url');
 var fbAuth = require('./modules/fbAuth');
 var xml2json = require('xml2json');
@@ -146,7 +146,7 @@ router.get('/group/:id', function(req, res) {
         var id = req.param("id");
         Group.findByGroupId(userId, id, function(err, items) {
             res.contentType('application/json');
-            res.send(items);
+            res.send(items[0] || {});
         });
     }
     fbAuth.checkAccessToken(req.query.inputToken, callback);
@@ -199,6 +199,8 @@ router.put('/group', function(req, res) {
             return;
         }
         var targetGroup = entry.group;
+        console.log("API PUT");
+        console.log(targetGroup);
         if(targetGroup){
             var userId = authResponse.data.user_id;
             Group.updateGroupByJSON(userId, targetGroup, function() {
@@ -322,7 +324,7 @@ router.get('/shop/retrieve', function(req, res) {
                 id: sid
             }
         });
-        var apiReq=request(urlStr, function (error, response, body) {
+        var apiReq = request(urlStr, function (error, response, body) {
         if (!error && response.statusCode == 200) {
                 response.setEncoding('utf8');
                 var json = xml2json.toJson(body);
@@ -344,7 +346,7 @@ router.get('/shop/retrieve', function(req, res) {
         }
     }else{
         // the id in URL is not same as sid sometimes for PC site
-        var shopURLReq=request(shopURL, function (error, response, body) {
+        var shopURLReq = request(shopURL, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 response.setEncoding('utf8');
                 var re = /<body.*data-r.*\"sid\":\"(\w+)\",\"/g;
