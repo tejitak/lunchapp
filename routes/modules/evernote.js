@@ -88,13 +88,21 @@ var evernote = {
         return -1;
     },
 
-    find: function(accesToken, guid){
+    find: function(accessToken, guid){
         // TODO: search by guid
-        return null;
+        var client = this.newClient(accessToken);
+        var noteStore = client.getNoteStore();
+        var filter = new Evernote.NoteFilter({notebookGuid: guid});
+        var resultSpec = new Evernote.NotesMetadataResultSpec();
+        var note = noteStore.getNote(accessToken, guid, true, true, false, false);
+        console.log(note);
+        return note;
     },
 
     removeReminder: function(accessToken, guid, callback){
-
+        var note = this.find(accessToken, guid);
+        delete note.attributes.reminderOrder;
+        delete note.attributes.reminderTime;
         if(callback){
             callback();
         }

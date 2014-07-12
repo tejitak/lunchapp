@@ -80,6 +80,8 @@ router.post('/reminder', function(req, res) {
             if(registeredNoteIndex >= 0){
                 // search & find note from user store
                 var existingNote = evernote.find(accessToken, group.evernote[registeredNoteIndex].guid);
+                console.log("existingNote");
+                console.log(existingNote);
                 if(existingNote){
                     // just set reminder
                     evernote.updateNote(accessToken, existingNote, lunchTime, lunchTimerURL, function(error, updatedNote){
@@ -97,10 +99,9 @@ router.post('/reminder', function(req, res) {
             }
         }else if(registeredNoteIndex >= 0){
             // remove from list in DB
-            group.evernote.splice(registeredNoteIndex, 1);
             // TODO: disable reminder
-            var deletedCallback = function(err, createdNote){
-                if(err){ res.redirect("/");  }
+            var deletedCallback = function(){
+                group.evernote.splice(registeredNoteIndex, 1);
                 // update group DB with evernoteID + createdNote.guid
                 updateGroup(group);
             };

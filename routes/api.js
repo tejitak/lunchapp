@@ -199,8 +199,6 @@ router.put('/group', function(req, res) {
             return;
         }
         var targetGroup = entry.group;
-        console.log("API PUT");
-        console.log(targetGroup);
         if(targetGroup){
             var userId = authResponse.data.user_id;
             Group.updateGroupByJSON(userId, targetGroup, function() {
