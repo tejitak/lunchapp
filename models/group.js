@@ -40,7 +40,14 @@ var groupSchema = new mongoose.Schema({
         type: String,
         default: 'vote' // There are 2 state. 'vote' or 'voted'
     },
-    decidedShop: String
+    decidedShop: String,
+    evernote: [{
+        userId: {
+            type: String,
+            index: true
+        },
+        guid: String
+    }]
 });
 
 groupSchema.statics.findByMemberId = function(id, completed) {

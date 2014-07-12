@@ -2,7 +2,6 @@ var express = require('express');
 var templates = require('./modules/templates');
 var resourceBundle = require('./modules/resourceBundle');
 var local_settings = require('../local_settings').settings;
-var evernote = require('./modules/evernote');
 var router = express.Router();
 
 /* GET home page. */
