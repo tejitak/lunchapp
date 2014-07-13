@@ -32,7 +32,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(session({secret: 'lunchTimer'}))
+app.use(session({
+    secret: 'lunchTimer',
+    saveUninitialized: true,
+    resave: true
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // create data collection

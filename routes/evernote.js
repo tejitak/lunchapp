@@ -51,8 +51,6 @@ router.post('/reminder', function(req, res) {
     request(lunchTimerURL + "api/group/" + entry.groupId + "?inputToken=" + entry.inputToken, function(error, getGroupRes, getGroupBody) {
         var group = JSON.parse(getGroupBody);
         var registeredNoteIndex = evernote.indexOfRegisteredNote(group, userId);
-        console.log("registeredNoteIndex");
-        console.log(registeredNoteIndex);
         var updateGroup = function(group){
             request.put({
                 url: lunchTimerURL + "api/group", 
@@ -61,8 +59,6 @@ router.post('/reminder', function(req, res) {
                     group: group
                 }
             }, function(error, putRes, body){
-                console.log("Successfully put the group");
-                console.log(body);
                 res.redirect("/");                    
             });
         };
@@ -79,28 +75,27 @@ router.post('/reminder', function(req, res) {
             };
             if(registeredNoteIndex >= 0){
                 // search & find note from user store
-                var existingNote = evernote.find(accessToken, group.evernote[registeredNoteIndex].guid);
-                console.log("existingNote");
-                console.log(existingNote);
-                if(existingNote){
-                    // just set reminder
-                    evernote.updateNote(accessToken, existingNote, lunchTime, lunchTimerURL, function(error, updatedNote){
-                        if(err){ res.redirect("/"); }
-                        res.redirect("/");
-                    });
-                }else{
-                    // remove the entry from list when the association is stored in DB but the note maybe
-                    group.evernote.splice(registeredNoteIndex, 1);
-                    evernote.createNote(accessToken, lunchTime, lunchTimerURL, createdCallback);
-                }
+                var findCallback = function(err, existingNote){
+                    if(existingNote){
+                        // just set reminder
+                        evernote.updateNote(accessToken, existingNote, lunchTime, lunchTimerURL, function(error, updatedNote){
+                            if(err){ res.redirect("/"); }
+                            res.redirect("/");
+                        });
+                    }else{
+                        // remove the entry from list when the association is stored in DB but the note maybe
+                        group.evernote.splice(registeredNoteIndex, 1);
+                        evernote.createNote(accessToken, lunchTime, lunchTimerURL, createdCallback);
+                    }
+                };
+                evernote.find(accessToken, group.evernote[registeredNoteIndex].guid, findCallback);
             }else{
                 // create a new note with reminder
                 evernote.createNote(accessToken, lunchTime, lunchTimerURL, createdCallback);
             }
         }else if(registeredNoteIndex >= 0){
-            // remove from list in DB
-            // TODO: disable reminder
-            var deletedCallback = function(){
+            // disable reminder and remove entry from DB
+            var deletedCallback = function(err, note){
                 group.evernote.splice(registeredNoteIndex, 1);
                 // update group DB with evernoteID + createdNote.guid
                 updateGroup(group);
