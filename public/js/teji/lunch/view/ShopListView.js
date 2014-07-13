@@ -7,6 +7,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
         initialize: function() {
             this.listenTo(this.collection, "addCollection", this.addItems);
             this.$groupSelect = $(".fnGroupSelect");
+            this._setupEvernote();
         },
 
         addItems: function(models){
@@ -111,6 +112,8 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 this.$el.append($('<div class="alert alert-danger"></div>').html(lunch.constants.labels.main_error_vote_result));
                 $(".fnMainContent").removeClass("resultView");
             }
+            // TODO: check status for evernote setting
+            
         },
 
         _renderShops: function(shops){
@@ -190,6 +193,26 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
         
         clearShops: function(){
             this.$el.empty();
+        },
+
+        _setupEvernote: function(){
+            $(".fnEvernoteReminderUpdateBtn").click($.proxy(function(){
+                var votingTimeReminder = $("#evernote_votingTime_reminder_checkbox").is(':checked');
+                $.ajax({type: "POST",
+                    url: lunch.constants.config.CONTEXT_PATH + "/evernote/reminder",
+                    contentType: "application/json; charset=utf-8",
+                    processData: false,
+                    data: JSON.stringify({
+                        lunchTimerURL: location.href,
+                        inputToken: fbInit.accessToken,
+                        userId: fbInit.me.id,
+                        groupId: this.getSelectedGroup().get("_id"),
+                        votingTimeReminder: votingTimeReminder
+                    })
+                }).done($.proxy(function(response){
+                    location.href = lunch.constants.config.CONTEXT_PATH + "/";
+                }, this));
+            }, this));
         }
     });
     return ShopListView;

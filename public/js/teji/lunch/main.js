@@ -54,24 +54,6 @@ require([
         groupCollection.loadList();
         $(".fnDefaultContent").hide();
         $(".fnMainContent").show();
-        // setup evernote
-        $(".fnEvernoteReminderUpdateBtn").click(function(){
-            var votingTimeReminder = $("#evernote_votingTime_reminder_checkbox").is(':checked');
-            $.ajax({type: "POST",
-                url: lunch.constants.config.CONTEXT_PATH + "/evernote/reminder",
-                contentType: "application/json; charset=utf-8",
-                processData: false,
-                data: JSON.stringify({
-                    lunchTimerURL: location.href,
-                    inputToken: fbInit.accessToken,
-                    userId: fbInit.me.id,
-                    groupId: shopListView.getSelectedGroup().get("_id"),
-                    votingTimeReminder: votingTimeReminder
-                })
-            }).done($.proxy(function(response){
-                location.href = lunch.constants.config.CONTEXT_PATH + "/";
-            }, this));
-        });
     };
     fbInit.loginFailCallback = function(response){
         $(".fnDefaultContent").show();
