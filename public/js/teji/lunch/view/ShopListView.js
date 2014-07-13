@@ -113,7 +113,15 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 $(".fnMainContent").removeClass("resultView");
             }
             // TODO: check status for evernote setting
-            
+            var evernoteList = model.get("evernote");
+            if(evernoteList && evernoteList.length > 0){
+                var noteEntry = $.grep(evernoteList, function(obj){
+                    return obj.userId == fbInit.me.id;
+                })[0];
+                if(noteEntry){
+                    $("#evernote_votingTime_reminder_checkbox").attr("checked", true);
+                }
+            }
         },
 
         _renderShops: function(shops){
