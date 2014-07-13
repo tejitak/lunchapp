@@ -22,7 +22,10 @@ e.g. "/private/etc/hosts" for mac
 3. Create a file "apikey.json" under lunchapp dir with the following content  
     {  
         "fb_client_secret": "{your_facebook_app_secret}",  
-        "gurunabi": "{your_grunavi_api_key}"  
+        "gurunabi": "{your_grunavi_api_key}",
+        "evernote_consumerKey": "{your_evernote_consumer_key}",
+        "evernote_consumerSecret": "XXX",
+        "evernote_sandbox": true
     }  
 
 4. Run "dscacheutil -flushcache" for reloading host file settings.
@@ -30,7 +33,7 @@ e.g. "/private/etc/hosts" for mac
 5. Run "mongod" or "mongod -dbpath ~/db".
 
 6. Run "npm install" (just for once to initialize dev environment)
-  
+
     Note: If you get an EACCES warning, use sudo chown -R <username> ~/.npm
     See https://github.com/npm/npm/issues/3537 and https://github.com/npm/npm/pull/3506.
 
