@@ -6,15 +6,15 @@
     "common_btn_delete": "Delete",
     "common_btn_cancel": "Cancel",
 
-    "menu_gettingStarted": "Getting Started",
+    "menu_gettingStarted": "Getting started",
     "menu_admin_group": "Manage groups",
     "menu_logout": "Logout",
 
 
     "main_title": "Lunch Timer!",
     "main_intro_title": "Lunch Timer",
-    "main_intro_lead": "Lunch Timer is a web application to coordinate your every day lunch group.",
-    "main_intro_description": "<p>Vote a restaurant by a configured lunch time</p><p>Show a vote result when users access to the group after a configured lunch time</p>",
+    "main_intro_lead": "Lunch Timer is a web application that helps you coordinate your every day lunch group.",
+    "main_intro_description": "<p>Vote for a restaurant before your group's configured lunch time.</p><p>The decided shop for the group will be shown after the voting has passed.</p>",
 
     "main_section_title": "Today's Lunch",
     "main_section_input_group": "Group",
@@ -23,8 +23,8 @@
     "main_filter_category_all": "All",
 
     "main_no_group_loginBtn": "Manage Groups",
-    "main_warning_no_groups": "No Groups - Please create a new group or join to an existing group.",
-    "main_warning_no_shops": "There is no restaurants in this group",
+    "main_warning_no_groups": "No groups - Please create a new group or join an existing group.",
+    "main_warning_no_shops": "There are no restaurants in this group",
     "main_error_vote_result": "Something went wrong...",
 
     "main_resultList_voting_countdown": "Voting countdown: ",
@@ -33,8 +33,8 @@
     "main_resultItem_unvote": "Cancel",
     "main_resultItem_shopInfo": "More information",
     "main_resultItem_voter": "Voters",
-    "main_resultItem_votedCount": "Voted count",
-    "main_resultItem_visitedCount": "Visited count",
+    "main_resultItem_votedCount": "Votes",
+    "main_resultItem_visitedCount": "Times visited",
 
     "main_comment_addButton": "Add comment",
 
@@ -42,11 +42,11 @@
     "gettingStarted_title": "Lunch Timer! - Getting Started - ",
     "gettingStarted_section_title": "Getting Started",
     "gettingStarted_section_vote_title": "What is Lunch Timer?",
-    "gettingStarted_section_vote_description": "Do you have a little trouble on a decision of lunch place every day in your colleagues?<br><br>It may be because there are a lot of restaurants in city or nobody decide a place in your lunch group.<br><br>If so, <strong>Lunch Timer can help you and your group to decide a lunch place with your votes and it makes the decision very fun!</strong>",
-    "gettingStarted_section_example_title": "Usage",
-    "gettingStarted_section_example_description": "Lunch Timer's shows a page for votes by a configured time. Please vote for a candidate!<br><br>After the configured time, the page will be changed for the result. You can confirm today's lunch.<br><br>If there are results which have same voted count, less visited place in your group will be choosen.<br><br>After 6 hours later, the page will be automatically changed to a page for votes next day.",
+    "gettingStarted_section_vote_description": "Do you often have troubles deciding where to go for lunch with your colleagues?<br><br>Maybe there are too many options around you and deciding where to go becomes a time consuming process.<br><br>If you feel this applies to you then Lunch Timer can help you and your lunch group! <strong>Lunch Timer makes the decision quick, fun and easy!</strong>",
+    "gettingStarted_section_example_title": "How to use",
+    "gettingStarted_section_example_description": "Lunch Timer displays a voting screen before the group’s configured lunch time. Please vote for a restaurant!<br><br>After the configured time, the application will change the screen and show the result - today’s lunch!<br><br>If two or more restaurants are tied, the restaurant which is least visited will be chosen.<br><br>6 hours after the lunch time the voting round will reset and show the voting page for the next day.",
     "gettingStarted_section_admin_title": "Group Management",
-    "gettingStarted_section_admin_description": "Before the voting, you need to create a lunch group. At the creation, Administrators need to configure the group name, lunch time, members who already started Lunch Timer on Facebook, restaurants.<br><br>When users who invided by administrators login to Lunch Timer, they can see the group and be ready for votes. The join members also can edit members and restaurants except a deletion of the group.",
+    "gettingStarted_section_admin_description": "Before getting started you need to create a lunch group. When creating a group the administrators need to configure the name, time and members for the group. Only members registered on Facebook and using Lunch Timer are able to join groups.<br><br>As soon as an administrator adds a user, he/she will be able to participate in the group activities and start voting for restaurants. Members that are added are also able to edit group members and restaurants, but not able to delete the group.",
 
 
     "admin_group_title": "Lunch Timer! - Group Management - ",
@@ -65,8 +65,8 @@
     "admin_group_edit_title": "Edit a Group",
     "admin_group_add_name": "Group Name",
     "admin_group_add_lunchTime": "Lunch Time (GMT +0900)",
-    "admin_group_add_members": "Members (Your Facebook friends who started Lunch Timer can be added)",
-    "admin_group_add_placeholder_members": "Type your friends",
+    "admin_group_add_members": "Members (Only Facebook friends who are using Lunch Timer can be added)",
+    "admin_group_add_placeholder_members": "Type your friend's name",
     "admin_group_add_shops": "Restaurants",
     "admin_group_add_btn_addShop": "Add Restaurant",
     "admin_group_add_btn_addGroup": "Add Group",
