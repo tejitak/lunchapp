@@ -12,7 +12,8 @@ define(["backbone", "jquery"], function(Backbone, $){
             imageURL: "",
             rating: 0,
             visitedCount: 0,
-            votedBy: []
+            votedBy: [],
+            en_gid: ""
         },
 
         initialize: function(obj){

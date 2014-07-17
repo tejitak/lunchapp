@@ -17658,7 +17658,10 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./t
         template: _.template(tmpl),
         defaultImgURL: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjE5cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MzAweDIwMDwvdGV4dD48L3N2Zz4=",
         // defaultImgURL: lunch.constants.config.CONTEXT_PATH + "/img/logo/logo_200.png",
-        
+        events: {
+            "click": "showComment"
+        },
+
         initialize: function() {
         },
 
@@ -17691,6 +17694,14 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./t
                 titleNode.hasClass('overflow') ? titleNode.removeClass('overflow') : titleNode.addClass('overflow');
             }, this));
             return this;
+        },
+
+        setCommentView: function(view) {
+            this.commentView = view;
+        },
+
+        showComment: function(e){
+            this.commentView.fillComment(this.model);
         },
 
         // for override
@@ -21829,7 +21840,74 @@ else {
 	return moment;
 }));
 
-define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "flipsnap", "moment", "moment.timzone"], function(Backbone, _, cookie, ShopView, flipsnap, moment, momentTz){
+define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery"], function(Backbone, _, $){
+    var CommentView = Backbone.View.extend({
+        el: $(".commentContainer"),
+
+        events: {
+            "click .shopCommentBtn": "addComment"
+        },
+
+        initialize: function() {
+        },
+
+        fillComment: function(shopModel){
+            //TODO how to get shop info?
+            this.shop = shopModel;
+
+            if (this.shop.en_gid) {
+                //TODO move to Model
+                // get note content and set to text area
+                $.ajax({
+                    type: "GET",
+                    url: lunch.constants.config.CONTEXT_PATH + "/evernote/shopComment?gid=" + this.shop.en_gid
+                }).done($.proxy(function(json){
+                    // create a new shop model from response
+                    if(!json.response || !json.response.rest){
+                        return;
+                    }
+                    $(".shopComment").val(json.content);
+                }, this));
+            } else {
+                //TODO just test
+                $(".shopComment").val("Test comment");
+            }
+        },
+
+        addComment: function() {
+            var newComment = $(".shopNewComment").val();
+            if (!newComment) {
+                return;
+            }
+            //TODO move to Model
+            var currentComment = $(".shopComment").val();
+            var sendValue = currentComment + "\n---\n" + newComment + "\n";
+
+            if (!this.shop.en_gid) {
+                // create a note and set gid
+                $.ajax({
+                    type: "POST",
+                    url: lunch.constants.config.CONTEXT_PATH + "/evernote/shopComment?gid=" + this.shop.en_gid + "&title=" + this.shop.name + "&content=" + sendValue
+                }).done($.proxy(function(json){
+                    // create a new shop model from response
+                    if(!json.response || !json.response.rest){
+                        return;
+                    }
+
+                    // set gid of new Evernote note.
+                    this.shop.en_gid = json.gid;
+
+                    // update comment
+                    $(".shopComment").val(sendValue);
+                    // empty comment user added.
+                    $(".shopNewComment").val('');
+                }, this));
+            }
+        }
+    });
+    return CommentView;
+});
+define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "flipsnap", "moment", "moment.timzone", "teji/lunch/view/CommentView"], function(Backbone, _, cookie, ShopView, flipsnap, moment, momentTz, CommentView){
     var ShopListView = Backbone.View.extend({
 
         COOKIE_SELECTED_GROUP: "teji.lunch.selectedGroup",
@@ -21839,6 +21917,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
             this.listenTo(this.collection, "addCollection", this.addItems);
             this.$groupSelect = $(".fnGroupSelect");
             this._setupEvernote();
+            this.commentView = new CommentView();
         },
 
         addItems: function(models){
@@ -21933,6 +22012,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                 })[0];
                 if(decidedShop){
                     var shopView = new ShopView({model: decidedShop});
+                    shopView.setCommentView(this.commentView);
                     this.$el.append(shopView.render().$el);
                 }else{
                     this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_shops));
@@ -21995,6 +22075,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
             var $div = $("<div></div>");
             _.each(shops, function(shop){
                 var shopView = new ShopView({model: shop});
+                shopView.setCommentView(this.commentView);
                 shopView.onVoteClick = $.proxy(function(shopModel){
                     var groupModel = this.getSelectedGroup();
                     if(groupModel){
@@ -22071,7 +22152,8 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
             imageURL: "",
             rating: 0,
             visitedCount: 0,
-            votedBy: []
+            votedBy: [],
+            en_gid: ""
         },
 
         initialize: function(obj){

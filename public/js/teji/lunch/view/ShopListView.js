@@ -1,4 +1,4 @@
-define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "flipsnap", "moment", "moment.timzone"], function(Backbone, _, cookie, ShopView, flipsnap, moment, momentTz){
+define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "flipsnap", "moment", "moment.timzone", "teji/lunch/view/CommentView"], function(Backbone, _, cookie, ShopView, flipsnap, moment, momentTz, CommentView){
     var ShopListView = Backbone.View.extend({
 
         COOKIE_SELECTED_GROUP: "teji.lunch.selectedGroup",
@@ -8,6 +8,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
             this.listenTo(this.collection, "addCollection", this.addItems);
             this.$groupSelect = $(".fnGroupSelect");
             this._setupEvernote();
+            this.commentView = new CommentView();
         },
 
         addItems: function(models){
@@ -102,6 +103,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 })[0];
                 if(decidedShop){
                     var shopView = new ShopView({model: decidedShop});
+                    shopView.setCommentView(this.commentView);
                     this.$el.append(shopView.render().$el);
                 }else{
                     this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_shops));
@@ -164,6 +166,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
             var $div = $("<div></div>");
             _.each(shops, function(shop){
                 var shopView = new ShopView({model: shop});
+                shopView.setCommentView(this.commentView);
                 shopView.onVoteClick = $.proxy(function(shopModel){
                     var groupModel = this.getSelectedGroup();
                     if(groupModel){
