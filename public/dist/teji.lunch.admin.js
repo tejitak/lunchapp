@@ -14960,7 +14960,7 @@ define("teji/lunch/fbInit", ["facebook", "jquery"], function(facebook, $){
                 var _selectedItem = "";
                 $input.autocomplete("https://graph.facebook.com/me/friends?access_token=" + fbInit.accessToken + "&callback=?", {
                     height: 400,
-                    // max: 10,
+                    max: 100,
                     dataType: 'jsonp',
                     // cacheLength: 10,
                     minChars: 1,
