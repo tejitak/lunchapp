@@ -26,7 +26,7 @@ var evernote = {
                 return res.send("Error getting OAuth request token : " + error, 500);
             }
             // store token and secret in session
-            req.session.evernoteOAuthTokenSecret = oauthTokenSecret;
+            req.session.evernote = {authTokenSecret: oauthTokenSecret};
             res.redirect(c.getAuthorizeUrl(oauthToken));
         });
     },
@@ -35,17 +35,22 @@ var evernote = {
         this._client.getAccessToken(oauthToken, oauthTokenSecret, oauthVerifier, callback);
     },
 
-    createNote: function(accessToken, lunchTime, url, callback){
-        console.log("createNote accessToken: " + accessToken + ", lunchTime: " + lunchTime + ", url: " + url);
-        // TODO: set readonly
+    getUser: function(accessToken, callback){
+        var client = this.newClient(accessToken);
+        var userStore = client.getUserStore();
+        userStore.getUser(accessToken, callback);
+    },
+
+    createNote: function(accessToken, group, url, callback){
+        // TODO: set readonly?
         var note = new Evernote.Note();
-        note.title = "API test1";
+        note.title = "LunchTimer Voting Time Reminder";
         note.content = '<?xml version="1.0" encoding="UTF-8"?>';
         note.content += '<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">';
-        note.content += '<en-note>LunchTimer voting time reminder <br/> ';
-        note.content += url;
+        note.content += '<en-note>This reminder is automatically created by LunchTimer for your group "<strong>' + group.name + '</strong>"<br/> Please vote for one by configured time "<strong>' + group.lunchTime + '</strong>"<br/>';
+        note.content += '<a href="' + url + '">' + url + '</a>';
         note.content += '</en-note>';
-        this.updateReminder(note, lunchTime);
+        this.updateReminder(note, group.lunchTime);
         var client = this.newClient(accessToken);
         var noteStore = client.getNoteStore();
         noteStore.createNote(note, function(err, createdNote) {
@@ -55,8 +60,8 @@ var evernote = {
         });
     },
 
-    updateNote: function(accessToken, note, lunchTime, url, callback){
-        this.updateReminder(note, lunchTime);
+    updateNote: function(accessToken, note, group, url, callback){
+        this.updateReminder(note, group.lunchTime);
         var client = this.newClient(accessToken);
         var noteStore = client.getNoteStore();
         noteStore.updateNote(note, function(err, updatedNote) {
