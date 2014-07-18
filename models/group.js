@@ -46,7 +46,8 @@ var groupSchema = new mongoose.Schema({
             type: String,
             index: true
         },
-        guid: String
+        guid: String,
+        accessToken: String
     }]
 });
 

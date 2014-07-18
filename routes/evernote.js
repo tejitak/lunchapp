@@ -50,29 +50,37 @@ router.post('/reminder', function(req, res) {
     var entry = req.body;
     var lunchTimerURL = entry.lunchTimerURL;
     var userId = entry.userId;
+    var groupId = entry.groupId;
+    var enableVotingTimeReminder = entry.votingTimeReminder;
+    var fbInputToken = entry.inputToken;
     // get selected group from DB
     // call api /api/group/{group._id}?inputToken={fb_token}
-    request(lunchTimerURL + "api/group/" + entry.groupId + "?inputToken=" + entry.inputToken, function(error, getGroupRes, getGroupBody) {
+    // the reminder will be set repeatedly at showing first result time in api.js
+    request(lunchTimerURL + "api/group/" + groupId + "?inputToken=" + fbInputToken, function(error, getGroupRes, getGroupBody) {
         var group = JSON.parse(getGroupBody);
         var registeredNoteIndex = evernote.indexOfRegisteredNote(group, userId);
         var updateGroup = function(group){
             request.put({
                 url: lunchTimerURL + "api/group", 
                 json: {
-                    inputToken: entry.inputToken,
+                    inputToken: fbInputToken,
                     group: group
                 }
             }, function(error, putRes, body){
                 res.redirect("/");                    
             });
         };
-        if(entry.votingTimeReminder){
+        if(enableVotingTimeReminder){
             // enable reminder
             // check if a note GUID exists in user entry
-            // e.g. group.evernote = [{userId: "{evernote_user_id}", guid: "{note_GUID}"}, ...]
+            // e.g. group.evernote = [{userId: "{facebook_user_id}", guid: "{note_GUID}"}, ...]
             var createdCallback = function(err, createdNote){
                 if(err){ res.redirect("/"); }
-                group.evernote.push({userId: userId, guid: createdNote.guid});
+                group.evernote.push({
+                    userId: userId,
+                    guid: createdNote.guid,
+                    accessToken: accessToken
+                });
                 // update group DB with evernoteID + createdNote.guid
                 updateGroup(group);
             };
@@ -82,20 +90,20 @@ router.post('/reminder', function(req, res) {
                     if(err){ res.redirect("/"); }
                     if(existingNote){
                         // just set reminder
-                        evernote.updateNote(accessToken, existingNote, group, lunchTimerURL, function(error, updatedNote){
+                        evernote.updateNote(accessToken, existingNote, group, function(error, updatedNote){
                             if(err){ res.redirect("/"); }
                             res.redirect("/");
                         });
                     }else{
                         // remove the entry from list when the association is stored in DB but the note maybe
                         group.evernote.splice(registeredNoteIndex, 1);
-                        evernote.createNote(accessToken, group, lunchTimerURL, createdCallback);
+                        evernote.createNote(accessToken, group.name, group.lunchTime, createdCallback);
                     }
                 };
                 evernote.find(accessToken, group.evernote[registeredNoteIndex].guid, findCallback);
             }else{
                 // create a new note with reminder
-                evernote.createNote(accessToken, group, lunchTimerURL, createdCallback);
+                evernote.createNote(accessToken, group.name, group.lunchTime, createdCallback);
             }
         }else if(registeredNoteIndex >= 0){
             // disable reminder and remove entry from DB

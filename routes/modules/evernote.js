@@ -41,16 +41,21 @@ var evernote = {
         userStore.getUser(accessToken, callback);
     },
 
-    createNote: function(accessToken, group, url, callback){
+    _buildNoteContent: function(groupName, lunchTime){
+        var content = '<?xml version="1.0" encoding="UTF-8"?>';
+        content += '<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">';
+        content += '<en-note>This reminder is automatically created by LunchTimer for your group "<strong>' + groupName + '</strong>"<br/> Please vote for one by configured time "<strong>' + lunchTime + '</strong>"<br/>';
+        content += '<a href="http://www.tejitak.com/lunch/">http://www.tejitak.com/lunch/</a>';
+        content += '</en-note>';
+        return content;
+    },
+
+    createNote: function(accessToken, groupName, lunchTime, callback){
         // TODO: set readonly?
         var note = new Evernote.Note();
         note.title = "LunchTimer Voting Time Reminder";
-        note.content = '<?xml version="1.0" encoding="UTF-8"?>';
-        note.content += '<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">';
-        note.content += '<en-note>This reminder is automatically created by LunchTimer for your group "<strong>' + group.name + '</strong>"<br/> Please vote for one by configured time "<strong>' + group.lunchTime + '</strong>"<br/>';
-        note.content += '<a href="' + url + '">' + url + '</a>';
-        note.content += '</en-note>';
-        this.updateReminder(note, group.lunchTime);
+        note.content = this._buildNoteContent(groupName, lunchTime);
+        this.updateReminder(note, lunchTime);
         var client = this.newClient(accessToken);
         var noteStore = client.getNoteStore();
         noteStore.createNote(note, function(err, createdNote) {
@@ -60,10 +65,11 @@ var evernote = {
         });
     },
 
-    updateNote: function(accessToken, note, group, url, callback){
-        this.updateReminder(note, group.lunchTime);
+    updateNote: function(accessToken, note, groupName, lunchTime, callback){
+        this.updateReminder(note, lunchTime);
         var client = this.newClient(accessToken);
         var noteStore = client.getNoteStore();
+        note.content = this._buildNoteContent(groupName, lunchTime);
         noteStore.updateNote(note, function(err, updatedNote) {
             if(callback){
                 callback(err, updatedNote);
@@ -75,7 +81,7 @@ var evernote = {
         var now = (new Date()).getTime();
         var noteAttr = new Evernote.NoteAttributes({
             reminderOrder: now,
-            reminderTime: now + 3600000
+            reminderTime: now + 6000000
         });
         note.attributes = noteAttr;
     },
@@ -121,6 +127,24 @@ var evernote = {
             });
         };
         this.find(accessToken, guid, _callback);
+    },
+
+    configureNextEvernoteReminder: function(group){
+        // configure next day's reminder if evernote entires are eixst in the group
+        var that = this;
+        if(group.evernote){
+            for(var i=0, len=group.evernote.length; i<len; i++){
+                var entry = group.evernote[i], guid = entry.guid, accessToken = entry.accessToken;
+                this.find(accessToken, guid, (function(accessToken){
+                    return function(err, existingNote){
+                        if(existingNote){
+                            // TODO: set next day's lunch time
+                            that.updateNote(accessToken, existingNote, group.name, group.luchTime);
+                        }
+                    }
+                })(accessToken));
+            }
+        }
     }
 };
 

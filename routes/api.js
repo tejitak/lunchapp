@@ -109,7 +109,10 @@ router.get('/groups', function(req, res) {
                     var group = items[i];
                     // set vote state "vote" or "voted"
                     var expectedState = calcVoteState(group.lunchTime, group.timezone);
-                    Group.changeStateIfRequired(group, expectedState, calcDecidedShop);
+                    Group.changeStateIfRequired(group, expectedState, function(group){
+                        evernote.configureNextEvernoteReminder(group);
+                        return calcDecidedShop(group);
+                    });
                 }
             }
             res.contentType('application/json');
