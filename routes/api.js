@@ -357,7 +357,7 @@ router.get('/shop/retrieve', function(req, res) {
                     "rest": {
                         "id": data.id,
                         "name": data.name,
-                        "category": data.categories[0],
+                        "category": data.categories,
                         "url": data.url,
                         "url_mobile": data.mobile_url,
                         "image_url": {
@@ -384,10 +384,10 @@ router.get('/shop/retrieve', function(req, res) {
             callAPI(result[1]);
         }
     }else if(shopURL.indexOf("www.yelp.co") != -1){
-        var re = /www\.yelp\.co.*\.*.*\/biz\/(.*)\?*.*/;
-        var result =re.exec(shopURL);
+        var re = /www\.yelp\.co.*\/biz\/([^?]*).*/;
+        var result = re.exec(shopURL);
         if(result && result[1]){
-            callYelpAPI(result[1]);
+            callYelpAPI(encodeURI(result[1]));
         }    
     }else{
         // the id in URL is not same as sid sometimes for PC site
