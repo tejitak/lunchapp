@@ -118,4 +118,18 @@ router.post('/reminder', function(req, res) {
     });
 });
 
+router.get('/shopComment', function(req,res) {
+    console.log('shopComment:GET ' + req.params);
+    //TODO get a note by gid
+})
+
+router.post('/shopComment', function(req,res) {
+    console.log('shopComment:POST ' + req.params);
+    if (req.params.gid === 'undefined') {
+        // TODO create a note
+    } else {
+        // TODO update the note
+    }
+})
+
 module.exports = router;

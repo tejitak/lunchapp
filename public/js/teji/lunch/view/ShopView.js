@@ -7,7 +7,7 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
         defaultImgURL: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjE5cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MzAweDIwMDwvdGV4dD48L3N2Zz4=",
         // defaultImgURL: lunch.constants.config.CONTEXT_PATH + "/img/logo/logo_200.png",
         events: {
-            "click": "showComment"
+            "click": "selected"
         },
 
         initialize: function() {
@@ -44,12 +44,9 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
             return this;
         },
 
-        setCommentView: function(view) {
-            this.commentView = view;
-        },
-
-        showComment: function(e){
-            this.commentView.fillComment(this.model);
+        selected: function(e){
+            console.log("ShopView.selected: start");
+            this.model.trigger("selected", this.model);
         },
 
         // for override

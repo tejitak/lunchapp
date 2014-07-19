@@ -22,11 +22,13 @@
                     <div class="flipsnapPrevArrow fnPrevShopBtn"></div>
                     <div class="flipsnapNextArrow fnNextShopBtn"></div> 
                 </div>
-                <div class="commentContainer">
-                    <textarea class="form-control col-sm-12 col-md-8 col-lg-8 shopComment" rows="3"></textarea>
-                    <textarea class="form-control col-sm-12 col-md-8 col-lg-8 shopNewComment" rows="1"></textarea>
+                <% if(session.evernote) { %>
+                <div class="commentContainer" >
+                    <textarea class="form-control col-sm-12 col-md-8 col-lg-8 shopComment" rows="3" ></textarea>
+                    <textarea class="form-control col-sm-12 col-md-8 col-lg-8 shopNewComment" rows="1" ></textarea>
                     <button class="btn btn-default shopCommentBtn"><%=labels.main_comment_addButton%></button>
                 </div>
+                <% } %>
                 <div class="row fnGroupSelectContainer" style="display: none;">
                     <div class="col-sm-4 col-sm-offset-4">
                         <h5><%=labels.main_section_input_group%></h5>
