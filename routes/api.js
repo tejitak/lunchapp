@@ -12,6 +12,7 @@ var apiKeys = {};
 
 var models = require('../models');
 var Group = models.Group;
+var yelpapi = require('yelp')
 
 // read apikey.json
 fs.readFile('apikey.json', 'UTF-8', function (err, data) {
@@ -326,12 +327,50 @@ router.get('/shop/retrieve', function(req, res) {
             }
         });
         var apiReq = request(urlStr, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
+            if (!error && response.statusCode == 200) {
                 response.setEncoding('utf8');
                 var json = xml2json.toJson(body);
                 res.contentType('application/json');
                 res.send(json);
+            }else{
+                res.contentType('application/json');
+                res.send("{}");
+            }
+        });
+    };
+    var callYelpAPI = function(sid,loc){
+        var yelp = yelpapi.createClient({
+                consumer_key: apiKeys["yelp_consumer_key"], 
+                consumer_secret: apiKeys["yelp_consumer_secret"],
+                token: apiKeys["yelp_token"],
+                token_secret: apiKeys["yelp_token_secret"]
+        });
+        // See http://www.yelp.com/developers/documentation/v2/search_api
+        yelp.search({term: sid, location:loc}, function(error, data) {
+            if(!data || !data.businesses || !data.businesses[0]){
+                res.contentType('application/json');
+                res.send("{}");
+                return;
+            }
+            var entry = data.businesses[0];
+            var json = {
+                "response": {
+                    "rest": {
+                        "id": entry.id,
+                        "name": entry.name,
+                        "category": entry.categories,
+                        "url": entry.url,
+                        "url_mobile": entry.mobile_url,
+                        "image_url": {
+                            "shop_image1": entry.image_url
+                        },
+                        "address": entry.location,
+                        "tel": entry.phone
+                    }
+                }
             };
+            res.contentType('application/json');
+            res.send(json);
         });
     };
 
@@ -345,6 +384,12 @@ router.get('/shop/retrieve', function(req, res) {
         if(result && result[1]){
             callAPI(result[1]);
         }
+    } else if(shopURL.indexOf("www.yelp.co.jp") != -1){
+        var re = /www.yelp.co.jp\/biz\/(.*)-(.*)/;
+        var result =re.exec(shopURL);
+        if(result && result[1] && result[2]){
+            callYelpAPI(result[1],result[2]);
+        }
     }else{
         // the id in URL is not same as sid sometimes for PC site
         var shopURLReq = request(shopURL, function (error, response, body) {
@@ -357,7 +402,6 @@ router.get('/shop/retrieve', function(req, res) {
                 };
             };
         });
-
         shopURLReq.end();
     }
 });
