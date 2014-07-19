@@ -338,7 +338,7 @@ router.get('/shop/retrieve', function(req, res) {
             }
         });
     };
-    var callYelpAPI = function(sid,loc){
+    var callYelpAPI = function(sid){
         var yelp = yelpapi.createClient({
                 consumer_key: apiKeys["yelp_consumer_key"], 
                 consumer_secret: apiKeys["yelp_consumer_secret"],
@@ -346,26 +346,25 @@ router.get('/shop/retrieve', function(req, res) {
                 token_secret: apiKeys["yelp_token_secret"]
         });
         // See http://www.yelp.com/developers/documentation/v2/search_api
-        yelp.search({term: sid, location:loc}, function(error, data) {
-            if(!data || !data.businesses || !data.businesses[0]){
+        yelp.business(sid, function(error, data) {
+            if(!data ){
                 res.contentType('application/json');
                 res.send("{}");
                 return;
             }
-            var entry = data.businesses[0];
             var json = {
                 "response": {
                     "rest": {
-                        "id": entry.id,
-                        "name": entry.name,
-                        "category": entry.categories,
-                        "url": entry.url,
-                        "url_mobile": entry.mobile_url,
+                        "id": data.id,
+                        "name": data.name,
+                        "category": data.categories[0],
+                        "url": data.url,
+                        "url_mobile": data.mobile_url,
                         "image_url": {
-                            "shop_image1": entry.image_url
+                            "shop_image1": data.image_url
                         },
-                        "address": entry.location,
-                        "tel": entry.phone
+                        "address": data.location,
+                        "tel": data.phone
                     }
                 }
             };
@@ -379,17 +378,17 @@ router.get('/shop/retrieve', function(req, res) {
     if(shopURL.indexOf("mobile.gnavi.co.jp") != -1){
         // the id in URL can be used as sid for mobile site
         // e.g. http://mobile.gnavi.co.jp/shop/gdtp400/
-        var re = /mobile.gnavi.co.jp\/shop\/(.*)\//g;
+        var re = /mobile\.gnavi\.co\.jp\/shop\/(.*)\//g;
         var result = re.exec(shopURL);
         if(result && result[1]){
             callAPI(result[1]);
         }
-    } else if(shopURL.indexOf("www.yelp.co.jp") != -1){
-        var re = /www.yelp.co.jp\/biz\/(.*)-(.*)/;
+    }else if(shopURL.indexOf("www.yelp.co") != -1){
+        var re = /www\.yelp\.co.*\.*.*\/biz\/(.*)\?*.*/;
         var result =re.exec(shopURL);
-        if(result && result[1] && result[2]){
-            callYelpAPI(result[1],result[2]);
-        }
+        if(result && result[1]){
+            callYelpAPI(result[1]);
+        }    
     }else{
         // the id in URL is not same as sid sometimes for PC site
         var shopURLReq = request(shopURL, function (error, response, body) {
