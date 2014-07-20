@@ -22383,7 +22383,9 @@ define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery"], funct
 
                 if (!this.shop.get("en_gid")) {
                     this.shop.set("en_gid", data.guid);
-                    //TODO save shop model to DB.
+                    // update the shop model (whole group model)to DB.
+                    var targetGroup = this.options.shopListView.getSelectedGroup();
+                    this.collection.updateGroup(targetGroup, function(){});
                 }
 
                 // update comment

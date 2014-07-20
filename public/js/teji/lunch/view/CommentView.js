@@ -87,7 +87,9 @@ define(["backbone", "underscore", "jquery"], function(Backbone, _, $){
 
                 if (!this.shop.get("en_gid")) {
                     this.shop.set("en_gid", data.guid);
-                    //TODO save shop model to DB.
+                    // update the shop model (whole group model)to DB.
+                    var targetGroup = this.options.shopListView.getSelectedGroup();
+                    this.collection.updateGroup(targetGroup, function(){});
                 }
 
                 // update comment
