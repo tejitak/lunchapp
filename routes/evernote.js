@@ -119,17 +119,63 @@ router.post('/reminder', function(req, res) {
 });
 
 router.get('/shopComment', function(req,res) {
-    console.log('shopComment:GET ' + req.params);
-    //TODO get a note by gid
+    console.log("/shopComment:GET start");
+    var accessToken = req.session.evernote && req.session.evernote.accessToken;
+    var en_gid = req.query.gid;
+
+    console.log("en_gid: " + en_gid);
+    if (!en_gid) {
+        res.send("{error: no gid was set.}");
+        return;
+    }
+
+    evernote.find(accessToken, en_gid, function(err, note) {
+        if (err) {
+            console.log("err: " + err.message);
+            res.send("{error: " + err.message + " }");
+            return;
+        }
+
+        res.send(note);
+    });
+
+    console.log("/shopComment:GET end");
 })
 
 router.post('/shopComment', function(req,res) {
-    console.log('shopComment:POST ' + req.params);
-    if (req.params.gid === 'undefined') {
-        // TODO create a note
+    console.log("/shopComment:POST start");
+    var accessToken = req.session.evernote && req.session.evernote.accessToken;
+    var gid = req.query.gid;
+    var title = req.query.title;
+    var content = req.query.content;
+
+    console.log("accessToken " + accessToken);
+    console.log("gid " + gid);
+    console.log("title " + title);
+    console.log("content " + content);
+
+    if (!gid) {
+        evernote.createCommentNote(accessToken, title, content, function(err, createdNote) {
+            if (err) {
+                console.log("/shopComment create evernote:err " + err.message);
+                res.send("{error: " + err.message + "}");
+                return;
+            }
+
+            res.send(createdNote);
+        });
     } else {
-        // TODO update the note
+        evernote.updateCommentNote(accessToken, gid, title, content, function(err, updatedNote) {
+            if (err) {
+                console.log("/shopComment update evernote:err " + err.message);
+                res.send("{error: " + err.message + "}");
+                return;
+            }
+
+            res.send(updatedNote);
+        });
     }
+    console.log("/shopComme:POST end");
 })
 
 module.exports = router;

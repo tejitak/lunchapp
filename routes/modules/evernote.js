@@ -86,6 +86,39 @@ var evernote = {
         note.attributes = noteAttr;
     },
 
+    createCommentNote: function(accessToken, title, content, callback){
+        var note = new Evernote.Note();
+        note.title = title;
+        var nBody = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+        nBody += "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">";
+        nBody += "<en-note>" + content + "</en-note>";
+        note.content = nBody;
+        var client = this.newClient(accessToken);
+        var noteStore = client.getNoteStore();
+        noteStore.createNote(note, function(err, createdNote) {
+            if (callback){
+                callback(err, createdNote);
+            }
+        });
+    },
+
+    updateCommentNote: function(accessToken, gid, title, content, callback) {
+        var note = new Evernote.Note();
+        note.guid = gid;
+        note.title = title;
+        var nBody = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+        nBody += "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">";
+        nBody += "<en-note>" + content + "</en-note>";
+        note.content = nBody;
+        var client = this.newClient(accessToken);
+        var noteStore = client.getNoteStore();
+        noteStore.updateNote(note, function(err, updatedNote) {
+            if (callback){
+                callback(err, updatedNote);
+            }
+        });
+    },
+
     indexOfRegisteredNote: function(group, userId){
         if(!group.evernote){ group.evernote = []; }
         for(var i=0, len=group.evernote.length; i<len; i++){

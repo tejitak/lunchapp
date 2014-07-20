@@ -18021,6 +18021,7 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
             this.set("url_mobile", result["url_mobile"]);
             this.set("imageURL", result.image_url["shop_image1"] || "");
             this.set("votedBy", []);
+            this.set("en_gid", "");
         },
 
         updateValues: function(shopInfo){

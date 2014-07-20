@@ -26,54 +26,74 @@ define(["backbone", "underscore", "jquery"], function(Backbone, _, $){
 
         fillComment: function(shopModel){
             console.log("CommentView.fillComment: start");
-            this.shop = shopModel;
-            console.log('shopName: ' + this.shop.get("name"));
 
-            if (this.shop.en_gid) {
-                // TODO get note content and set to text area
+            //enable input section
+            $(".shopComment").removeAttr("disabled");
+            $(".shopNewComment").removeAttr("disabled");
+            $(".shopCommentBtn").removeAttr("disabled");
+
+            this.shop = shopModel;
+            console.log("shopName: " + this.shop.get("name"));
+            console.log("en_gid: " + this.shop.get("en_gid"));
+
+            if (this.shop.get("en_gid")) {
+                // get note content and set to text area
                 $.ajax({
                     type: "GET",
                     url: lunch.constants.config.CONTEXT_PATH + "/evernote/shopComment?gid=" + this.shop.get("en_gid")
                 }).done($.proxy(function(json){
-                    // create a new shop model from response
-                    if(!json.response || !json.response.rest){
+                    if(!json || !json.content) {
                         return;
                     }
-                    $(".shopComment").val(json.content);
+
+                    console.log("CommentView.fillComment: enContent=" + json.content);
+
+                    // parse xml and show content.
+                    var shopComment = "";
+                    var enNote = $.parseXML(json.content);
+                    var divs = $(enNote).find("en-note div");
+                    divs.each(function () {
+                        console.log("div.text()" + $(this).text());
+                        shopComment += $(this).text() + "\n";
+                    });
+
+                    $(".shopComment").val(shopComment);
                 }, this));
-            } else {
-                //TODO just test
-                $(".shopComment").val("Test comment");
             }
         },
 
         addComment: function() {
+            console.log("CommentView.addComment: start");
             var newComment = $(".shopNewComment").val();
             if (!newComment) {
                 return;
             }
-            //TODO move to Model
             var currentComment = $(".shopComment").val();
-            var sendValue = currentComment + "\n---\n" + newComment + "\n";
+            var currentCommentLines = currentComment.split("\n");
+            var sendValue = "";
+            for (var i=0, len=currentCommentLines.length; i<len; i++) {
+                sendValue += ("<div>" + currentCommentLines[i] + "</div>");
+            }
+            sendValue += "<div>---</div><div>" + newComment + "</div>";
 
             $.ajax({
                 type: "POST",
                 url: lunch.constants.config.CONTEXT_PATH + "/evernote/shopComment?gid=" + this.shop.get("en_gid") + "&title=" + this.shop.get("name") + "&content=" + sendValue
-            }).done($.proxy(function(json){
-                // create a new shop model from response
-                if(!json.response || !json.response.rest){
+            }).done($.proxy(function(data) {
+                if(!data) {
                     return;
                 }
+                console.log("CommentView.addComment: data.guid=" + data.guid);
 
-                if (!this.shop.en_gid) {
-                    // set gid of new Evernote note.
-                    this.shop.set("en_gid", json.gid);
-
-                    // update comment
-                    $(".shopComment").val(sendValue);
-                    // empty comment user added.
-                    $(".shopNewComment").val('');
+                if (!this.shop.get("en_gid")) {
+                    this.shop.set("en_gid", data.guid);
+                    //TODO save shop model to DB.
                 }
+
+                // update comment
+                $(".shopComment").val(currentComment + "---\n" + newComment + "\n");
+                // empty comment user added.
+                $(".shopNewComment").val('');
             }, this));
         }
     });
