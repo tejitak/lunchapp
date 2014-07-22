@@ -9189,8 +9189,6 @@ return jQuery;
 
 }));
 
-define("jquery", function(){});
-
 /*!
  * Bootstrap v3.1.1 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
