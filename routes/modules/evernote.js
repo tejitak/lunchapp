@@ -180,8 +180,8 @@ var evernote = {
                 this.find(accessToken, guid, (function(accessToken){
                     return function(err, existingNote){
                         if(existingNote){
-                            // TODO: set next day's lunch time
-                            that.updateNote(accessToken, existingNote, group.name, group.luchTime);
+                            // set next day's lunch time
+                            that.updateReminderNote(accessToken, existingNote, group.name, group.lunchTime, group.timezone);
                         }
                     }
                 })(accessToken));
