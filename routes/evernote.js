@@ -90,20 +90,20 @@ router.post('/reminder', function(req, res) {
                     if(err){ res.redirect("/"); }
                     if(existingNote){
                         // just set reminder
-                        evernote.updateNote(accessToken, existingNote, group, function(error, updatedNote){
+                        evernote.updateReminderNote(accessToken, existingNote, group.name, group.lunchTime, group.timezone, function(error, updatedNote){
                             if(err){ res.redirect("/"); }
                             res.redirect("/");
                         });
                     }else{
                         // remove the entry from list when the association is stored in DB but the note maybe
                         group.evernote.splice(registeredNoteIndex, 1);
-                        evernote.createNote(accessToken, group.name, group.lunchTime, createdCallback);
+                        evernote.createReminderNote(accessToken, group.name, group.lunchTime, group.timezone, createdCallback);
                     }
                 };
                 evernote.find(accessToken, group.evernote[registeredNoteIndex].guid, findCallback);
             }else{
                 // create a new note with reminder
-                evernote.createNote(accessToken, group.name, group.lunchTime, createdCallback);
+                evernote.createReminderNote(accessToken, group.name, group.lunchTime, group.timezone, createdCallback);
             }
         }else if(registeredNoteIndex >= 0){
             // disable reminder and remove entry from DB

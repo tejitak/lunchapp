@@ -1,3 +1,5 @@
+var moment = require('moment');
+var momentTz = require('moment-timezone');
 var Evernote = require('evernote').Evernote;
 
 var evernote = {
@@ -50,12 +52,12 @@ var evernote = {
         return content;
     },
 
-    createNote: function(accessToken, groupName, lunchTime, callback){
+    createReminderNote: function(accessToken, groupName, lunchTime, timezone, callback){
         // TODO: set readonly?
         var note = new Evernote.Note();
         note.title = "LunchTimer Voting Time Reminder";
         note.content = this._buildNoteContent(groupName, lunchTime);
-        this.updateReminder(note, lunchTime);
+        this.updateReminder(note, lunchTime, timezone);
         var client = this.newClient(accessToken);
         var noteStore = client.getNoteStore();
         noteStore.createNote(note, function(err, createdNote) {
@@ -65,8 +67,8 @@ var evernote = {
         });
     },
 
-    updateNote: function(accessToken, note, groupName, lunchTime, callback){
-        this.updateReminder(note, lunchTime);
+    updateReminderNote: function(accessToken, note, groupName, lunchTime, timezone, callback){
+        this.updateReminder(note, lunchTime, timezone);
         var client = this.newClient(accessToken);
         var noteStore = client.getNoteStore();
         note.content = this._buildNoteContent(groupName, lunchTime);
@@ -77,11 +79,18 @@ var evernote = {
         });
     },
 
-    updateReminder: function(note, lunchTime){
-        var now = (new Date()).getTime();
+    updateReminder: function(note, lunchTime, timezone){
+        var now = target = (new Date()).getTime();
+        var diff = (moment.tz(lunchTime, "HH:mm", timezone)).diff(moment());
+        if(diff >= 0){
+            target = now + diff - 600000/*10minutes*/;
+        }else{
+            // set next day's time 24 hours (1000 * 60 * 60 * 24) + diff - 10 minutes
+            target = now + (86400000 + diff - 600000/*10 minutes*/);
+        }
         var noteAttr = new Evernote.NoteAttributes({
             reminderOrder: now,
-            reminderTime: now + 6000000
+            reminderTime: target
         });
         note.attributes = noteAttr;
     },
@@ -171,8 +180,8 @@ var evernote = {
                 this.find(accessToken, guid, (function(accessToken){
                     return function(err, existingNote){
                         if(existingNote){
-                            // TODO: set next day's lunch time
-                            that.updateNote(accessToken, existingNote, group.name, group.luchTime);
+                            // set next day's lunch time
+                            that.updateReminderNote(accessToken, existingNote, group.name, group.lunchTime, group.timezone);
                         }
                     }
                 })(accessToken));
