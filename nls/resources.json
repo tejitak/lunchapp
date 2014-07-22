@@ -32,12 +32,12 @@
     "main_resultItem_vote": "Vote",
     "main_resultItem_unvote": "Cancel",
     "main_resultItem_shopInfo": "More information",
+    "main_resultItem_shopComment": "Show comment",
     "main_resultItem_voter": "Voters",
     "main_resultItem_votedCount": "Votes",
     "main_resultItem_visitedCount": "Times visited",
 
     "main_comment_addButton": "Add comment",
-
 
     "gettingStarted_title": "Lunch Timer! - Getting Started - ",
     "gettingStarted_section_title": "Getting Started",

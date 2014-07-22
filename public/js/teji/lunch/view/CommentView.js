@@ -27,14 +27,11 @@ define(["backbone", "underscore", "jquery"], function(Backbone, _, $){
         fillComment: function(shopModel){
             console.log("CommentView.fillComment: start");
 
-            //enable input section
-            $(".shopComment").removeAttr("disabled");
-            $(".shopNewComment").removeAttr("disabled");
-            $(".shopCommentBtn").removeAttr("disabled");
-
             this.shop = shopModel;
             console.log("shopName: " + this.shop.get("name"));
             console.log("en_gid: " + this.shop.get("en_gid"));
+
+            $(".shopName").text(this.shop.get("name"));
 
             if (this.shop.get("en_gid")) {
                 // get note content and set to text area
@@ -49,8 +46,10 @@ define(["backbone", "underscore", "jquery"], function(Backbone, _, $){
                     console.log("CommentView.fillComment: enContent=" + json.content);
 
                     // parse xml and show content.
-                    var shopComment = "";
                     var enNote = $.parseXML(json.content);
+
+                    // for textarea version
+                    var shopComment = "";
                     var divs = $(enNote).find("en-note div");
                     divs.each(function () {
                         console.log("div.text()" + $(this).text());
@@ -58,8 +57,19 @@ define(["backbone", "underscore", "jquery"], function(Backbone, _, $){
                     });
 
                     $(".shopComment").val(shopComment);
+
+                    // for div version
+                    // var note = $(enNote).find("en-note");
+                    // $(".shopComment").html(note.children());
                 }, this));
             }
+
+            //show comment
+            $(".shopName").show();
+            $(".shopComment").show();
+            $(".shopNewComment").show();
+            $(".shopCommentBtn").show();
+
         },
 
         addComment: function() {
@@ -68,6 +78,7 @@ define(["backbone", "underscore", "jquery"], function(Backbone, _, $){
             if (!newComment) {
                 return;
             }
+            // for textarea version
             var currentComment = $(".shopComment").val();
             var currentCommentLines = currentComment.split("\n");
             var sendValue = "";
@@ -75,6 +86,11 @@ define(["backbone", "underscore", "jquery"], function(Backbone, _, $){
                 sendValue += ("<div>" + currentCommentLines[i] + "</div>");
             }
             sendValue += "<div>---</div><div>" + newComment + "</div>";
+
+            // for div version
+            // var sendValue = "";
+            // var currentComment = $(".shopComment").html();
+            // sendValue += currentComment + "<div>---</div><div>" + newComment + "</div>";
 
             $.ajax({
                 type: "POST",
@@ -93,7 +109,10 @@ define(["backbone", "underscore", "jquery"], function(Backbone, _, $){
                 }
 
                 // update comment
+                // for textarea version
                 $(".shopComment").val(currentComment + "---\n" + newComment + "\n");
+                // for div version
+                //$(".shopComment").html(currentComment + "<div>---</div><div>" + newComment + "</div>");
                 // empty comment user added.
                 $(".shopNewComment").val('');
             }, this));
