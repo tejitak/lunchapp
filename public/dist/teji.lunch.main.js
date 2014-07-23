@@ -14180,6 +14180,10 @@ define("teji/lunch/util", ["jquery"], function($){
             });
             $(mainPages[pageIndex]).show().velocity({opacity: 1});
             this._mainPages = mainPages;
+        },
+
+        escapeHTML: function(text){
+            return text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
     };
 });
@@ -22292,10 +22296,14 @@ define('teji/lunch/collection/GroupCollection',["jquery", "backbone", "teji/lunc
     return groupCollection;
 });
 
-define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery"], function(Backbone, _, $){
+define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery", "teji/lunch/util"], function(Backbone, _, $, util){
     var CommentView = Backbone.View.extend({
 
+        SEPARATOR: "---",
+
         shop: null,
+
+        _currentText: "",
 
         events: {
             "click .shopCommentBtn": "addComment"
@@ -22333,28 +22341,22 @@ define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery"], funct
                     type: "GET",
                     url: lunch.constants.config.CONTEXT_PATH + "/evernote/shopComment?gid=" + this.shop.get("en_gid")
                 }).done($.proxy(function(json){
+                    var $commentDisplayNode = $(".shopComment");
+                    this._currentText = "";
+                    $commentDisplayNode.html("");
                     if(!json || !json.content) {
+                        // clear en_gid (it is assumed to be error e.g. remove note in evernote)
+                        this.shop.set("en_gid", "");
                         return;
                     }
-
                     console.log("CommentView.fillComment: enContent=" + json.content);
-
                     // parse xml and show content.
                     var enNote = $.parseXML(json.content);
-
-                    // for textarea version
-                    var shopComment = "";
-                    var divs = $(enNote).find("en-note div");
-                    divs.each(function () {
-                        console.log("div.text()" + $(this).text());
-                        shopComment += $(this).text() + "\n";
-                    });
-
-                    $(".shopComment").val(shopComment);
-
-                    // for div version
-                    // var note = $(enNote).find("en-note");
-                    // $(".shopComment").html(note.children());
+                    var $note = $(enNote).find("en-note");
+                    if($note && $note.size() > 0){
+                        var text = this._currentText = $note.html();
+                        $commentDisplayNode.html(this._textToHTML(text));
+                    }
                 }, this));
             }
 
@@ -22372,23 +22374,15 @@ define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery"], funct
             if (!newComment) {
                 return;
             }
-            // for textarea version
-            var currentComment = $(".shopComment").val();
-            var currentCommentLines = currentComment.split("\n");
-            var sendValue = "";
-            for (var i=0, len=currentCommentLines.length; i<len; i++) {
-                sendValue += ("<div>" + currentCommentLines[i] + "</div>");
-            }
-            sendValue += "<div>---</div><div>" + newComment + "</div>";
-
-            // for div version
-            // var sendValue = "";
-            // var currentComment = $(".shopComment").html();
-            // sendValue += currentComment + "<div>---</div><div>" + newComment + "</div>";
-
             $.ajax({
                 type: "POST",
-                url: lunch.constants.config.CONTEXT_PATH + "/evernote/shopComment?gid=" + this.shop.get("en_gid") + "&title=" + this.shop.get("name") + "&content=" + sendValue
+                url: lunch.constants.config.CONTEXT_PATH + "/evernote/shopComment?gid=" + this.shop.get("en_gid"),
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify({
+                    title: this.shop.get("name"),
+                    content: this._currentText + this.SEPARATOR + newComment
+                })
             }).done($.proxy(function(data) {
                 if(!data) {
                     return;
@@ -22401,15 +22395,18 @@ define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery"], funct
                     var targetGroup = this.options.shopListView.getSelectedGroup();
                     this.collection.updateGroup(targetGroup, function(){});
                 }
-
                 // update comment
-                // for textarea version
-                $(".shopComment").val(currentComment + "---\n" + newComment + "\n");
-                // for div version
-                //$(".shopComment").html(currentComment + "<div>---</div><div>" + newComment + "</div>");
+                $(".shopComment").html(this._textToHTML(this._currentText + this.SEPARATOR + newComment));
                 // empty comment user added.
                 $(".shopNewComment").val('');
             }, this));
+        },
+
+        _textToHTML: function(text){
+            // escape html content for XSS
+            text = util.escapeHTML(text);
+            // split with separator
+            return text.split(this.SEPARATOR).join("<hr/>");
         }
     });
     return CommentView;

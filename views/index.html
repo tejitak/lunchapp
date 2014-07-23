@@ -43,10 +43,9 @@
                 </div>
                 <div class="commentContainer">
                     <div class="text-info shopName" stype="display: none"></div>
-                    <textarea class="form-control col-sm-12 col-md-8 col-lg-8 shopComment" rows="3" style="display: none;"></textarea>
-                    <!--div class="form-contorl col-sm-12 col-md-8 col-lg-8 shopComment" style="display: none"></div-->
-                    <textarea class="form-control col-sm-12 col-md-8 col-lg-8 shopNewComment" rows="1" style="display: none; margin: 8px 0;"></textarea>
-                    <div style="margin: 8px 0;">
+                    <div class="shopComment" style="display: none"></div>
+                    <textarea class="form-control col-sm-12 col-md-8 col-lg-8 shopNewComment" rows="1" style="display: none; margin: 20px 0 8px 0px;"></textarea>
+                    <div style="margin: 16px 0;">
                         <button class="btn btn-primary btn-default shopCommentBtn" style="display: none"><%=labels.main_comment_addButton%></button>
                     </div>
                 </div>
@@ -64,10 +63,10 @@
                 <% }else{ %>
                 <div>
                     <p>
-                        <a href="javascript:;" onclick="location.href=location.href + 'api/evernote/authenticate?callback=' + location.href + 'evernote'"><img src="<%=config.CONTEXT_PATH%>/img/evernote/connect_evernote_button.png" width="179" height="25"></a>
+                        Evernoteにログインして通知の設定やお店のコメントを記入できます
                     </p>
                     <div>
-                        Evernoteにログインして通知の設定やお店のコメントを記入できます
+                        <a href="javascript:;" onclick="location.href=location.href + 'api/evernote/authenticate?callback=' + location.href + 'evernote'"><img src="<%=config.CONTEXT_PATH%>/img/evernote/connect_evernote_button.png" width="179" height="25"></a>
                     </div>
                 </div>
                 <% } %>

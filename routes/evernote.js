@@ -118,21 +118,21 @@ router.post('/reminder', function(req, res) {
     });
 });
 
-router.get('/shopComment', function(req,res) {
+router.get('/shopComment', function(req, res) {
     console.log("/shopComment:GET start");
     var accessToken = req.session.evernote && req.session.evernote.accessToken;
     var en_gid = req.query.gid;
 
     console.log("en_gid: " + en_gid);
     if (!en_gid) {
-        res.send("{error: no gid was set.}");
+        res.send('{"error": "no gid was set."}');
         return;
     }
 
     evernote.find(accessToken, en_gid, function(err, note) {
         if (err) {
             console.log("err: " + err.message);
-            res.send("{error: " + err.message + " }");
+            res.send('{"error": "' + err.message + '" }');
             return;
         }
 
@@ -142,12 +142,13 @@ router.get('/shopComment', function(req,res) {
     console.log("/shopComment:GET end");
 })
 
-router.post('/shopComment', function(req,res) {
+router.post('/shopComment', function(req, res) {
     console.log("/shopComment:POST start");
     var accessToken = req.session.evernote && req.session.evernote.accessToken;
     var gid = req.query.gid;
-    var title = req.query.title;
-    var content = req.query.content;
+    var entry = req.body;
+    var title = entry.title;
+    var content = entry.content;
 
     console.log("accessToken " + accessToken);
     console.log("gid " + gid);
@@ -158,7 +159,7 @@ router.post('/shopComment', function(req,res) {
         evernote.createCommentNote(accessToken, title, content, function(err, createdNote) {
             if (err) {
                 console.log("/shopComment create evernote:err " + err.message);
-                res.send("{error: " + err.message + "}");
+                res.send('{"error": "' + err.message + '"}');
                 return;
             }
 
@@ -168,7 +169,7 @@ router.post('/shopComment', function(req,res) {
         evernote.updateCommentNote(accessToken, gid, title, content, function(err, updatedNote) {
             if (err) {
                 console.log("/shopComment update evernote:err " + err.message);
-                res.send("{error: " + err.message + "}");
+                res.send('{"error": "' + err.message + '"}');
                 return;
             }
 

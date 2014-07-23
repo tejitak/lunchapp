@@ -15031,6 +15031,10 @@ define("teji/lunch/util", ["jquery"], function($){
             });
             $(mainPages[pageIndex]).show().velocity({opacity: 1});
             this._mainPages = mainPages;
+        },
+
+        escapeHTML: function(text){
+            return text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
     };
 });
