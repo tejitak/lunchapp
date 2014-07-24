@@ -74,7 +74,7 @@
 
     "admin_group_shop_title_add": "お店を追加",
     "admin_group_shop_title_edit": "お店を更新",
-    "admin_group_shop_placeholder_getShopInfo": "ぐるなびURL",
+    "admin_group_shop_placeholder_getShopInfo": "Yelp URL OR ぐるなびURL",
     "admin_group_shop_btn_getShopInfo": "GET",
     "admin_group_shop_input_id": "ID",
     "admin_group_shop_input_name": "お店の名前",
