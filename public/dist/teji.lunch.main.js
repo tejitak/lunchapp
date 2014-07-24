@@ -14182,6 +14182,10 @@ define("teji/lunch/util", ["jquery"], function($){
             });
             $(mainPages[pageIndex]).show().velocity({opacity: 1});
             this._mainPages = mainPages;
+        },
+
+        escapeHTML: function(text){
+            return text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
     };
 });
@@ -17648,7 +17652,7 @@ define('text',['module'], function (module) {
 });
 
 
-define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail shopViewItem">\n    <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=item.name%></span></h4>\n    <img src="<%=item.imageURL%>" class="img-rounded" alt="photo" style="width: 200px; height: 200px;">\n    <hr>\n    <div class="caption shopViewButtons">\n        <p><a href="javascript:;" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button"><%=labels.main_resultItem_vote%></a>\n           <a href="javascript:;" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hidden" role="button"><%=labels.main_resultItem_unvote%></a></p>\n        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> \n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n    <div class="caption resultViewItemInfo">\n        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> \n        <div><%=labels.main_resultItem_visitedCount%>: <%=item.visitedCount%></div>\n        <div><%=labels.main_resultItem_votedCount%>: <%=item.votedBy.length%></div>\n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n</div>';});
+define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail shopViewItem">\n    <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=item.name%></span></h4>\n    <img src="<%=item.imageURL%>" class="img-rounded" alt="photo" style="width: 200px; height: 200px;">\n    <hr>\n    <div class="caption shopViewButtons">\n        <p><a href="javascript:;" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button"><%=labels.main_resultItem_vote%></a>\n           <a href="javascript:;" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hidden" role="button"><%=labels.main_resultItem_unvote%></a></p>\n        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span><%=labels.main_resultItem_shopInfo%></a></p>\n        <% if(isEvernoteLogin){ %>\n        <p><button type="button" class="btn btn-default btn-block btn-sm fnBtnComment" style="text-align: center;"><img src="<%=contextPath%>/img/evernote/evernote_logo_4c-sm.png" width="72" height="18"></button></p>\n        <% } %>\n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n    <div class="caption resultViewItemInfo">\n        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> \n        <div><%=labels.main_resultItem_visitedCount%>: <%=item.visitedCount%></div>\n        <div><%=labels.main_resultItem_votedCount%>: <%=item.votedBy.length%></div>\n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n</div>';});
 
 define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], function(Backbone, _, $, tmpl){
     var ShopView = Backbone.View.extend({
@@ -17659,7 +17663,7 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./t
         defaultImgURL: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjE5cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MzAweDIwMDwvdGV4dD48L3N2Zz4=",
         // defaultImgURL: lunch.constants.config.CONTEXT_PATH + "/img/logo/logo_200.png",
         events: {
-            "click": "selected"
+            "click .fnBtnComment": "selected"
         },
 
         initialize: function() {
@@ -17675,7 +17679,7 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./t
             if(!json.imageURL){
                 json.imageURL = this.defaultImgURL;
             }
-            this.$el.html(this.template({item: json, labels: lunch.constants.labels}));
+            this.$el.html(this.template({item: json, labels: lunch.constants.labels, contextPath: lunch.constants.config.CONTEXT_PATH, isEvernoteLogin: lunch.evernoteUser ? true : false}));
 
             if(!enableVote){
                 this.$(".fnBtnVote").addClass('disabled'); 
@@ -22294,10 +22298,14 @@ define('teji/lunch/collection/GroupCollection',["jquery", "backbone", "teji/lunc
     return groupCollection;
 });
 
-define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery"], function(Backbone, _, $){
+define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery", "teji/lunch/util"], function(Backbone, _, $, util){
     var CommentView = Backbone.View.extend({
 
+        SEPARATOR: "---",
+
         shop: null,
+
+        _currentText: "",
 
         events: {
             "click .shopCommentBtn": "addComment"
@@ -22323,14 +22331,11 @@ define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery"], funct
         fillComment: function(shopModel){
             console.log("CommentView.fillComment: start");
 
-            //enable input section
-            $(".shopComment").removeAttr("disabled");
-            $(".shopNewComment").removeAttr("disabled");
-            $(".shopCommentBtn").removeAttr("disabled");
-
             this.shop = shopModel;
             console.log("shopName: " + this.shop.get("name"));
             console.log("en_gid: " + this.shop.get("en_gid"));
+
+            $(".shopName").text(this.shop.get("name"));
 
             if (this.shop.get("en_gid")) {
                 // get note content and set to text area
@@ -22338,24 +22343,31 @@ define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery"], funct
                     type: "GET",
                     url: lunch.constants.config.CONTEXT_PATH + "/evernote/shopComment?gid=" + this.shop.get("en_gid")
                 }).done($.proxy(function(json){
+                    var $commentDisplayNode = $(".shopComment");
+                    this._currentText = "";
+                    $commentDisplayNode.html("");
                     if(!json || !json.content) {
+                        // clear en_gid (it is assumed to be error e.g. remove note in evernote)
+                        this.shop.set("en_gid", "");
                         return;
                     }
-
                     console.log("CommentView.fillComment: enContent=" + json.content);
-
                     // parse xml and show content.
-                    var shopComment = "";
                     var enNote = $.parseXML(json.content);
-                    var divs = $(enNote).find("en-note div");
-                    divs.each(function () {
-                        console.log("div.text()" + $(this).text());
-                        shopComment += $(this).text() + "\n";
-                    });
-
-                    $(".shopComment").val(shopComment);
+                    var $note = $(enNote).find("en-note");
+                    if($note && $note.size() > 0){
+                        var text = this._currentText = $note.html();
+                        $commentDisplayNode.html(this._textToHTML(text));
+                    }
                 }, this));
             }
+
+            //show comment
+            $(".shopName").show();
+            $(".shopComment").show();
+            $(".shopNewComment").show();
+            $(".shopCommentBtn").show();
+
         },
 
         addComment: function() {
@@ -22364,17 +22376,15 @@ define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery"], funct
             if (!newComment) {
                 return;
             }
-            var currentComment = $(".shopComment").val();
-            var currentCommentLines = currentComment.split("\n");
-            var sendValue = "";
-            for (var i=0, len=currentCommentLines.length; i<len; i++) {
-                sendValue += ("<div>" + currentCommentLines[i] + "</div>");
-            }
-            sendValue += "<div>---</div><div>" + newComment + "</div>";
-
             $.ajax({
                 type: "POST",
-                url: lunch.constants.config.CONTEXT_PATH + "/evernote/shopComment?gid=" + this.shop.get("en_gid") + "&title=" + this.shop.get("name") + "&content=" + sendValue
+                url: lunch.constants.config.CONTEXT_PATH + "/evernote/shopComment?gid=" + this.shop.get("en_gid"),
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify({
+                    title: this.shop.get("name"),
+                    content: this._currentText + this.SEPARATOR + newComment
+                })
             }).done($.proxy(function(data) {
                 if(!data) {
                     return;
@@ -22387,12 +22397,18 @@ define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery"], funct
                     var targetGroup = this.options.shopListView.getSelectedGroup();
                     this.collection.updateGroup(targetGroup, function(){});
                 }
-
                 // update comment
-                $(".shopComment").val(currentComment + "---\n" + newComment + "\n");
+                $(".shopComment").html(this._textToHTML(this._currentText + this.SEPARATOR + newComment));
                 // empty comment user added.
                 $(".shopNewComment").val('');
             }, this));
+        },
+
+        _textToHTML: function(text){
+            // escape html content for XSS
+            text = util.escapeHTML(text);
+            // split with separator
+            return text.split(this.SEPARATOR).join("<hr/>");
         }
     });
     return CommentView;

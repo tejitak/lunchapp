@@ -7,7 +7,7 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
         defaultImgURL: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjE5cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MzAweDIwMDwvdGV4dD48L3N2Zz4=",
         // defaultImgURL: lunch.constants.config.CONTEXT_PATH + "/img/logo/logo_200.png",
         events: {
-            "click": "selected"
+            "click .fnBtnComment": "selected"
         },
 
         initialize: function() {
@@ -23,7 +23,7 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
             if(!json.imageURL){
                 json.imageURL = this.defaultImgURL;
             }
-            this.$el.html(this.template({item: json, labels: lunch.constants.labels}));
+            this.$el.html(this.template({item: json, labels: lunch.constants.labels, contextPath: lunch.constants.config.CONTEXT_PATH, isEvernoteLogin: lunch.evernoteUser ? true : false}));
 
             if(!enableVote){
                 this.$(".fnBtnVote").addClass('disabled'); 

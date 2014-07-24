@@ -43,20 +43,35 @@ var evernote = {
         userStore.getUser(accessToken, callback);
     },
 
-    _buildNoteContent: function(groupName, lunchTime){
-        var content = '<?xml version="1.0" encoding="UTF-8"?>';
-        content += '<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">';
-        content += '<en-note>This reminder is automatically created by LunchTimer for your group "<strong>' + groupName + '</strong>"<br/> Please vote for one by configured time "<strong>' + lunchTime + '</strong>"<br/>';
-        content += '<a href="http://www.tejitak.com/lunch/">http://www.tejitak.com/lunch/</a>';
-        content += '</en-note>';
-        return content;
+    _buildReminderNoteContent: function(groupName, lunchTime){
+        var html = ['<?xml version="1.0" encoding="UTF-8"?>'];
+        html.push('<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>');
+        html.push('<div style="background: #e6e6e6; color: #585957; font-size: 14px; line-height: 1.3;">');
+        html.push('<div style="height: 40px;"> </div><div style="max-width: 600px;padding: 25px 0px; background-color: #fff;margin: 0 auto;box-shadow: 0 0px 5px rgba(0, 0, 0, 0.2); text-align: center;"><div style="margin: 0px 25px;padding-bottom: 15px;">');
+        html.push('<img src="http://www.tejitak.com/lunch/img/logo/logo_64.png"></img>')
+        html.push('<h1 style="color: #db6900;margin: 0;margin-top: 15px;font-size: 20px;font-weight: normal;">Lunch Timer Reminder</h1>');
+        html.push('<p style="font-size: 16px;margin: 6px 0px;line-height: 1.4;">');
+        html.push('This reminder is automatically created by LunchTimer for your group');
+        html.push(' "<strong>');
+        html.push(groupName);
+        html.push('</strong>"</p></div><div style="margin: 0px 25px;font-size: 14px;color: #4d4b47;background-color: #e6f4f6;border: 1px solid #c1e8ec;padding: 0px 15px 8px;clear: both;">');
+        html.push('<p style="margin: 8px 0;"><span style="font-weight: bold;">');
+        html.push('Please vote for one by configured time');
+        html.push(' "<strong>');
+        html.push(lunchTime);
+        html.push('</strong>"</span></p>');
+        html.push('<p style="margin: 8px 0;"><a href="http://www.tejitak.com/lunch/" style="color: #db6900;">');
+        html.push('Open Lunch Timer for a vote');
+        html.push('</a></p></div></div><div style="height: 40px;"> </div></div>');
+        html.push('</en-note>');
+        return html.join("");
     },
 
     createReminderNote: function(accessToken, groupName, lunchTime, timezone, callback){
         // TODO: set readonly?
         var note = new Evernote.Note();
         note.title = "LunchTimer Voting Time Reminder";
-        note.content = this._buildNoteContent(groupName, lunchTime);
+        note.content = this._buildReminderNoteContent(groupName, lunchTime);
         this.updateReminder(note, lunchTime, timezone);
         var client = this.newClient(accessToken);
         var noteStore = client.getNoteStore();
@@ -71,7 +86,7 @@ var evernote = {
         this.updateReminder(note, lunchTime, timezone);
         var client = this.newClient(accessToken);
         var noteStore = client.getNoteStore();
-        note.content = this._buildNoteContent(groupName, lunchTime);
+        note.content = this._buildReminderNoteContent(groupName, lunchTime);
         noteStore.updateNote(note, function(err, updatedNote) {
             if(callback){
                 callback(err, updatedNote);

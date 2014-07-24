@@ -22,23 +22,10 @@
                     <div class="flipsnapPrevArrow fnPrevShopBtn"></div>
                     <div class="flipsnapNextArrow fnNextShopBtn"></div> 
                 </div>
-                <% if(session.evernote) { %>
-                <div class="commentContainer" >
-                    <textarea class="form-control col-sm-12 col-md-8 col-lg-8 shopComment" disabled rows="3" ></textarea>
-                    <textarea class="form-control col-sm-12 col-md-8 col-lg-8 shopNewComment" disabled rows="1" ></textarea>
-                    <button class="btn btn-default shopCommentBtn" disabled><%=labels.main_comment_addButton%></button>
-                </div>
-                <% } %>
                 <div class="row fnGroupSelectContainer" style="display: none;">
                     <div class="col-sm-4 col-sm-offset-4">
                         <h5><%=labels.main_section_input_group%></h5>
                         <select class="form-control col-sm-5 fnGroupSelect"></select>
-                    </div>
-                </div>
-                <div class="row resultViewFilterSection fnResultViewFilterSection" style="display: none;">
-                    <div class="col-sm-4 col-sm-offset-4">
-                        <h5><%=labels.main_section_input_category%></h5>
-                        <select class="form-control col-sm-5 fnCategoryFilter"></select>
                     </div>
                 </div>
                 <div style="margin: 32px auto; width: 100%;">
@@ -54,6 +41,14 @@
                         <strong><%=session.evernote.user.username%></strong> さんでログイン中
                     </p>
                 </div>
+                <div class="commentContainer">
+                    <div class="text-info shopName" stype="display: none"></div>
+                    <div class="shopComment" style="display: none"></div>
+                    <textarea class="form-control col-sm-12 col-md-8 col-lg-8 shopNewComment" rows="1" style="display: none; margin: 20px 0 8px 0px;"></textarea>
+                    <div style="margin: 16px 0;">
+                        <button class="btn btn-primary btn-default shopCommentBtn" style="display: none"><%=labels.main_comment_addButton%></button>
+                    </div>
+                </div>
                 <div>
                     <p>
                         <input id="evernote_votingTime_reminder_checkbox" type="checkbox" style="margin-right: 8px;"><label for="evernote_votingTime_reminder_checkbox">投票〆切の10分前にリマインダーを送信する</label>
@@ -68,13 +63,19 @@
                 <% }else{ %>
                 <div>
                     <p>
-                        <a href="javascript:;" onclick="location.href=location.href + 'api/evernote/authenticate?callback=' + location.href + 'evernote'"><img src="<%=config.CONTEXT_PATH%>/img/evernote/connect_evernote_button.png" width="179" height="25"></a>
+                        Evernoteにログインして通知の設定やお店のコメントを記入できます
                     </p>
                     <div>
-                        Evernoteにログインして通知の設定やお店のコメントを記入できます
+                        <a href="javascript:;" onclick="location.href=location.href + 'api/evernote/authenticate?callback=' + location.href + 'evernote'"><img src="<%=config.CONTEXT_PATH%>/img/evernote/connect_evernote_button.png" width="179" height="25"></a>
                     </div>
                 </div>
                 <% } %>
+                </div>
+                <div class="row resultViewFilterSection fnResultViewFilterSection" style="display: none;">
+                    <div class="col-sm-4 col-sm-offset-4">
+                        <h5><%=labels.main_section_input_category%></h5>
+                        <select class="form-control col-sm-5 fnCategoryFilter"></select>
+                    </div>
                 </div>
             </div>
             <div class="fnDefaultContent" style="display: none;">
