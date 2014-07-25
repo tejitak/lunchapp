@@ -22399,6 +22399,7 @@ define('teji/lunch/view/CommentView',["backbone", "underscore", "jquery", "teji/
                 }
                 // update comment
                 $(".shopComment").html(this._textToHTML(this._currentText + this.SEPARATOR + newComment));
+                this._currentText = this._currentText + this.SEPARATOR + newComment;
                 // empty comment user added.
                 $(".shopNewComment").val('');
             }, this));
