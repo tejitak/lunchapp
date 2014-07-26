@@ -80,6 +80,23 @@ var clone = function(obj) {
    return JSON.parse(JSON.stringify(obj));
 };
 
+var responseFilter = function(items){
+    if(!items){ return items; }
+    if(!(items instanceof Array)){ items = [items]; }
+    // remove evernote accessToken
+    var newItems = clone(items);
+    for(var i=0, len=newItems.length; i<len; i++){
+        var item = newItems[i], evernote = item.evernote;
+        if(evernote && evernote.length > 0){
+            for(var j=0; j<evernote.length; j++){
+                // hide accessToken
+                evernote[j].accessToken = -1;
+            }
+        }
+    }
+    return newItems;
+};
+
 /**
  * @api {GET} /groups Get groups which an authenticated user joins
  *
@@ -118,7 +135,7 @@ router.get('/groups', function(req, res) {
             }
             res.contentType('application/json');
             // Note: returns items not saved yet
-            res.send(items);
+            res.send(responseFilter(items));
         });
     };
     fbAuth.checkAccessToken(req.query.inputToken, callback);
@@ -150,7 +167,7 @@ router.get('/group/:id', function(req, res) {
         var id = req.param("id");
         Group.findByGroupId(userId, id, function(err, items) {
             res.contentType('application/json');
-            res.send(items[0] || {});
+            res.send(responseFilter(items[0]) || {});
         });
     }
     fbAuth.checkAccessToken(req.query.inputToken, callback);
