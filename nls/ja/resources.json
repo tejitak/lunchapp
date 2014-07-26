@@ -90,6 +90,13 @@
     "admin_group_shop_input_btn_add": "お店の追加",
     "admin_group_shop_input_btn_update": "更新",
 
+
+    "evernote_main_login_user": "さんでログイン中",
+    "evernote_main_description": "Evernoteにログインしてリマインダー通知やランチログの機能が使えます",
+    "evernote_main_logout": "Evernoteをログアウトする",
+    "evernote_main_setting_reminder_checkbox": "投票〆切の10分前にリマインダーを送信する",
+    "evernote_main_setting_reminder_button": "Reminderを設定する",
+
     "evernote_log_feeling": "あたなの感想",
 
     "dummy": ""

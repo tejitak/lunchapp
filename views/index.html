@@ -38,29 +38,27 @@
                         <a href="http://www.evernote.com/" target="_blank"><img src="<%=config.CONTEXT_PATH%>/img/evernote/evernote_logo_4c-lrg.png" width="114" height="28"></a>
                     </p>
                     <p>
-                        <strong><%=session.evernote.user.username%></strong> さんでログイン中
+                        <strong><%=session.evernote.user.username%></strong> <%=labels.evernote_main_login_user%>
                     </p>
                 </div>
-                <% if(true){ %>
                 <div class="fnEvernoteLogContainer" style="display: none; margin-bottom: 16px;">
                     <button class="btn btn-primary btn-default fnEvernoteLogBtn"><%=labels.main_evernote_log_btn%></button>
                 </div>
-                <% } %>
                 <div>
                     <p>
-                        <input id="evernote_votingTime_reminder_checkbox" type="checkbox" style="margin-right: 8px;"><label for="evernote_votingTime_reminder_checkbox">投票〆切の10分前にリマインダーを送信する</label>
+                        <input id="evernote_votingTime_reminder_checkbox" type="checkbox" style="margin-right: 8px;"><label for="evernote_votingTime_reminder_checkbox"><%=labels.evernote_main_setting_reminder_checkbox%></label>
                     </p>
                 </div>
                 <div>
-                    <button class="btn btn-primary btn-default fnEvernoteReminderUpdateBtn">Reminderを設定する</button>
+                    <button class="btn btn-primary btn-default fnEvernoteReminderUpdateBtn"><%=labels.evernote_main_setting_reminder_button%></button>
                 </div>
                 <div style="margin-top: 8px;">
-                    <a href="<%=config.CONTEXT_PATH%>/evernote/logout">Evernoteをログアウトする</a>
+                    <a href="<%=config.CONTEXT_PATH%>/evernote/logout"><%=labels.evernote_main_logout%></a>
                 </div>
                 <% }else{ %>
                 <div>
                     <p>
-                        Evernoteにログインして通知の設定やお店のコメントを記入できます
+                        <%=labels.evernote_main_description%>
                     </p>
                     <div>
                         <a href="javascript:;" onclick="location.href=location.href + 'api/evernote/authenticate?callback=' + location.href + 'evernote'"><img src="<%=config.CONTEXT_PATH%>/img/evernote/connect_evernote_button.png" width="179" height="25"></a>

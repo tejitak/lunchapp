@@ -90,6 +90,13 @@
     "admin_group_shop_input_btn_add": "Add Restaurant",
     "admin_group_shop_input_btn_update": "Update",
 
+
+    "evernote_main_login_user": "is logged in",
+    "evernote_main_description": "You can create a reminder and lunch logs with your Evernote account",
+    "evernote_main_logout": "Logout from Evernote",
+    "evernote_main_setting_reminder_checkbox": "Send a reminder for a vote 10 minutes before your group's configured lunch time",
+    "evernote_main_setting_reminder_button": "Setup Reminder",
+
     "evernote_log_feeling": "Your feeling",
 
     "dummy": ""
