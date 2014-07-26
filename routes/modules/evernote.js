@@ -113,13 +113,7 @@ var evernote = {
     createLogNote: function(accessToken, title, imageURL, callback){
         var note = new Evernote.Note();
         note.title = title;
-
-        var nBody = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-        nBody += "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">";
-        nBody += "<en-note>";
-        nBody += '<img src="' + imageURL + '"></img>';
-        nBody += "</en-note>";
-        note.content = nBody;
+        note.content = this._buildLogNoteContent(title, imageURL);
 
         var client = this.newClient(accessToken);
         var noteStore = client.getNoteStore();
@@ -131,6 +125,28 @@ var evernote = {
                 callback(err, createdNote);
             }
         });
+    },
+
+    _buildLogNoteContent: function(shopName, imageURL) {
+        var html = ['<?xml version="1.0" encoding="UTF-8"?>'];
+        html.push('<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>');
+        html.push('<div style="background: #e6e6e6; color: #585957; font-size: 14px; line-height: 1.3;">'); //div1
+        html.push('<div style="height: 40px;"> </div>');
+        html.push('<div style="max-width: 600px;padding: 25px 0px; background-color: #fff;margin: 0 auto;box-shadow: 0 0px 5px rgba(0, 0, 0, 0.2); text-align: center;"><div style="margin: 0px 25px;padding-bottom: 15px;">'); // div2
+        html.push('<img src="http://www.tejitak.com/lunch/img/logo/logo_64.png"></img>');
+        html.push('<h1 style="color: #db6900;margin: 0;margin-top: 15px;font-size: 20px;font-weight: normal;">Lunch Timer Log</h1>');
+        html.push('<p style="font-size: 16px;margin: 6px 0px;line-height: 1.4;">' + shopName + '</p>');
+        html.push('<img style="width: 100%;" src="' + imageURL + '"></img>');
+        html.push('</div><div style="margin: 0px 25px;font-size: 14px;color: #4d4b47;background-color: #e6f4f6;border: 1px solid #c1e8ec;padding: 0px 15px 8px;clear: both;">');
+        html.push('<p style="margin: 8px 0;"><span style="font-weight: bold;">');
+        html.push('Leave your feeling:');
+        html.push('</span></p>');
+        html.push('</div>');
+        html.push('</div>'); // div2
+        html.push('<div style="height: 40px;"> </div>');
+        html.push('</div>'); // div1
+        html.push('</en-note>');
+        return html.join("");
     },
 
     indexOfRegisteredNote: function(group, userId){
