@@ -28,6 +28,12 @@
                         <select class="form-control col-sm-5 fnGroupSelect"></select>
                     </div>
                 </div>
+                <div class="row resultViewFilterSection fnResultViewFilterSection" style="display: none;">
+                    <div class="col-sm-4 col-sm-offset-4">
+                        <h5><%=labels.main_section_input_category%></h5>
+                        <select class="form-control col-sm-5 fnCategoryFilter"></select>
+                    </div>
+                </div>
                 <div style="margin: 32px auto; width: 100%;">
                 <% if(session.evernote && session.evernote.user){ %>
                 <script>
@@ -65,12 +71,6 @@
                     </div>
                 </div>
                 <% } %>
-                </div>
-                <div class="row resultViewFilterSection fnResultViewFilterSection" style="display: none;">
-                    <div class="col-sm-4 col-sm-offset-4">
-                        <h5><%=labels.main_section_input_category%></h5>
-                        <select class="form-control col-sm-5 fnCategoryFilter"></select>
-                    </div>
                 </div>
             </div>
             <div class="fnDefaultContent" style="display: none;">

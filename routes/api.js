@@ -81,7 +81,7 @@ var clone = function(obj) {
 };
 
 var responseFilter = function(items){
-    if(!items){ return items; }
+    if(!items){ return []; }
     if(!(items instanceof Array)){ items = [items]; }
     // remove evernote accessToken
     var newItems = clone(items);
@@ -167,7 +167,7 @@ router.get('/group/:id', function(req, res) {
         var id = req.param("id");
         Group.findByGroupId(userId, id, function(err, items) {
             res.contentType('application/json');
-            res.send(responseFilter(items[0]) || {});
+            res.send(responseFilter(items)[0] || {});
         });
     }
     fbAuth.checkAccessToken(req.query.inputToken, callback);

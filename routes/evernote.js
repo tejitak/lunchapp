@@ -77,7 +77,7 @@ router.post('/reminder', function(req, res) {
             // check if a note GUID exists in user entry
             // e.g. group.evernote = [{userId: "{facebook_user_id}", guid: "{note_GUID}"}, ...]
             var createdCallback = function(err, createdNote){
-                if(err){ res.redirect("/"); }
+                if(err){ res.redirect("/"); return; }
                 group.evernote.push({
                     userId: userId,
                     guid: createdNote.guid,
@@ -93,7 +93,7 @@ router.post('/reminder', function(req, res) {
                     if(existingNote){
                         // just set reminder
                         evernote.updateReminderNote(accessToken, existingNote, group.name, group.lunchTime, group.timezone, labels, function(error, updatedNote){
-                            if(err){ res.redirect("/"); }
+                            if(err){ res.redirect("/"); return; }
                             res.redirect("/");
                         });
                     }else{
