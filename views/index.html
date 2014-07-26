@@ -48,15 +48,11 @@
                     </p>
                 </div>
                 <div class="fnEvernoteLogContainer" style="display: none; margin-bottom: 16px;">
-                    <button class="btn btn-primary btn-default fnEvernoteLogBtn"><%=labels.main_evernote_log_btn%></button>
+                    <button class="btn btn-success btn-default fnEvernoteLogBtn"><%=labels.main_evernote_log_btn%></button>
                 </div>
                 <div>
-                    <p>
-                        <input id="evernote_votingTime_reminder_checkbox" type="checkbox" style="margin-right: 8px;"><label for="evernote_votingTime_reminder_checkbox"><%=labels.evernote_main_setting_reminder_checkbox%></label>
-                    </p>
-                </div>
-                <div>
-                    <button class="btn btn-primary btn-default fnEvernoteReminderUpdateBtn"><%=labels.evernote_main_setting_reminder_button%></button>
+                    <button class="btn btn-success btn-default fnEvernoteReminderSetupBtn"><%=labels.evernote_main_setting_reminder_setup_button%></button>
+                    <button class="btn btn-danger btn-default fnEvernoteReminderStopBtn" style="display: none;"><%=labels.evernote_main_setting_reminder_stop_button%></button>
                 </div>
                 <div style="margin-top: 8px;">
                     <a href="<%=config.CONTEXT_PATH%>/evernote/logout"><%=labels.evernote_main_logout%></a>

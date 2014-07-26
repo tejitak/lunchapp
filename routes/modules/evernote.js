@@ -162,13 +162,11 @@ var evernote = {
     },
 
     find: function(accessToken, guid, callback){
-        // TODO: search by guid
         var client = this.newClient(accessToken);
         var noteStore = client.getNoteStore();
-        var filter = new Evernote.NoteFilter({notebookGuid: guid});
-        var resultSpec = new Evernote.NotesMetadataResultSpec({includeTitle: true, includeNotebookGuid: true});
+        // var filter = new Evernote.NoteFilter({notebookGuid: guid});
+        // var resultSpec = new Evernote.NotesMetadataResultSpec({includeTitle: true, includeNotebookGuid: true});
         // noteStore.findNotesMetadata(accessToken, filter, 0, 10, resultSpec, function(notes){});
-        var note = null;
         noteStore.getNote(accessToken, guid, true, true, false, false, function(err, note){
             if(callback){
                 callback(err, note);

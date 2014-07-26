@@ -45,9 +45,9 @@
     "gettingStarted_section_example_title": "使い方",
     "gettingStarted_section_example_description": "決められた投票の時間までにLunch Timerを開くと投票画面が表示されます。投票ボタンを押して行きたいお店に投票しましょう！<br><br>ランチの時間を過ぎると投票結果が集計され、結果ページが表示されます。<br><br>投票の結果が同じランチのお店があった場合は、そのグループ内で過去に行ったことがある回数が少ないものが優先的に選ばれます。<br><br>結果の表示から６時間経つと、自動的に次の日の投票画面に戻ります。",
     "gettingStarted_section_admin_title": "グループの管理について",
-    "gettingStarted_section_admin_description": "投票を行う前に事前にランチグループを作成する必要があります。管理者はグループを作成時にグループ名、ランチの時間、メンバー(LunchTimerを使用しているFacebook上の友人)、お店を登録しましょう。<br><br>メンバーに追加されたユーザーがLunch Timerにログインすると、お店が見えるようになります。なお、管理者以外の参加メンバーもメンバーの追加やランチのお店の追加などができます（グループの削除は管理者のみ可能）。",
+    "gettingStarted_section_admin_description": "投票を行う前に事前にランチグループを作成する必要があります。管理者はグループを作成時にグループ名、ランチの時間、メンバー(Lunch Timerを使用しているFacebook上の友人)、お店を登録しましょう。<br><br>メンバーに追加されたユーザーがLunch Timerにログインすると、お店が見えるようになります。なお、管理者以外の参加メンバーもメンバーの追加やランチのお店の追加などができます（グループの削除は管理者のみ可能）。",
     "gettingStarted_section_evernote_title": "Evernoteによる投票リマインダーとランチログ",
-    "gettingStarted_section_evernote_description": "Evernoteを利用することで、LunchTimerにリマインダーとランチログ機能が利用できる様になります。あなたのEvernoteのアカウントを使って以下に紹介する機能を利用してみましょう。<br><br><strong>投票時間のリマインダー</strong><br>Lunch Timerのメインページの下の方にあるEvernoteログインボタンを押して認証した後、リマインダーを設定すると、設定された毎日のランチ時間の<strong>10分前</strong>にEvernoteを通じてリマインダーが送られます。<br><br><strong>ランチのログ</strong><br>投票結果ページにある<strong>今日のランチを記録する</strong>というボタンを押すと、投票で選ばれたお店の情報を毎日のランチのログとしてEvernoteに記録できます。",
+    "gettingStarted_section_evernote_description": "Evernoteを利用することで、Lunch Timerでリマインダーとランチログが利用できます。あなたのEvernoteのアカウントを使って以下の２つの機能を利用してみましょう。<br><br><strong>投票締め切り10分前のリマインダー</strong><br>Lunch Timerのメインページの下の方にあるEvernoteボタンを押して認証した後、リマインダーを設定すると、対象のグループのランチ時間の<strong>10分前</strong>にEvernoteリマインダーが作成されます。ランチのお店が決定すると自動的に次の日のリマインダーをセットします。<br><br><strong>ランチのログ</strong><br>投票結果ページにある<strong>今日のランチを記録する</strong>というボタンを押すと、投票で選ばれたお店の情報を毎日のランチのログとしてEvernoteに記録できます。",
 
 
     "admin_group_title": "Lunch Timer! - グループ管理 - ",
@@ -66,7 +66,7 @@
     "admin_group_edit_title": "グループの編集",
     "admin_group_add_name": "グループ名",
     "admin_group_add_lunchTime": "ランチの時間 (GMT +0900)",
-    "admin_group_add_members": "メンバー (既にLunchTimerを始めているFacebookの友人を追加できます)",
+    "admin_group_add_members": "メンバー (既にLunch Timerを始めているFacebookの友人を追加できます)",
     "admin_group_add_placeholder_members": "Type your friends",
     "admin_group_add_shops": "お店の管理",
     "admin_group_add_btn_addShop": "お店の追加",
@@ -94,12 +94,13 @@
     "evernote_main_login_user": "さんでログイン中",
     "evernote_main_description": "Evernoteにログインしてリマインダー通知やランチログの機能が使えます",
     "evernote_main_logout": "Evernoteをログアウトする",
-    "evernote_main_setting_reminder_checkbox": "投票〆切の10分前にリマインダーを送信する",
-    "evernote_main_setting_reminder_button": "Reminderを設定する",
+    "evernote_main_setting_reminder_setup_button": "投票〆切の10分前のリマインダーを設定する",
+    "evernote_main_setting_reminder_stop_button": "リマインダーを解除する",
 
+    "evernote_log_success": "本日のランチの情報があなたのEvernoteに記録されました",
     "evernote_log_feeling": "あたなの感想",
-    "evernote_reminder_info": "このリマインダーははLunchTimerの以下のグループによって作成されました",
-    "evernote_reminder_vote_and_time": "締め切りまでに投票してください 締め切り時間: ",
+    "evernote_reminder_info": "このリマインダーはLunch Timerの以下のグループによって作成されました",
+    "evernote_reminder_vote_and_time": "本日のランチのお店を投票してください 締め切り時間: ",
     "evernote_remidner_open_lunch_timer": "Lunch Timerを開いて投票する",
 
     "dummy": ""

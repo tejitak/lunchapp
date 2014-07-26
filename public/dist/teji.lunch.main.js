@@ -21948,14 +21948,16 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                 this.$el.append($('<div class="alert alert-danger"></div>').html(lunch.constants.labels.main_error_vote_result));
                 $(".fnMainContent").removeClass("resultView");
             }
-            // TODO: check status for evernote setting
+            // check status for evernote setting
             var evernoteList = model.get("evernote");
             if(evernoteList && evernoteList.length > 0){
                 var noteEntry = $.grep(evernoteList, function(obj){
                     return obj.userId == fbInit.me.id;
                 })[0];
                 if(noteEntry){
-                    $("#evernote_votingTime_reminder_checkbox").attr("checked", true);
+                    // show stop reminder button
+                    $(".fnEvernoteReminderStopBtn").show();
+                    $(".fnEvernoteReminderSetupBtn").hide();
                 }
             }
         },
@@ -22040,8 +22042,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
         },
 
         _setupEvernote: function(){
-            $(".fnEvernoteReminderUpdateBtn").click($.proxy(function(){
-                var votingTimeReminder = $("#evernote_votingTime_reminder_checkbox").is(':checked');
+            var sendReminder = function(enableReminder, groupId){
                 $.ajax({type: "POST",
                     url: lunch.constants.config.CONTEXT_PATH + "/evernote/reminder",
                     contentType: "application/json; charset=utf-8",
@@ -22050,12 +22051,20 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                         lunchTimerURL: location.href,
                         inputToken: fbInit.accessToken,
                         userId: fbInit.me.id,
-                        groupId: this.getSelectedGroup().get("_id"),
-                        votingTimeReminder: votingTimeReminder
+                        groupId: groupId,
+                        votingTimeReminder: enableReminder
                     })
                 }).done($.proxy(function(response){
                     location.href = lunch.constants.config.CONTEXT_PATH + "/";
                 }, this));
+            };
+
+            $(".fnEvernoteReminderSetupBtn").click($.proxy(function(){
+                sendReminder(true, this.getSelectedGroup().get("_id"));
+            }, this));
+
+            $(".fnEvernoteReminderStopBtn").click($.proxy(function(){
+                sendReminder(false, this.getSelectedGroup().get("_id"));
             }, this));
 
             $(".fnEvernoteLogBtn").click($.proxy(function(){
@@ -22080,6 +22089,8 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                         title: shopName,
                         imageURL: shopImageURL
                     }
+                }).done(function(){
+                    alert(lunch.constants.labels.evernote_log_success);
                 });
             }, this));
         }

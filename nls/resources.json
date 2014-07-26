@@ -47,7 +47,7 @@
     "gettingStarted_section_admin_title": "Group Management",
     "gettingStarted_section_admin_description": "Before getting started you need to create a lunch group. When creating a group the administrators need to configure the name, time and members for the group. Only members registered on Facebook and using Lunch Timer are able to join groups.<br><br>As soon as an administrator adds a user, he/she will be able to participate in the group activities and start voting for restaurants. The added members are also able to edit group members and restaurants, but not able to delete the group.",
     "gettingStarted_section_evernote_title": "Voting Reminder and Lunch Log with Evernote",
-    "gettingStarted_section_evernote_description": "By using Evernote API, the application can have reminder and lunch log capability. Those fascinating capabilities will be enabled with your evernote account<br><br><strong>Reminder for a Vote</strong><br>When you check the reminder setting button at the bottom of Lunch Timer main page, Evernote will send a notification to your mobile devices at <strong>10 minutes</strong> before the configured lunch time. <br><br><strong>Your Lunch Log</strong><br>To click a button <strong>Log today's lunch</strong> in a vote result page, the lunch log will be stored in your notes with the restraurant information. You can log every day lunch!",
+    "gettingStarted_section_evernote_description": "By using Evernote API, the application can have reminder and lunch log capability. Those fascinating capabilities will be enabled with your evernote account<br><br><strong>Reminder for a Vote 10 minutes before the lunch time</strong><br>When you click a setup reminder button at the bottom of main page, Evernote will send a notification to your mobile devices at <strong>10 minutes</strong> before your group’s configured lunch time. The reminder for next day will be automatically set at the result time.<br><br><strong>Your Lunch Log</strong><br>To click a button <strong>Log today's lunch</strong> in a vote result page, the lunch log will be stored in your notes with the restraurant information. You can log every day lunch!",
 
 
     "admin_group_title": "Lunch Timer! - Group Management - ",
@@ -94,12 +94,13 @@
     "evernote_main_login_user": "is logged in",
     "evernote_main_description": "You can create a reminder and lunch logs with your Evernote account",
     "evernote_main_logout": "Logout from Evernote",
-    "evernote_main_setting_reminder_checkbox": "Send a reminder for a vote 10 minutes before your group's configured lunch time",
-    "evernote_main_setting_reminder_button": "Setup Reminder",
+    "evernote_main_setting_reminder_setup_button": "Setup Reminder 10 minutes before a lunch time",
+    "evernote_main_setting_reminder_stop_button": "Stop Reminder",
 
+    "evernote_log_success": "Today's lunch is successfully recorded in your Evernote",
     "evernote_log_feeling": "Your feeling",
-    "evernote_reminder_info": "This reminder is automatically created by LunchTimer for your group",
-    "evernote_reminder_vote_and_time": "Please vote for one by configured time",
+    "evernote_reminder_info": "This reminder is automatically created by Lunch Timer for your group",
+    "evernote_reminder_vote_and_time": "Please vote for one by your group's configured time",
     "evernote_remidner_open_lunch_timer": "Open Lunch Timer for a vote",
 
     "dummy": ""

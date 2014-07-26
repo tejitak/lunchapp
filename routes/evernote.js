@@ -18,7 +18,12 @@ router.get('/', function(req, res) {
         // store accessToken in session
         req.session.evernote.accessToken = oauthAccessToken;
         evernote.getUser(oauthAccessToken, function(err, user){
-            if(err){ res.redirect("/"); }
+            if(err){
+                console.log("getAccessToken callback");
+                console.log(error);
+                res.redirect("/");
+                return;
+            }
             // user: {id: xx, username: "xxx", ...}
             req.session.evernote.user = user;
             res.redirect("/");    
@@ -30,6 +35,7 @@ router.get('/', function(req, res) {
 router.get('/logout', function(req, res) {
     var accessToken = req.session.evernote && req.session.evernote.accessToken;
     if(!accessToken){
+        console.log("invalid access token");
         res.redirect("/");
         return;
     }
@@ -46,6 +52,7 @@ router.post('/reminder', function(req, res) {
     var labels = resourceBundle.getLabels(req);
     var accessToken = req.session.evernote && req.session.evernote.accessToken;
     if(!accessToken){
+        console.log("invalid access token");
         res.redirect("/");
         return;
     }
@@ -69,7 +76,13 @@ router.post('/reminder', function(req, res) {
                     group: group
                 }
             }, function(error, putRes, body){
-                res.redirect("/");                    
+                if(error){
+                    console.log("updateGroup callback");
+                    console.log(error);
+                    res.redirect("/");
+                    return;
+                }
+                res.redirect("/");
             });
         };
         if(enableVotingTimeReminder){
@@ -77,7 +90,12 @@ router.post('/reminder', function(req, res) {
             // check if a note GUID exists in user entry
             // e.g. group.evernote = [{userId: "{facebook_user_id}", guid: "{note_GUID}"}, ...]
             var createdCallback = function(err, createdNote){
-                if(err){ res.redirect("/"); return; }
+                console.log("created callback");
+                if(err){
+                    console.log(err);
+                    res.redirect("/");
+                    return;
+                }
                 group.evernote.push({
                     userId: userId,
                     guid: createdNote.guid,
@@ -89,11 +107,19 @@ router.post('/reminder', function(req, res) {
             if(registeredNoteIndex >= 0){
                 // search & find note from user store
                 var findCallback = function(err, existingNote){
-                    if(err){ res.redirect("/"); }
+                    // if(err){ 
+                    //     res.redirect("/");
+                    //     return;
+                    // }
                     if(existingNote){
                         // just set reminder
                         evernote.updateReminderNote(accessToken, existingNote, group.name, group.lunchTime, group.timezone, labels, function(error, updatedNote){
-                            if(err){ res.redirect("/"); return; }
+                            if(err){
+                                console.log("updateReminderNote callback");
+                                console.log(err);
+                                res.redirect("/");
+                                return;
+                            }
                             res.redirect("/");
                         });
                     }else{
@@ -110,7 +136,12 @@ router.post('/reminder', function(req, res) {
         }else if(registeredNoteIndex >= 0){
             // disable reminder and remove entry from DB
             var deletedCallback = function(err, note){
-                if(err){ res.redirect("/"); }
+                if(err){
+                    console.log("deletedCallback");
+                    console.log(err);
+                    res.redirect("/");
+                    return;
+                }
                 group.evernote.splice(registeredNoteIndex, 1);
                 // update group DB with evernoteID + createdNote.guid
                 updateGroup(group);
