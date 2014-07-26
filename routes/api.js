@@ -7,6 +7,7 @@ var xml2json = require('xml2json');
 var moment = require('moment');
 var momentTz = require('moment-timezone');
 var evernote = require('./modules/evernote');
+var resourceBundle = require('./modules/resourceBundle');
 var router = express.Router();
 var apiKeys = {};
 
@@ -111,6 +112,7 @@ var responseFilter = function(items){
  *     }
  */
 router.get('/groups', function(req, res) {
+    var labels = resourceBundle.getLabels(req);
     var callback = function(err, authResponse){
         if (err) {
             res.contentType('application/json');
@@ -128,7 +130,7 @@ router.get('/groups', function(req, res) {
                     // set vote state "vote" or "voted"
                     var expectedState = calcVoteState(group.lunchTime, group.timezone);
                     Group.changeStateIfRequired(group, expectedState, function(group){
-                        evernote.configureNextEvernoteReminder(group);
+                        evernote.configureNextEvernoteReminder(group, labels);
                         return calcDecidedShop(group);
                     });
                 }

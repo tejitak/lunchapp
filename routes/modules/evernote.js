@@ -193,7 +193,7 @@ var evernote = {
         this.find(accessToken, guid, _callback);
     },
 
-    configureNextEvernoteReminder: function(group){
+    configureNextEvernoteReminder: function(group, labels){
         // configure next day's reminder if evernote entires are eixst in the group
         var that = this;
         if(group.evernote){
@@ -203,7 +203,7 @@ var evernote = {
                     return function(err, existingNote){
                         if(existingNote){
                             // set next day's lunch time
-                            that.updateReminderNote(accessToken, existingNote, group.name, group.lunchTime, group.timezone);
+                            that.updateReminderNote(accessToken, existingNote, group.name, group.lunchTime, group.timezone, labels);
                         }
                     }
                 })(accessToken));
