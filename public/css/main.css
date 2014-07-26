@@ -176,6 +176,12 @@
     background-image: url("../img/screen3.png");
 }
 
+.gettingStartedContainer .gettingStartedImage.screen4 {
+    background-image: url("../img/screen4.png");
+}
+
+
+/* for smart phone */
 @media (max-width: 768px) {
     .gettingStartedContainer .row .col-xs-6 {
         width: 100%;
@@ -188,5 +194,14 @@
         background-size: 300px 200px;
     }
 }
+/* for middle size screen */
+@media (min-width: 768px) {
+    .gettingStartedContainer .gettingStartedImage {
+        width: 480px;
+        height: 320px;
+        background-size: 480px 320px;
+    }
+}
+
 
 /*** Getting started end ***/
