@@ -110,10 +110,10 @@ var evernote = {
         note.attributes = noteAttr;
     },
 
-    createLogNote: function(accessToken, title, imageURL, callback){
+    createLogNote: function(accessToken, title, imageURL, labels, callback){
         var note = new Evernote.Note();
         note.title = title;
-        note.content = this._buildLogNoteContent(title, imageURL);
+        note.content = this._buildLogNoteContent(title, imageURL, labels);
 
         var client = this.newClient(accessToken);
         var noteStore = client.getNoteStore();
@@ -127,7 +127,7 @@ var evernote = {
         });
     },
 
-    _buildLogNoteContent: function(shopName, imageURL) {
+    _buildLogNoteContent: function(shopName, imageURL, labels) {
         var html = ['<?xml version="1.0" encoding="UTF-8"?>'];
         html.push('<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>');
         html.push('<div style="background: #e6e6e6; color: #585957; font-size: 14px; line-height: 1.3;">'); //div1
@@ -139,12 +139,13 @@ var evernote = {
         html.push('<img style="width: 100%;" src="' + imageURL + '"></img>');
         html.push('</div><div style="margin: 0px 25px;font-size: 14px;color: #4d4b47;background-color: #e6f4f6;border: 1px solid #c1e8ec;padding: 0px 15px 8px;clear: both;">');
         html.push('<p style="margin: 8px 0;"><span style="font-weight: bold;">');
-        html.push('Leave your feeling:');
-        html.push('</span></p>');
+        html.push(labels.evernote_log_feeling);
+        html.push(':</span></p>');
+        html.push('<div style="height: 40px;width: 100%;text-align: left;background-color: white;border: 1px solid #c0c0c0;"></div>');
         html.push('</div>');
-        html.push('</div>'); // div2
+        html.push('</div>');
         html.push('<div style="height: 40px;"> </div>');
-        html.push('</div>'); // div1
+        html.push('</div>');
         html.push('</en-note>');
         return html.join("");
     },

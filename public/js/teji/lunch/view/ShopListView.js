@@ -236,8 +236,6 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 var shopName = decidedShop.get("name");
                 var shopImageURL = decidedShop.get("imageURL");
                 var lunchDate = "";
-                console.log("log: name=" + shopName);
-                console.log("log: shopImageURL=" + shopImageURL);
 
                 $.ajax({type: "POST",
                     url: lunch.constants.config.CONTEXT_PATH + "/evernote/log",

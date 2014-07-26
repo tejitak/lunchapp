@@ -1,5 +1,6 @@
 var express = require('express');
 var evernote = require('./modules/evernote');
+var resourceBundle = require('./modules/resourceBundle');
 var request = require('request');
 var router = express.Router();
 
@@ -119,17 +120,13 @@ router.post('/reminder', function(req, res) {
 });
 
 router.post('/log', function(req, res) {
-    console.log("/log:POST start");
+    var labels = resourceBundle.getLabels(req);
     var accessToken = req.session.evernote && req.session.evernote.accessToken;
     var log = req.body;
     var title = log.title;
     var imageURL = log.imageURL;
 
-    console.log('/log log=' + log);
-    console.log('/log title=' + title);
-    console.log('/log imageURL=' + imageURL);
-
-    evernote.createLogNote(accessToken, title, imageURL, function(err, createdNote) {
+    evernote.createLogNote(accessToken, title, imageURL, labels, function(err, createdNote) {
         if (err) {
             console.log("/log create evernote:err " + err);
             res.send('{"error": "' + err + '"}');
@@ -137,7 +134,6 @@ router.post('/log', function(req, res) {
         }
         res.send(createdNote);
     });
-    console.log("/log:POST end");
 })
 
 module.exports = router;
