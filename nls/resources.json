@@ -98,6 +98,9 @@
     "evernote_main_setting_reminder_button": "Setup Reminder",
 
     "evernote_log_feeling": "Your feeling",
+    "evernote_reminder_info": "This reminder is automatically created by LunchTimer for your group",
+    "evernote_reminder_vote_and_time": "Please vote for one by configured time",
+    "evernote_remidner_open_lunch_timer": "Open Lunch Timer for a vote",
 
     "dummy": ""
 }

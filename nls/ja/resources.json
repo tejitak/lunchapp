@@ -98,6 +98,9 @@
     "evernote_main_setting_reminder_button": "Reminderを設定する",
 
     "evernote_log_feeling": "あたなの感想",
+    "evernote_reminder_info": "このリマインダーははLunchTimerの以下のグループによって作成されました",
+    "evernote_reminder_vote_and_time": "締め切りまでに投票してください 締め切り時間: ",
+    "evernote_remidner_open_lunch_timer": "Lunch Timerを開いて投票する",
 
     "dummy": ""
 }
