@@ -14,7 +14,7 @@
     "main_title": "Lunch Timer!",
     "main_intro_title": "Lunch Timer",
     "main_intro_lead": "Lunch Timer is a web application that helps you coordinate your every day lunch group.",
-    "main_intro_description": "<p>Vote for a restaurant before your group's configured lunch time.</p><p>The decided shop for the group will be shown after the voting has passed.</p>",
+    "main_intro_description": "<p>Vote for a restaurant before your group's configured lunch time.</p><p>The decided restaurant for the group will be displayed after the voting has passed.</p>",
 
     "main_section_title": "Today's Lunch",
     "main_section_input_group": "Group",
@@ -26,7 +26,7 @@
 
     "main_no_group_loginBtn": "Manage Groups",
     "main_warning_no_groups": "No groups - Please create a new group or join an existing group.",
-    "main_warning_no_shops": "There are no restaurants in this group",
+    "main_warning_no_shops": "No restaurant in this group - Please add candidate restaurants.",
     "main_error_vote_result": "Something went wrong...",
 
     "main_resultList_voting_countdown": "Voting countdown: ",
@@ -45,9 +45,9 @@
     "gettingStarted_section_example_title": "How to use",
     "gettingStarted_section_example_description": "Lunch Timer displays a voting screen before the group’s configured lunch time. Please vote for a restaurant!<br><br>After the configured time, the application will change the screen and show the result - today’s lunch!<br><br>If two or more restaurants are tied, the restaurant which is least visited will be chosen.<br><br>6 hours after the lunch time the voting round will reset and show the voting page for the next day.",
     "gettingStarted_section_admin_title": "Group Management",
-    "gettingStarted_section_admin_description": "Before getting started you need to create a lunch group. When creating a group the administrators need to configure the name, time and members for the group. Only members registered on Facebook and using Lunch Timer are able to join groups.<br><br>As soon as an administrator adds a user, he/she will be able to participate in the group activities and start voting for restaurants. Members that are added are also able to edit group members and restaurants, but not able to delete the group.",
+    "gettingStarted_section_admin_description": "Before getting started you need to create a lunch group. When creating a group the administrators need to configure the name, time and members for the group. Only members registered on Facebook and using Lunch Timer are able to join groups.<br><br>As soon as an administrator adds a user, he/she will be able to participate in the group activities and start voting for restaurants. The added members are also able to edit group members and restaurants, but not able to delete the group.",
     "gettingStarted_section_evernote_title": "Voting Reminder and Lunch Log with Evernote",
-    "gettingStarted_section_evernote_description": "By using Evernote API, the application can have reminder and lunch log capability. The following fascinating capability will be enabled with your evernot account<br><br><strong>Reminder for a Vote</strong><br>When you check the reminder setting button at the bottom of Lunch Timer main page, Evernote will send a notification to your mobile devices at <strong>10 minutes</strong> before the configured lunch time. <br><br><strong>Your Lunch Log</strong><br>To click a button <strong>Log today's lunch</strong> in a vote result page, the lunch log will be stored in your notes with the restraurant information. You can log every day lunch!",
+    "gettingStarted_section_evernote_description": "By using Evernote API, the application can have reminder and lunch log capability. Those fascinating capabilities will be enabled with your evernote account<br><br><strong>Reminder for a Vote</strong><br>When you check the reminder setting button at the bottom of Lunch Timer main page, Evernote will send a notification to your mobile devices at <strong>10 minutes</strong> before the configured lunch time. <br><br><strong>Your Lunch Log</strong><br>To click a button <strong>Log today's lunch</strong> in a vote result page, the lunch log will be stored in your notes with the restraurant information. You can log every day lunch!",
 
 
     "admin_group_title": "Lunch Timer! - Group Management - ",
@@ -76,7 +76,7 @@
 
     "admin_group_shop_title_add": "Add a Restaurant",
     "admin_group_shop_title_edit": "Edit a Restaurant",
-    "admin_group_shop_placeholder_getShopInfo": "Gnavi URL",
+    "admin_group_shop_placeholder_getShopInfo": "Yelp or Gnavi URL",
     "admin_group_shop_btn_getShopInfo": "GET",
     "admin_group_shop_input_id": "ID",
     "admin_group_shop_input_name": "Restaurant name",
