@@ -29,7 +29,6 @@ var groupSchema = new mongoose.Schema({
             default: 0
         },
         votedBy: [String],
-        en_gid: String
     }],
     lunchTime: String,
     timezone: String,

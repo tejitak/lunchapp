@@ -20,6 +20,8 @@
     "main_section_input_group": "Group",
     "main_section_input_category": "Category",
 
+    "main_evernote_log_btn": "Log today's lunch",
+
     "main_filter_category_all": "All",
 
     "main_no_group_loginBtn": "Manage Groups",
@@ -28,16 +30,13 @@
     "main_error_vote_result": "Something went wrong...",
 
     "main_resultList_voting_countdown": "Voting countdown: ",
-    
+
     "main_resultItem_vote": "Vote",
     "main_resultItem_unvote": "Cancel",
     "main_resultItem_shopInfo": "More information",
-    "main_resultItem_shopComment": "Show comment",
     "main_resultItem_voter": "Voters",
     "main_resultItem_votedCount": "Votes",
     "main_resultItem_visitedCount": "Times visited",
-
-    "main_comment_addButton": "Add comment",
 
     "gettingStarted_title": "Lunch Timer! - Getting Started - ",
     "gettingStarted_section_title": "Getting Started",

@@ -110,35 +110,25 @@ var evernote = {
         note.attributes = noteAttr;
     },
 
-    createCommentNote: function(accessToken, title, content, callback){
+    createLogNote: function(accessToken, title, imageURL, callback){
         var note = new Evernote.Note();
         note.title = title;
+
         var nBody = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         nBody += "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">";
-        nBody += "<en-note>" + content + "</en-note>";
+        nBody += "<en-note>";
+        nBody += '<img src="' + imageURL + '"></img>';
+        nBody += "</en-note>";
         note.content = nBody;
+
         var client = this.newClient(accessToken);
         var noteStore = client.getNoteStore();
         noteStore.createNote(note, function(err, createdNote) {
+            if(err) {
+                console.log("createLogNote: err" + err);
+            }
             if (callback){
                 callback(err, createdNote);
-            }
-        });
-    },
-
-    updateCommentNote: function(accessToken, gid, title, content, callback) {
-        var note = new Evernote.Note();
-        note.guid = gid;
-        note.title = title;
-        var nBody = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-        nBody += "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">";
-        nBody += "<en-note>" + content + "</en-note>";
-        note.content = nBody;
-        var client = this.newClient(accessToken);
-        var noteStore = client.getNoteStore();
-        noteStore.updateNote(note, function(err, updatedNote) {
-            if (callback){
-                callback(err, updatedNote);
             }
         });
     },

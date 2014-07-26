@@ -20,6 +20,8 @@
     "main_section_input_group": "グループ",
     "main_section_input_category": "カテゴリー",
 
+    "main_evernote_log_btn": "今日のランチを記録する",
+
     "main_filter_category_all": "全て",
 
     "main_no_group_loginBtn": "グループ管理",
@@ -32,12 +34,9 @@
     "main_resultItem_vote": "投票",
     "main_resultItem_unvote": "キャンセル",
     "main_resultItem_shopInfo": "お店の情報",
-    "main_resultItem_shopComment": "お店へのコメント",
     "main_resultItem_voter": "投票者",
     "main_resultItem_votedCount": "投票数",
     "main_resultItem_visitedCount": "訪問回数",
-
-    "main_comment_addButton": "コメントを追加",
 
     "gettingStarted_title": "Lunch Timer - はじめての方へ - ",
     "gettingStarted_section_title": "Lunch Timerとは",

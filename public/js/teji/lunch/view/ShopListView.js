@@ -108,6 +108,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 }
                 // add class for result view
                 $(".fnMainContent").addClass("resultView");
+                $(".fnEvernoteLogContainer").show();
             }else{
                 this.$el.append($('<div class="alert alert-danger"></div>').html(lunch.constants.labels.main_error_vote_result));
                 $(".fnMainContent").removeClass("resultView");
@@ -220,6 +221,33 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 }).done($.proxy(function(response){
                     location.href = lunch.constants.config.CONTEXT_PATH + "/";
                 }, this));
+            }, this));
+
+            $(".fnEvernoteLogBtn").click($.proxy(function(){
+                var group = this.getSelectedGroup();
+                var decidedShopId = group.get("decidedShop");
+                var decidedShop = $.grep(group.get("shops"), function(shop){
+                    return shop.id === decidedShopId;
+                })[0];
+                if(!decidedShop){
+                    return;
+                }
+
+                var shopName = decidedShop.get("name");
+                var shopImageURL = decidedShop.get("imageURL");
+                var lunchDate = "";
+                console.log("log: name=" + shopName);
+                console.log("log: shopImageURL=" + shopImageURL);
+
+                $.ajax({type: "POST",
+                    url: lunch.constants.config.CONTEXT_PATH + "/evernote/log",
+                    contentTYpe: "application/json; charset=utf-8",
+                    processDate: false,
+                    data: {
+                        title: shopName,
+                        imageURL: shopImageURL
+                    }
+                });
             }, this));
         }
     });

@@ -42,8 +42,7 @@ require([
     "teji/lunch/fbInit",
     "teji/lunch/util",
     "teji/lunch/view/ShopListView",
-    "teji/lunch/collection/GroupCollection",
-    "teji/lunch/view/CommentView"], function($, bootstrap, velocity, fbInit, util, ShopListView, GroupCollection, CommentView) {
+    "teji/lunch/collection/GroupCollection"], function($, bootstrap, velocity, fbInit, util, ShopListView, GroupCollection) {
 
     var mainPages = [".fnMainContainer"];
     // set callback for initial FB sdk load and <fb:login-button>
@@ -51,7 +50,6 @@ require([
         // initialize views
         var groupCollection = new GroupCollection();
         var shopListView = new ShopListView({el: ".fnResultViewList", collection: groupCollection});
-        var commentView = new CommentView({el: ".commentContainer", collection: groupCollection, shopListView: shopListView});
         // initial load
         groupCollection.loadList();
         $(".fnDefaultContent").hide();

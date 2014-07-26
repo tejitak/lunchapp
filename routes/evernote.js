@@ -118,65 +118,26 @@ router.post('/reminder', function(req, res) {
     });
 });
 
-router.get('/shopComment', function(req, res) {
-    console.log("/shopComment:GET start");
+router.post('/log', function(req, res) {
+    console.log("/log:POST start");
     var accessToken = req.session.evernote && req.session.evernote.accessToken;
-    var en_gid = req.query.gid;
+    var log = req.body;
+    var title = log.title;
+    var imageURL = log.imageURL;
 
-    console.log("en_gid: " + en_gid);
-    if (!en_gid) {
-        res.send('{"error": "no gid was set."}');
-        return;
-    }
+    console.log('/log log=' + log);
+    console.log('/log title=' + title);
+    console.log('/log imageURL=' + imageURL);
 
-    evernote.find(accessToken, en_gid, function(err, note) {
+    evernote.createLogNote(accessToken, title, imageURL, function(err, createdNote) {
         if (err) {
-            console.log("err: " + err.message);
-            res.send('{"error": "' + err.message + '" }');
+            console.log("/log create evernote:err " + err);
+            res.send('{"error": "' + err + '"}');
             return;
         }
-
-        res.send(note);
+        res.send(createdNote);
     });
-
-    console.log("/shopComment:GET end");
-})
-
-router.post('/shopComment', function(req, res) {
-    console.log("/shopComment:POST start");
-    var accessToken = req.session.evernote && req.session.evernote.accessToken;
-    var gid = req.query.gid;
-    var entry = req.body;
-    var title = entry.title;
-    var content = entry.content;
-
-    console.log("accessToken " + accessToken);
-    console.log("gid " + gid);
-    console.log("title " + title);
-    console.log("content " + content);
-
-    if (!gid) {
-        evernote.createCommentNote(accessToken, title, content, function(err, createdNote) {
-            if (err) {
-                console.log("/shopComment create evernote:err " + err.message);
-                res.send('{"error": "' + err.message + '"}');
-                return;
-            }
-
-            res.send(createdNote);
-        });
-    } else {
-        evernote.updateCommentNote(accessToken, gid, title, content, function(err, updatedNote) {
-            if (err) {
-                console.log("/shopComment update evernote:err " + err.message);
-                res.send('{"error": "' + err.message + '"}');
-                return;
-            }
-
-            res.send(updatedNote);
-        });
-    }
-    console.log("/shopComme:POST end");
+    console.log("/log:POST end");
 })
 
 module.exports = router;
