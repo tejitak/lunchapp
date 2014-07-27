@@ -51,7 +51,7 @@
                     <button class="btn btn-success btn-default fnEvernoteLogBtn"><%=labels.main_evernote_log_btn%></button>
                 </div>
                 <div>
-                    <button class="btn btn-success btn-default fnEvernoteReminderSetupBtn"><%=labels.evernote_main_setting_reminder_setup_button%></button>
+                    <button class="btn btn-success btn-default fnEvernoteReminderSetupBtn" style="display: none;"><%=labels.evernote_main_setting_reminder_setup_button%></button>
                     <button class="btn btn-danger btn-default fnEvernoteReminderStopBtn" style="display: none;"><%=labels.evernote_main_setting_reminder_stop_button%></button>
                 </div>
                 <div style="margin-top: 8px;">
@@ -63,7 +63,7 @@
                         <%=labels.evernote_main_description%>
                     </p>
                     <div>
-                        <a href="javascript:;" onclick="location.href=location.href + 'api/evernote/authenticate?callback=' + location.href + 'evernote'"><img src="<%=config.CONTEXT_PATH%>/img/evernote/connect_evernote_button.png" width="179" height="25"></a>
+                        <a class="fnEvernoteAuthBtn" href="javascript:;"><img src="<%=config.CONTEXT_PATH%>/img/evernote/connect_evernote_button.png" width="179" height="25"></a>
                     </div>
                 </div>
                 <% } %>

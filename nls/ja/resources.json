@@ -27,6 +27,7 @@
     "main_no_group_loginBtn": "グループ管理",
     "main_warning_no_groups": "グループに所属していません - グループを作成するか、既にあるグループに入れてもらってください。",
     "main_warning_no_shops": "このグループにはお店が登録されていません。",
+    "main_warning_no_decidedShop": "投票画面は設定したランチの時間から6時間後以降に表示されます",
     "main_error_vote_result": "エラーが起きました。",
 
     "main_resultList_voting_countdown": "投票〆切までの時間: ",

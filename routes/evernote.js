@@ -3,6 +3,8 @@ var evernote = require('./modules/evernote');
 var resourceBundle = require('./modules/resourceBundle');
 var request = require('request');
 var router = express.Router();
+var models = require('../models');
+var Token = models.Token;
 
 router.get('/', function(req, res) {
     // this is called as a authentication callback
@@ -14,19 +16,23 @@ router.get('/', function(req, res) {
         res.redirect("/");
         return;
     }
+    var userId = req.param("userId");
     var callback = function(error, oauthAccessToken, oauthAccessTokenSecret, results){
-        // store accessToken in session
-        req.session.evernote.accessToken = oauthAccessToken;
-        evernote.getUser(oauthAccessToken, function(err, user){
-            if(err){
-                console.log("getAccessToken callback");
-                console.log(error);
-                res.redirect("/");
-                return;
-            }
-            // user: {id: xx, username: "xxx", ...}
-            req.session.evernote.user = user;
-            res.redirect("/");    
+        // save accessToken to DB
+        Token.updateEntry({userId: userId, evernoteAccessToken: oauthAccessToken}, function(){
+            // store accessToken in session
+            req.session.evernote.accessToken = oauthAccessToken;
+            evernote.getUser(oauthAccessToken, function(err, user){
+                if(err){
+                    console.log("getAccessToken callback");
+                    console.log(error);
+                    res.redirect("/");
+                    return;
+                }
+                // user: {id: xx, username: "xxx", ...}
+                req.session.evernote.user = user;
+                res.redirect("/");    
+            });            
         });
     };
     evernote.getAccessToken(oauthToken, oauthTokenSecret, oauthVerifier, callback);
@@ -90,8 +96,8 @@ router.post('/reminder', function(req, res) {
             // check if a note GUID exists in user entry
             // e.g. group.evernote = [{userId: "{facebook_user_id}", guid: "{note_GUID}"}, ...]
             var createdCallback = function(err, createdNote){
-                console.log("created callback");
                 if(err){
+                    console.log("created callback");
                     console.log(err);
                     res.redirect("/");
                     return;
@@ -139,8 +145,6 @@ router.post('/reminder', function(req, res) {
                 if(err){
                     console.log("deletedCallback");
                     console.log(err);
-                    res.redirect("/");
-                    return;
                 }
                 group.evernote.splice(registeredNoteIndex, 1);
                 // update group DB with evernoteID + createdNote.guid

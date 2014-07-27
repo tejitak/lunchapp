@@ -13,7 +13,6 @@ var apiRoutes = require('./routes/api');
 var evernoteRoutes = require('./routes/evernote');
 
 var models = require('./models');
-var Datastore = require('nedb');
 
 var local_settings = require('./local_settings').settings;
 
@@ -38,15 +37,6 @@ app.use(session({
     resave: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
-
-// create data collection
-var db = {};
-db.groups = new Datastore({filename: 'data/groups.db', autoload: true});
-// Make our db accessible to our router
-app.use(function(req,res,next){
-    req.db = db;
-    next();
-});
 
 console.log('MongoDB URL:' + local_settings.MONGO_URL);
 

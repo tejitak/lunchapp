@@ -97,33 +97,45 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 $(".fnMainContent").removeClass("resultView");
             }else if(model.get("state") === "voted"){
                 var decidedShopId = model.get("decidedShop");
-                var decidedShop = $.grep(model.get("shops"), function(shop){
+                var shops = model.get("shops");
+                var decidedShop = $.grep(shops, function(shop){
                     return shop.id === decidedShopId;
                 })[0];
                 if(decidedShop){
                     var shopView = new ShopView({model: decidedShop});
                     this.$el.append(shopView.render().$el);
+                }else if(shops.length > 0){
+                    this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_decidedShop));
                 }else{
                     this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_shops));
                 }
                 // add class for result view
                 $(".fnMainContent").addClass("resultView");
-                $(".fnEvernoteLogContainer").show();
             }else{
                 this.$el.append($('<div class="alert alert-danger"></div>').html(lunch.constants.labels.main_error_vote_result));
                 $(".fnMainContent").removeClass("resultView");
             }
-            // check status for evernote setting
+            // check status for evernote reminder
             var evernoteList = model.get("evernote");
+            var reminderEntry = null;
             if(evernoteList && evernoteList.length > 0){
-                var noteEntry = $.grep(evernoteList, function(obj){
+                reminderEntry = $.grep(evernoteList, function(obj){
                     return obj.userId == fbInit.me.id;
                 })[0];
-                if(noteEntry){
-                    // show stop reminder button
-                    $(".fnEvernoteReminderStopBtn").show();
-                    $(".fnEvernoteReminderSetupBtn").hide();
-                }
+            }
+            if(reminderEntry){
+                // show stop reminder button
+                $(".fnEvernoteReminderStopBtn").show();
+                $(".fnEvernoteReminderSetupBtn").hide();
+            }else{
+                $(".fnEvernoteReminderStopBtn").hide();
+                $(".fnEvernoteReminderSetupBtn").show();                
+            }
+            // check status for evernote lunch log
+            if(model.get("state") === "voted"){
+                $(".fnEvernoteLogContainer").show();
+            }else{
+                $(".fnEvernoteLogContainer").hide();                
             }
         },
 
@@ -207,6 +219,11 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
         },
 
         _setupEvernote: function(){
+            // authentication
+            $(".fnEvernoteAuthBtn").click(function(){
+                location.href= location.href + "api/evernote/authenticate?callback=" + location.href + "evernote?userId=" + fbInit.me.id;
+            });
+            // reminder
             var sendReminder = function(enableReminder, groupId){
                 $.ajax({type: "POST",
                     url: lunch.constants.config.CONTEXT_PATH + "/evernote/reminder",
@@ -232,6 +249,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 sendReminder(false, this.getSelectedGroup().get("_id"));
             }, this));
 
+            // lunch log
             $(".fnEvernoteLogBtn").click($.proxy(function(){
                 var group = this.getSelectedGroup();
                 var decidedShopId = group.get("decidedShop");

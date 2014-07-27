@@ -1,6 +1,8 @@
 var moment = require('moment');
 var momentTz = require('moment-timezone');
 var Evernote = require('evernote').Evernote;
+var models = require('../../models');
+var Token = models.Token;
 
 var evernote = {
 
@@ -88,6 +90,7 @@ var evernote = {
         var noteStore = client.getNoteStore();
         note.content = this._buildReminderNoteContent(groupName, lunchTime, labels);
         noteStore.updateNote(note, function(err, updatedNote) {
+            if(err){ console.log(err); }
             if(callback){
                 callback(err, updatedNote);
             }
@@ -196,15 +199,23 @@ var evernote = {
         var that = this;
         if(group.evernote){
             for(var i=0, len=group.evernote.length; i<len; i++){
-                var entry = group.evernote[i], guid = entry.guid, accessToken = entry.accessToken;
-                this.find(accessToken, guid, (function(accessToken){
-                    return function(err, existingNote){
-                        if(existingNote){
-                            // set next day's lunch time
-                            that.updateReminderNote(accessToken, existingNote, group.name, group.lunchTime, group.timezone, labels);
-                        }
+                var entry = group.evernote[i], guid = entry.guid;
+                // get accessToken from token DB
+                Token.getEvernoteAccessToken(entry.userId, function(accessToken){
+                    if(accessToken){
+                        that.find(accessToken, guid, (function(accessToken){
+                            return function(err, existingNote){
+                                if(err){
+                                    console.log("find error at configuring next day reminder for a group: " + group.name);
+                                }
+                                if(existingNote){
+                                    // set next day's lunch time
+                                    that.updateReminderNote(accessToken, existingNote, group.name, group.lunchTime, group.timezone, labels);
+                                }
+                            }
+                        })(accessToken));                        
                     }
-                })(accessToken));
+                });
             }
         }
     }

@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Group = require('./group');
+var Token = require('./token');
 
 module.exports.init = function(url, db) {
     // if you uses multiple connection, use createConnection()
@@ -11,3 +12,4 @@ module.exports.destroy = function(completed) {
 }
 
 module.exports.Group = Group;
+module.exports.Token = Token;
