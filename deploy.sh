@@ -1,6 +1,6 @@
 #!/bin/sh
 git reset --hard HEAD
-git pull origin master
+git pull
 forever stopall
 npm install
 grunt product
