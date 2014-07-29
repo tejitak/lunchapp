@@ -21,8 +21,16 @@ e.g. "/private/etc/hosts" for mac
 
 3. Create a file "apikey.json" under lunchapp dir with the following content  
     {  
-        "fb_client_secret": "{your_facebook_app_secret}",  
-        "gurunabi": "{your_grunavi_api_key}"  
+      "fb_client_id": "xxxxx",  
+      "fb_client_secret": "xxxxx",  
+      "gurunabi": "xxxxx",  
+      "evernote_consumerKey": "xxxxx",  
+      "evernote_consumerSecret": "xxxxx",  
+      "evernote_sandbox": true,  
+      "yelp_consumer_key" : "xxxxx",  
+      "yelp_consumer_secret" : "xxxxx",  
+      "yelp_token" : "xxxxx",  
+      "yelp_token_secret" : "xxxxx"  
     }  
 
 4. Run "dscacheutil -flushcache" for reloading host file settings.
