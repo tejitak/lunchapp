@@ -13,14 +13,14 @@ router.get('/', function(req, res) {
     // get from session
     var oauthTokenSecret = req.session.evernote && req.session.evernote.authTokenSecret;
     if(!oauthToken || !oauthVerifier || !oauthTokenSecret){
-        res.redirect("/");
+        res.redirect("../");
         return;
     }
     var userId = req.param("userId");
     var callback = function(error, oauthAccessToken, oauthAccessTokenSecret, results){
         // save accessToken to DB
         Token.updateEntry({userId: userId, evernoteAccessToken: oauthAccessToken}, function(){
-            res.redirect("/");
+            res.redirect("../");
         });
     };
     evernote.getAccessToken(oauthToken, oauthTokenSecret, oauthVerifier, callback);
@@ -58,7 +58,7 @@ router.get('/logout', function(req, res) {
     var accessToken = req.session.evernote && req.session.evernote.accessToken;
     if(!accessToken){
         console.log("invalid access token");
-        res.redirect("/");
+        res.redirect("../");
         return;
     }
     var userStore = evernote.newClient(accessToken).getUserStore();
@@ -68,7 +68,7 @@ router.get('/logout', function(req, res) {
     Token.removeEntryByEvernoteAccessToken(accessToken, function(err){
         // call logout
         userStore.revokeLongSession(accessToken, function(){
-            res.redirect("/");
+            res.redirect("../");
         });        
     });
 });
@@ -78,7 +78,7 @@ router.post('/reminder', function(req, res) {
     var accessToken = req.session.evernote && req.session.evernote.accessToken;
     if(!accessToken){
         console.log("invalid access token");
-        res.redirect("/");
+        res.redirect("../");
         return;
     }
     var entry = req.body;
@@ -104,10 +104,10 @@ router.post('/reminder', function(req, res) {
                 if(error){
                     console.log("updateGroup callback");
                     console.log(error);
-                    res.redirect("/");
+                    res.redirect("../");
                     return;
                 }
-                res.redirect("/");
+                res.redirect("../");
             });
         };
         if(enableVotingTimeReminder){
@@ -118,7 +118,7 @@ router.post('/reminder', function(req, res) {
                 if(err){
                     console.log("created callback");
                     console.log(err);
-                    res.redirect("/");
+                    res.redirect("../");
                     return;
                 }
                 group.evernote.push({
@@ -133,7 +133,7 @@ router.post('/reminder', function(req, res) {
                 // search & find note from user store
                 var findCallback = function(err, existingNote){
                     // if(err){ 
-                    //     res.redirect("/");
+                    //     res.redirect("../");
                     //     return;
                     // }
                     if(existingNote){
@@ -142,10 +142,10 @@ router.post('/reminder', function(req, res) {
                             if(err){
                                 console.log("updateReminderNote callback");
                                 console.log(err);
-                                res.redirect("/");
+                                res.redirect("../");
                                 return;
                             }
-                            res.redirect("/");
+                            res.redirect("../");
                         });
                     }else{
                         // remove the entry from list when the association is stored in DB but the note maybe
