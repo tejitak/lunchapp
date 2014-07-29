@@ -9189,8 +9189,6 @@ return jQuery;
 
 }));
 
-define("jquery", function(){});
-
 /*!
  * Bootstrap v3.1.1 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -17676,7 +17674,7 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./t
             if(!json.imageURL){
                 json.imageURL = this.defaultImgURL;
             }
-            this.$el.html(this.template({item: json, labels: lunch.constants.labels, contextPath: lunch.constants.config.CONTEXT_PATH, isEvernoteLogin: lunch.evernoteUser ? true : false}));
+            this.$el.html(this.template({item: json, labels: lunch.constants.labels, contextPath: lunch.constants.config.CONTEXT_PATH}));
 
             if(!enableVote){
                 this.$(".fnBtnVote").addClass('disabled'); 
@@ -22054,6 +22052,21 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
         },
 
         _setupEvernote: function(){
+            if(!fbInit.me.id){ return; }
+            // check login state
+            $.ajax({type: "GET",
+                url: lunch.constants.config.CONTEXT_PATH + "/evernote/user?userId=" + fbInit.me.id,
+                cache: false
+            }).done($.proxy(function(response){
+                if(response && response.username){
+                    // show user info and logout button
+                    $(".fnEvernoteLoginUser").html(response.username);
+                    $(".fnEvernoteMain").show();
+                }else{
+                    // show login button
+                    $(".fnEvernoteLogin").show();
+                }
+            }, this));
             // authentication
             $(".fnEvernoteAuthBtn").click(function(){
                 location.href= location.href + "api/evernote/authenticate?callback=" + location.href + "evernote?userId=" + fbInit.me.id;

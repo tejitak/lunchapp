@@ -20,7 +20,7 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
             if(!json.imageURL){
                 json.imageURL = this.defaultImgURL;
             }
-            this.$el.html(this.template({item: json, labels: lunch.constants.labels, contextPath: lunch.constants.config.CONTEXT_PATH, isEvernoteLogin: lunch.evernoteUser ? true : false}));
+            this.$el.html(this.template({item: json, labels: lunch.constants.labels, contextPath: lunch.constants.config.CONTEXT_PATH}));
 
             if(!enableVote){
                 this.$(".fnBtnVote").addClass('disabled'); 

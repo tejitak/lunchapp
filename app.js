@@ -34,7 +34,10 @@ app.use(cookieParser());
 app.use(session({
     secret: 'lunchTimer',
     saveUninitialized: true,
-    resave: true
+    resave: false,
+    cookie: {
+        maxAge: null
+    }
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 

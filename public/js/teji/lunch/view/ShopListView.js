@@ -219,6 +219,21 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
         },
 
         _setupEvernote: function(){
+            if(!fbInit.me.id){ return; }
+            // check login state
+            $.ajax({type: "GET",
+                url: lunch.constants.config.CONTEXT_PATH + "/evernote/user?userId=" + fbInit.me.id,
+                cache: false
+            }).done($.proxy(function(response){
+                if(response && response.username){
+                    // show user info and logout button
+                    $(".fnEvernoteLoginUser").html(response.username);
+                    $(".fnEvernoteMain").show();
+                }else{
+                    // show login button
+                    $(".fnEvernoteLogin").show();
+                }
+            }, this));
             // authentication
             $(".fnEvernoteAuthBtn").click(function(){
                 location.href= location.href + "api/evernote/authenticate?callback=" + location.href + "evernote?userId=" + fbInit.me.id;

@@ -20,22 +20,38 @@ router.get('/', function(req, res) {
     var callback = function(error, oauthAccessToken, oauthAccessTokenSecret, results){
         // save accessToken to DB
         Token.updateEntry({userId: userId, evernoteAccessToken: oauthAccessToken}, function(){
-            // store accessToken in session
-            req.session.evernote.accessToken = oauthAccessToken;
-            evernote.getUser(oauthAccessToken, function(err, user){
-                if(err){
-                    console.log("getAccessToken callback");
-                    console.log(error);
-                    res.redirect("/");
-                    return;
-                }
-                // user: {id: xx, username: "xxx", ...}
-                req.session.evernote.user = user;
-                res.redirect("/");    
-            });            
+            res.redirect("/");
         });
     };
     evernote.getAccessToken(oauthToken, oauthTokenSecret, oauthVerifier, callback);
+});
+
+router.get('/user', function(req, res) {
+    // get accessToken from token DB
+    Token.getEvernoteAccessToken(req.param("userId"), function(accessToken){
+        req.session.evernote = {};
+        res.contentType('application/json');
+        if(accessToken){
+            // store accessToken in session
+            req.session.evernote.accessToken = accessToken;
+            evernote.getUser(accessToken, function(err, user){
+                if(err){
+                    // remove entry from DB
+                    delete req.session.evernote.accessToken;
+                    Token.removeEntryByEvernoteAccessToken(accessToken, function(err){
+                        req.session.save(function(){
+                            res.send('{"error":  true}');
+                            return;
+                        });
+                    });
+                }
+                // user: {id: xx, username: "xxx", ...}
+                req.session.save(function(){ res.send(user); });
+            });
+        }else{
+            req.session.save(function(){ res.send('{}') });
+        }
+    });        
 });
 
 router.get('/logout', function(req, res) {
@@ -48,9 +64,12 @@ router.get('/logout', function(req, res) {
     var userStore = evernote.newClient(accessToken).getUserStore();
     // clear session
     delete req.session.evernote;
-    // call logout
-    userStore.revokeLongSession(accessToken, function(){
-        res.redirect("/");
+    // remove entry from DB
+    Token.removeEntryByEvernoteAccessToken(accessToken, function(err){
+        // call logout
+        userStore.revokeLongSession(accessToken, function(){
+            res.redirect("/");
+        });        
     });
 });
 

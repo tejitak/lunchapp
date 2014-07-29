@@ -9189,8 +9189,6 @@ return jQuery;
 
 }));
 
-define("jquery", function(){});
-
 /*
  * jQuery Autocomplete plugin 1.2.3
  *

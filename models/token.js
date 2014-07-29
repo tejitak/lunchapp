@@ -52,6 +52,15 @@ tokenSchema.statics.removeEntry = function(userId, completed) {
     });
 };
 
+tokenSchema.statics.removeEntryByEvernoteAccessToken = function(evernoteAccessToken, completed) {
+    Token.remove({'evernoteAccessToken': evernoteAccessToken}, function(err, num) {
+        if (err) console.log(err);
+        if (completed) {
+            completed(err);
+        }
+    });
+};
+
 var Token = mongoose.model('Token', tokenSchema);
 
 module.exports = Token;

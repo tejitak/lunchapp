@@ -11,8 +11,7 @@ router.get('/', function(req, res) {
         title: labels.main_title,
         templates: templates(req),
         config: local_settings,
-        labels: labels,
-        session: req.session
+        labels: labels
     });
 });
 

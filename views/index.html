@@ -35,38 +35,34 @@
                     </div>
                 </div>
                 <div style="margin: 32px auto; width: 100%;">
-                <% if(session.evernote && session.evernote.user){ %>
-                <script>
-                    lunch.evernoteUser = <%=JSON.stringify(session.evernote.user)%>;
-                </script>
-                <div>
-                    <p>
-                        <a href="http://www.evernote.com/" target="_blank"><img src="<%=config.CONTEXT_PATH%>/img/evernote/evernote_logo_4c-lrg.png" width="114" height="28"></a>
-                    </p>
-                    <p>
-                        <strong><%=session.evernote.user.username%></strong> <%=labels.evernote_main_login_user%>
-                    </p>
-                </div>
-                <div class="fnEvernoteLogContainer" style="display: none; margin-bottom: 16px;">
-                    <button class="btn btn-success btn-default fnEvernoteLogBtn"><%=labels.main_evernote_log_btn%></button>
-                </div>
-                <div>
-                    <button class="btn btn-success btn-default fnEvernoteReminderSetupBtn" style="display: none;"><%=labels.evernote_main_setting_reminder_setup_button%></button>
-                    <button class="btn btn-danger btn-default fnEvernoteReminderStopBtn" style="display: none;"><%=labels.evernote_main_setting_reminder_stop_button%></button>
-                </div>
-                <div style="margin-top: 8px;">
-                    <a href="<%=config.CONTEXT_PATH%>/evernote/logout"><%=labels.evernote_main_logout%></a>
-                </div>
-                <% }else{ %>
-                <div>
-                    <p>
-                        <%=labels.evernote_main_description%>
-                    </p>
-                    <div>
-                        <a class="fnEvernoteAuthBtn" href="javascript:;"><img src="<%=config.CONTEXT_PATH%>/img/evernote/connect_evernote_button.png" width="179" height="25"></a>
+                    <div class="fnEvernoteMain" style="display: none;">
+                        <div>
+                            <p>
+                                <a href="http://www.evernote.com/" target="_blank"><img src="<%=config.CONTEXT_PATH%>/img/evernote/evernote_logo_4c-lrg.png" width="114" height="28"></a>
+                            </p>
+                            <p>
+                                <strong class="fnEvernoteLoginUser"></strong> <%=labels.evernote_main_login_user%>
+                            </p>
+                        </div>
+                        <div class="fnEvernoteLogContainer" style="display: none; margin-bottom: 16px;">
+                            <button class="btn btn-success btn-default fnEvernoteLogBtn"><%=labels.main_evernote_log_btn%></button>
+                        </div>
+                        <div>
+                            <button class="btn btn-success btn-default fnEvernoteReminderSetupBtn" style="display: none;"><%=labels.evernote_main_setting_reminder_setup_button%></button>
+                            <button class="btn btn-danger btn-default fnEvernoteReminderStopBtn" style="display: none;"><%=labels.evernote_main_setting_reminder_stop_button%></button>
+                        </div>
+                        <div style="margin-top: 8px;">
+                            <a href="<%=config.CONTEXT_PATH%>/evernote/logout"><%=labels.evernote_main_logout%></a>
+                        </div>
                     </div>
-                </div>
-                <% } %>
+                    <div class="fnEvernoteLogin" style="display: none;">
+                        <p>
+                            <%=labels.evernote_main_description%>
+                        </p>
+                        <div>
+                            <a class="fnEvernoteAuthBtn" href="javascript:;"><img src="<%=config.CONTEXT_PATH%>/img/evernote/connect_evernote_button.png" width="179" height="25"></a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="fnDefaultContent" style="display: none;">
