@@ -22069,7 +22069,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
             }, this));
             // authentication
             $(".fnEvernoteAuthBtn").click(function(){
-                location.href= location.href + "api/evernote/authenticate?callback=" + location.href + "evernote?userId=" + fbInit.me.id;
+                location.href= location.href + "api/evernote/authenticate?callback=" + location.href + "evernote/?userId=" + fbInit.me.id;
             });
             // reminder
             var sendReminder = function(enableReminder, groupId){

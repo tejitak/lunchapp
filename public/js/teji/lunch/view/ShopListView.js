@@ -236,7 +236,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
             }, this));
             // authentication
             $(".fnEvernoteAuthBtn").click(function(){
-                location.href= location.href + "api/evernote/authenticate?callback=" + location.href + "evernote?userId=" + fbInit.me.id;
+                location.href= location.href + "api/evernote/authenticate?callback=" + location.href + "evernote/?userId=" + fbInit.me.id;
             });
             // reminder
             var sendReminder = function(enableReminder, groupId){
