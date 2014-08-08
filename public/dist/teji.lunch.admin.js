@@ -9189,6 +9189,8 @@ return jQuery;
 
 }));
 
+define("jquery", function(){});
+
 /*
  * jQuery Autocomplete plugin 1.2.3
  *
@@ -15035,6 +15037,10 @@ define("teji/lunch/util", ["jquery"], function($){
 
         escapeHTML: function(text){
             return text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        },
+
+        isMobileScreen: function(){
+            return $(window).width() < 768;
         }
     };
 });
@@ -17991,7 +17997,7 @@ define("teji/lunch/util", ["jquery"], function($){
 
 }));
 
-define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
+define('teji/lunch/model/Shop',["backbone", "jquery", "teji/lunch/util",], function(Backbone, $, util){
     var Shop = Backbone.Model.extend({
 
         defaults: {
@@ -18036,8 +18042,7 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
         },
 
         showInfo: function(){
-            var isMobile = $(window).width() < 768;
-            window.open(isMobile ? this.get('url_mobile') : this.get('url'));
+            window.open(util.isMobileScreen() ? this.get('url_mobile') : this.get('url'));
         }
     });
     return Shop;

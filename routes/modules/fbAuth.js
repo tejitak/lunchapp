@@ -23,7 +23,7 @@ var updateAccessToken = function(callback){
             response.setEncoding('utf8');
             access_token = body.split('=')[1];
         } else {
-            console.log('error: ' + response.statusCode);
+            console.log('error: ' + response);
             console.log(body);
         }
         if (callback) {

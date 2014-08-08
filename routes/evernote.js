@@ -44,9 +44,10 @@ router.get('/user', function(req, res) {
                             return;
                         });
                     });
+                }else{
+                    // user: {id: xx, username: "xxx", ...}
+                    req.session.save(function(){ res.send(user); });
                 }
-                // user: {id: xx, username: "xxx", ...}
-                req.session.save(function(){ res.send(user); });
             });
         }else{
             req.session.save(function(){ res.send('{}') });

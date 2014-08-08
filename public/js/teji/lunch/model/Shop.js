@@ -1,4 +1,4 @@
-define(["backbone", "jquery"], function(Backbone, $){
+define(["backbone", "jquery", "teji/lunch/util",], function(Backbone, $, util){
     var Shop = Backbone.Model.extend({
 
         defaults: {
@@ -43,8 +43,7 @@ define(["backbone", "jquery"], function(Backbone, $){
         },
 
         showInfo: function(){
-            var isMobile = $(window).width() < 768;
-            window.open(isMobile ? this.get('url_mobile') : this.get('url'));
+            window.open(util.isMobileScreen() ? this.get('url_mobile') : this.get('url'));
         }
     });
     return Shop;

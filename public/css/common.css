@@ -100,12 +100,13 @@ a {
 .navbar-custom {
     background-color: #ff7a00;
     border-color: #de6a00;
-    background-image: -webkit-gradient(linear, left 0%, left 100%, from(#ff9533), to(#ff7a00));
+/*    background-image: -webkit-gradient(linear, left 0%, left 100%, from(#ff9533), to(#ff7a00));
     background-image: -webkit-linear-gradient(top, #ff9533, 0%, #ff7a00, 100%);
     background-image: -moz-linear-gradient(top, #ff9533 0%, #ff7a00 100%);
     background-image: linear-gradient(to bottom, #ff9533 0%, #ff7a00 100%);
     background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffff9533', endColorstr='#ffff7a00', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffff9533', endColorstr='#ffff7a00', GradientType=0);*/
+    box-shadow: 0 1px 5px rgba(0,0,0,.3);
 }
 .navbar-custom .navbar-brand {
     color: #ffffff;

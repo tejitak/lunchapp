@@ -9189,6 +9189,8 @@ return jQuery;
 
 }));
 
+define("jquery", function(){});
+
 /*!
  * Bootstrap v3.1.1 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -14184,6 +14186,10 @@ define("teji/lunch/util", ["jquery"], function($){
 
         escapeHTML: function(text){
             return text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        },
+
+        isMobileScreen: function(){
+            return $(window).width() < 768;
         }
     };
 });
@@ -21831,7 +21837,7 @@ else {
 	return moment;
 }));
 
-define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "flipsnap", "moment", "moment.timzone"], function(Backbone, _, cookie, ShopView, flipsnap, moment, momentTz){
+define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "flipsnap", "moment", "moment.timzone", "teji/lunch/util"], function(Backbone, _, cookie, ShopView, flipsnap, moment, momentTz, util){
     var ShopListView = Backbone.View.extend({
 
         COOKIE_SELECTED_GROUP: "teji.lunch.selectedGroup",
@@ -21977,30 +21983,18 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
             if(len == 0){
                 this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_shops));
             }else{
-                var w = (len * 220/*item width*/) + 95/* padding */;
-                var $node = this._createShopsNode(shops).addClass("flipsnap").width(w + "px");
-                this.$el.append($node);
-                this.enableFilpSnap();
+                var $node = this._createShopsNode(shops);
+                if(util.isMobileScreen()){
+                    var w = (len * 220/*item width*/) + 95/* padding */;
+                    $node.addClass("flipsnap").width(w + "px");
+                    this.$el.append($node);
+                    // activate filesnap 220px seems to be the perfect distance for some reason. Maybe because .flipsnapItem has 200px and 10px padding (220px)
+                    flipsnap('.flipsnap', {distance: 220});
+                }else{
+                    $node.addClass("flexContainer");
+                    this.$el.append($node);
+                }
             }
-        },
-
-        enableFilpSnap: function(){
-            var flip = flipsnap('.flipsnap', {distance: 220});//220px seems to be the perfect distance for some reason. Maybe because .flipsnapItem has 200px and 10px padding (220px)
-            // attach event for flipsnap
-            var $prevArrow = $("<div></div>").addClass("flipsnapPrevArrow disabled").click(function() {
-                if(flip.hasPrev()){ flip.toPrev(); }
-            });
-            this.$el.append($prevArrow);
-            var $nextArrow = $("<div></div>").addClass("flipsnapNextArrow disabled").click(function() {
-                if(flip.hasNext()){ flip.toNext(); }
-            });
-            this.$el.append($nextArrow);
-            var updateFlipBtnStates = function(){
-                flip.hasPrev() ? $prevArrow.removeClass("disabled") : $prevArrow.addClass("disabled");
-                flip.hasNext() ? $nextArrow.removeClass("disabled") : $nextArrow.addClass("disabled");
-            };
-            flip.element.addEventListener('fspointmove', updateFlipBtnStates, false);
-            updateFlipBtnStates();
         },
 
         _createShopsNode: function(shops){
@@ -22129,7 +22123,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
     return ShopListView;
 });
 
-define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
+define('teji/lunch/model/Shop',["backbone", "jquery", "teji/lunch/util",], function(Backbone, $, util){
     var Shop = Backbone.Model.extend({
 
         defaults: {
@@ -22174,8 +22168,7 @@ define('teji/lunch/model/Shop',["backbone", "jquery"], function(Backbone, $){
         },
 
         showInfo: function(){
-            var isMobile = $(window).width() < 768;
-            window.open(isMobile ? this.get('url_mobile') : this.get('url'));
+            window.open(util.isMobileScreen() ? this.get('url_mobile') : this.get('url'));
         }
     });
     return Shop;
