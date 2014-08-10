@@ -407,6 +407,49 @@ router.get('/shop/retrieve', function(req, res) {
     }
 });
 
+/**
+ * @api {GET} /shop/ranking 
+ * Return global top visited shops with descending order & URL is not empty
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *  [{
+ *      "groupId" : ObjectId("53b8c28e17c56e5b05fc8341"),
+ *      "groupName" : "test1",
+ *      "shop" : {
+ *          "id" : "a634268",
+ *          "name" : "自由ヶ丘グリル 〜新丸ビル〜",
+ *          "category" : "グリル料理",
+ *          "address" : "〒100-6507 東京都千代田区丸の内1-5-1 新丸の内ビルディング7F",
+ *          "tel" : "03-5220-2351",
+ *          "imageURL" : "",
+ *          "url" : "http://r.gnavi.co.jp/a634268/?ak=YgOfXMeAmhP8f9D5ifeXqSRZiZzqAIz9x%2BEsHldPCnU%3D",
+ *          "url_mobile" : "http://mobile.gnavi.co.jp/shop/a634268/?ak=YgOfXMeAmhP8f9D5ifeXqSRZiZzqAIz9x%2BEsHldPCnU%3D",
+ *          "_id" : ObjectId("53bab64433fd48d405842ba5"),
+ *          "votedBy" : [ ],
+ *          "visitedCount" : 6
+ *      }
+ *   },...]
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Unauthorized
+ *     {
+ *       "error": "404 Unauthorized"
+ *     }
+ */
+router.get('/shop/ranking', function(req, res) {
+    var count = req.param("count") || 10;
+    Group.shopRanking(count, function(err, items) {
+        if (err) {
+            res.contentType('application/json');
+            res.send('{"error":' + err.message + '}')
+            return;
+        }
+        res.contentType('application/json');
+        res.send(items || {});
+    });
+});
+
 router.get('/evernote/authenticate', function(req, res) {
     evernote.authenticate(req, res);
 });

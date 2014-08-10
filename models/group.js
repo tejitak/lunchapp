@@ -166,6 +166,10 @@ groupSchema.statics.removeGroup = function(adminId, groupId, completed) {
     });
 }
 
+groupSchema.statics.shopRanking = function(count, completed) {
+    Group.aggregate([{$project: {"_id":-0, "groupId": "$_id", "groupName": "$name", "shop": "$shops"}}, {$unwind: "$shop"}, {$match: {"shop.url": {$ne: ""}}}, {$sort: {"shop.visitedCount": -1}}, {$limit: count}]).exec(completed);
+};
+
 var Group = mongoose.model('Group', groupSchema);
 
 module.exports = Group;
