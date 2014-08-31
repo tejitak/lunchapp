@@ -32,6 +32,9 @@
 
     "main_resultList_voting_countdown": "Voting countdown: ",
 
+    "main_popularshops_title": "Popular restaurants",
+    "main_popularshops_description": "Followings are restaurants got many votes recently.",
+
     "main_resultItem_vote": "Vote",
     "main_resultItem_unvote": "Cancel",
     "main_resultItem_shopInfo": "More information",

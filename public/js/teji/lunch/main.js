@@ -42,7 +42,8 @@ require([
     "teji/lunch/fbInit",
     "teji/lunch/util",
     "teji/lunch/view/ShopListView",
-    "teji/lunch/collection/GroupCollection"], function($, bootstrap, velocity, fbInit, util, ShopListView, GroupCollection) {
+    "teji/lunch/view/PopularShopsView",
+    "teji/lunch/collection/GroupCollection"], function($, bootstrap, velocity, fbInit, util, ShopListView, PopularShopsView, GroupCollection) {
 
     var mainPages = [".fnMainContainer"];
     // set callback for initial FB sdk load and <fb:login-button>
@@ -54,10 +55,16 @@ require([
         groupCollection.loadList();
         $(".fnDefaultContent").hide();
         $(".fnMainContent").show();
+        $(".fnPopularList").hide();
     };
     fbInit.loginFailCallback = function(response){
         $(".fnDefaultContent").show();
         $(".fnMainContent").hide();
+        var popularShopsView = new PopularShopsView({el: ".fnPopularList"});
+        // Initial load
+       popularShopsView.render();
+//        this.$el.append(popularShopsView.render().$el);
+        $(".fnPopularList").show();
     };
     fbInit.logoutCallback = function(){
         location.href = lunch.constants.config.CONTEXT_PATH + "/";

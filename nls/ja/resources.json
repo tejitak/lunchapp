@@ -32,6 +32,9 @@
 
     "main_resultList_voting_countdown": "投票〆切までの時間: ",
 
+    "main_popularshops_title": "人気のあるお店",
+    "main_popularshops_description": "最近たくさん投票されたお店はこちらです。",
+
     "main_resultItem_vote": "投票",
     "main_resultItem_unvote": "キャンセル",
     "main_resultItem_shopInfo": "お店の情報",
