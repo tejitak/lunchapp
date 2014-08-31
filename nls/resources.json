@@ -15,7 +15,7 @@
     "main_intro_title": "Lunch Timer",
     "main_intro_lead": "Lunch Timer is a web application that helps you coordinate your every day lunch group.",
     "main_intro_description": "<p>Vote for a restaurant before your group's configured lunch time.</p><p>The decided restaurant for the group will be displayed after the voting has passed.</p>",
-    "main_intro_loginToContinue": "Start with Facebook ID",
+    "main_intro_loginToStart": "Start with Facebook ID",
 
     "main_section_title": "Today's Lunch",
     "main_section_input_group": "Group",
