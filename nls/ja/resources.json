@@ -15,6 +15,7 @@
     "main_intro_title": "Lunch Timer",
     "main_intro_lead": "Lunch Timerは毎日のランチグループメンバーと楽しくお店を選べるアプリです",
     "main_intro_description": "<p>決められたランチの時間までに行きたいお店に投票してください</p><p>ランチの時間になったら本日のランチのお店が決定します！</p><p>まずはFacebookログインをしてはじめましょう</p>",
+    "main_intro_loginToStart": "Facebook IDではじめる",
 
     "main_section_title": "本日のランチ",
     "main_section_input_group": "グループ",
