@@ -103,6 +103,15 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                 })[0];
                 if(decidedShop){
                     var shopView = new ShopView({model: decidedShop});
+                    shopView.onShuffleResultClick = $.proxy(function(){
+                        if(window.confirm(lunch.constants.labels.main_resultItem_shuffle_result_confirm)){
+                            var groupModel = this.getSelectedGroup();
+                            if(groupModel){
+                                var callback = function(){ location.reload(); };
+                                groupModel.shuffleResult(callback);
+                            }
+                        }
+                    }, this);
                     this.$el.append(shopView.render().$el);
                 }else if(shops.length > 0){
                     this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_decidedShop));

@@ -303,6 +303,39 @@ router.delete('/vote', function(req, res) {
 });
 
 /**
+ * @api {POST} /shuffleResult Change result to next ranked one
+ *
+ * @apiParam {String} shopId Shop ID.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {"success": true}
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Unauthorized
+ *     {
+ *       "error": "404 Unauthorized"
+ *     }
+ */
+router.post('/shuffleResult', function(req, res) {
+    var entry = req.body;
+    var callback = function(err, authResponse){
+        if (err) {
+            res.contentType('application/json');
+            res.send('{"error":' + error.message + '}')
+            return;
+        }
+        var groupId = entry.groupId;
+        var userId = authResponse.data.user_id;
+        Group.shuffleDecidedShop(userId, groupId, function() {
+            res.contentType('application/json');
+            res.send('{"success":true}');
+        });
+    };
+    fbAuth.checkAccessToken(entry.inputToken, callback);
+});
+
+/**
  * @api {GET} /shop/retrieve Get a specified shop information via external web API such as Gurunabi
  *
  * @apiParam {Number} shopId Shop unique ID.

@@ -111,6 +111,25 @@ groupSchema.statics.changeStateIfRequired = function(group, expectedState, calcD
     }
 }
 
+groupSchema.statics.shuffleDecidedShop = function(memberId, groupId, completed){
+    var findCb = function(err, items) {
+        if(items && items[0]){
+            var group = items[0];
+            // retreive shops
+            var shops = group.shops;
+            // select one by random
+            var newShop = shops[Math.floor(Math.random() * shops.length)];
+            if(newShop){
+                // set as decidedShop
+                group.decidedShop = newShop.id;                
+            }
+            // save group
+            save(group, completed);
+        }
+    }
+    Group.findByGroupId(memberId, groupId, findCb);
+}
+
 var save = function(group, completed) {
     group.save(function(err, group) {
         if (err) cosole.log(err);

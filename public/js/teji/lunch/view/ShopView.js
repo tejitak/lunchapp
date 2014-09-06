@@ -7,6 +7,10 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
         defaultImgURL: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjE5cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MzAweDIwMDwvdGV4dD48L3N2Zz4=",
         // defaultImgURL: lunch.constants.config.CONTEXT_PATH + "/img/logo/logo_200.png",
 
+        // events: {
+        //     "click .fnShuffleResultBtn": "onShuffleResultClick"
+        // },
+
         initialize: function() {
         },
 
@@ -38,6 +42,7 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
                 var titleNode = this.$(".shopViewItem h4");
                 titleNode.hasClass('overflow') ? titleNode.removeClass('overflow') : titleNode.addClass('overflow');
             }, this));
+            this.$(".fnShuffleResultBtn").click($.proxy(this.onShuffleResultClick, this));
             return this;
         },
 
@@ -45,6 +50,8 @@ define(["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], f
         onVoteClick: function(shopModel){
         },
         onUndoVoteClick: function(shopModel){
+        },
+        onShuffleResultClick: function(){
         }
     });
     return ShopView;

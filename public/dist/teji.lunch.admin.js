@@ -18169,6 +18169,19 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
                     callback();
                 }
             }, this));
+        },
+
+        shuffleResult: function(callback){
+            $.ajax({type: "POST",
+                url: lunch.constants.config.CONTEXT_PATH + "/api/shuffleResult",
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify({groupId: this.get("_id"), inputToken: fbInit.accessToken})
+            }).done($.proxy(function(response){
+                if(callback){
+                    callback();
+                }
+            }, this));
         }
     });
     return Group;

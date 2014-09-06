@@ -42,6 +42,8 @@
     "main_resultItem_voter": "投票者",
     "main_resultItem_votedCount": "投票数",
     "main_resultItem_visitedCount": "訪問回数",
+    "main_resultItem_shuffle_result": "結果をシャッフルする",
+    "main_resultItem_shuffle_result_confirm": "本日の投票結果を変更してよろしいですか？",
 
     "gettingStarted_title": "Lunch Timer - はじめての方へ - ",
     "gettingStarted_section_title": "Lunch Timerとは",
