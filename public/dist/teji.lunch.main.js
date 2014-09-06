@@ -21989,7 +21989,7 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                     $node.addClass("flipsnap").width(w + "px");
                     this.$el.append($node);
                     // activate filesnap 220px seems to be the perfect distance for some reason. Maybe because .flipsnapItem has 200px and 10px padding (220px)
-                    flipsnap('.flipsnap', {distance: 220});
+                    flipsnap('.fnResultViewList .flipsnap', {distance: 220});
                 }else{
                     $node.addClass("flexContainer");
                     this.$el.append($node);
@@ -22123,6 +22123,52 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
     return ShopListView;
 });
 
+
+define('text!teji/lunch/view/templates/PopularShopsView.html',[],function () { return '<div class=<%= isMobile ? "flipsnap" : "flexContainer" %> style="<%= isMobile ? \'width:\' + width + \'px\' : \'\'%>">\n<% if(items.length > 0) { %>\n    <% _.each(items, function(item){ %>\n        <div class="flipsnapItem">\n            <div class="thumbnail shopViewItem">\t\n                <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=item.shop.name%></span></h4>\n                <img src="<%=item.shop.imageURL%>" class="img-rounded" alt="photo" style="width: 200px; height: 200px;">\n                <hr>\n                <div class="caption shopViewButtons">\n                    <p><a href="<%=item.shop.url%>" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button">\n                        <span class="glyphicon glyphicon-info-sign"></span><%=labels.main_resultItem_shopInfo%></a></p> \n                </div>\n            </div>\n        </div>\n  \t<% }); %>\n<% } else { %>\n    -\n<% }%>\n</div>';});
+
+define('teji/lunch/view/PopularShopsView',["backbone", "underscore", "jquery",  "flipsnap", "teji/lunch/util", "text!./templates/PopularShopsView.html"],
+function(Backbone, _, $, flipsnap, util, tmpl){
+    var PopularShopsView = Backbone.View.extend({
+        tagName: "div",
+        template: _.template(tmpl),
+
+        initialize: function() {
+        },
+        render: function(){
+            $.ajax({
+                type: "GET",
+                url: lunch.constants.config.CONTEXT_PATH + "/api/shop/ranking"
+            }).done($.proxy(function(data){
+                var randomized = this._randomize(data, 3);
+                var w = (randomized.length * 220/*item width*/) + 95/* padding */;
+                var isMobile = util.isMobileScreen();
+                this.$el.html(this.template({
+                    items: randomized,
+                    labels: lunch.constants.labels,
+                    isMobile: isMobile,
+                    width: w
+                }));
+                if(isMobile){
+                    flipsnap('.fnPopularList .flipsnap', {distance: 220});
+                }
+            }, this));
+            return this;
+        },
+        _randomize: function(data, count){
+            var l = data.length;
+            var randomized = [];
+            for(var i = l - 1; i > l - count - 1; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var tmp = data[i];
+                randomized.push(data[j]);
+                data[j] = tmp;
+            }
+            return randomized;
+        }
+
+    });
+    return PopularShopsView;
+});
 define('teji/lunch/model/Shop',["backbone", "jquery", "teji/lunch/util",], function(Backbone, $, util){
     var Shop = Backbone.Model.extend({
 
@@ -22395,7 +22441,8 @@ require([
     "teji/lunch/fbInit",
     "teji/lunch/util",
     "teji/lunch/view/ShopListView",
-    "teji/lunch/collection/GroupCollection"], function($, bootstrap, velocity, fbInit, util, ShopListView, GroupCollection) {
+    "teji/lunch/view/PopularShopsView",
+    "teji/lunch/collection/GroupCollection"], function($, bootstrap, velocity, fbInit, util, ShopListView, PopularShopsView, GroupCollection) {
 
     var mainPages = [".fnMainContainer"];
     // set callback for initial FB sdk load and <fb:login-button>
@@ -22407,10 +22454,16 @@ require([
         groupCollection.loadList();
         $(".fnDefaultContent").hide();
         $(".fnMainContent").show();
+        $(".fnPopularList").hide();
     };
     fbInit.loginFailCallback = function(response){
         $(".fnDefaultContent").show();
         $(".fnMainContent").hide();
+        var popularShopsView = new PopularShopsView({el: ".fnPopularList"});
+        // Initial load
+       popularShopsView.render();
+//        this.$el.append(popularShopsView.render().$el);
+        $(".fnPopularList").show();
     };
     fbInit.logoutCallback = function(){
         location.href = lunch.constants.config.CONTEXT_PATH + "/";
