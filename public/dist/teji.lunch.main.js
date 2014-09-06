@@ -17656,7 +17656,7 @@ define('text',['module'], function (module) {
 });
 
 
-define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail shopViewItem">\n    <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=item.name%></span></h4>\n    <img src="<%=item.imageURL%>" class="img-rounded" alt="photo" style="width: 200px; height: 200px;">\n    <hr>\n    <div class="caption shopViewButtons">\n        <p><a href="javascript:;" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button"><%=labels.main_resultItem_vote%></a>\n           <a href="javascript:;" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hidden" role="button"><%=labels.main_resultItem_unvote%></a></p>\n        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span><%=labels.main_resultItem_shopInfo%></a></p>\n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n    <div class="caption resultViewItemInfo">\n        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> \n        <div><%=labels.main_resultItem_visitedCount%>: <%=item.visitedCount%></div>\n        <div><%=labels.main_resultItem_votedCount%>: <%=item.votedBy.length%></div>\n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n</div>';});
+define('text!teji/lunch/view/templates/ShopView.html',[],function () { return '<div class="thumbnail shopViewItem">\n    <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=item.name%></span></h4>\n    <img src="<%=item.imageURL%>" class="img-rounded" alt="photo" style="width: 200px; height: 200px;">\n    <hr>\n    <div class="caption shopViewButtons">\n        <p><a href="javascript:;" class="btn btn-primary btn-block btn-lg fnBtnVote" role="button"><%=labels.main_resultItem_vote%></a>\n           <a href="javascript:;" class="btn btn-danger btn-block btn-lg fnBtnUndoVote hidden" role="button"><%=labels.main_resultItem_unvote%></a></p>\n        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span><%=labels.main_resultItem_shopInfo%></a></p>\n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n    </div>\n    <div class="caption resultViewItemInfo">\n        <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> \n        <div><%=labels.main_resultItem_visitedCount%>: <%=item.visitedCount%></div>\n        <div><%=labels.main_resultItem_votedCount%>: <%=item.votedBy.length%></div>\n        <div><%=labels.main_resultItem_voter%>: \n        <% if(item.votedBy.length > 0) { %>\n            <% _.each(item.votedBy, function(userId, key, arr){ %>\n            <img class="img-rounded" width="20px" height="20px" src="http://graph.facebook.com/<%=userId%>/picture?type=square">\n            <% }); %>\n        <% } else { %>\n            -\n        <% }%>\n        </div>\n        <hr>\n        <div style="padding-top: 9px;">\n            <p><a href="javascript:;" class="btn btn-default btn-block btn-sm fnShuffleResultBtn" role="button"><span class="glyphicon glyphicon-refresh"></span> <%=labels.main_resultItem_shuffle_result%></a></p>\n        </div>\n    </div>\n</div>';});
 
 define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./templates/ShopView.html"], function(Backbone, _, $, tmpl){
     var ShopView = Backbone.View.extend({
@@ -17666,6 +17666,10 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./t
         template: _.template(tmpl),
         defaultImgURL: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjE5cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MzAweDIwMDwvdGV4dD48L3N2Zz4=",
         // defaultImgURL: lunch.constants.config.CONTEXT_PATH + "/img/logo/logo_200.png",
+
+        // events: {
+        //     "click .fnShuffleResultBtn": "onShuffleResultClick"
+        // },
 
         initialize: function() {
         },
@@ -17698,6 +17702,7 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./t
                 var titleNode = this.$(".shopViewItem h4");
                 titleNode.hasClass('overflow') ? titleNode.removeClass('overflow') : titleNode.addClass('overflow');
             }, this));
+            this.$(".fnShuffleResultBtn").click($.proxy(this.onShuffleResultClick, this));
             return this;
         },
 
@@ -17705,6 +17710,8 @@ define('teji/lunch/view/ShopView',["backbone", "underscore", "jquery", "text!./t
         onVoteClick: function(shopModel){
         },
         onUndoVoteClick: function(shopModel){
+        },
+        onShuffleResultClick: function(){
         }
     });
     return ShopView;
@@ -21942,6 +21949,15 @@ define('teji/lunch/view/ShopListView',["backbone", "underscore", "jquery.cookie"
                 })[0];
                 if(decidedShop){
                     var shopView = new ShopView({model: decidedShop});
+                    shopView.onShuffleResultClick = $.proxy(function(){
+                        if(window.confirm(lunch.constants.labels.main_resultItem_shuffle_result_confirm)){
+                            var groupModel = this.getSelectedGroup();
+                            if(groupModel){
+                                var callback = function(){ location.reload(); };
+                                groupModel.shuffleResult(callback);
+                            }
+                        }
+                    }, this);
                     this.$el.append(shopView.render().$el);
                 }else if(shops.length > 0){
                     this.$el.append($('<div class="alert alert-info"></div>').html(lunch.constants.labels.main_warning_no_decidedShop));
@@ -22336,6 +22352,19 @@ define('teji/lunch/model/Group',["backbone", "jquery", "teji/lunch/model/Shop"],
                 contentType: "application/json; charset=utf-8",
                 processData: false,
                 data: JSON.stringify({inputToken: fbInit.accessToken, groupId: this.get("_id"), shopId: shopId})
+            }).done($.proxy(function(response){
+                if(callback){
+                    callback();
+                }
+            }, this));
+        },
+
+        shuffleResult: function(callback){
+            $.ajax({type: "POST",
+                url: lunch.constants.config.CONTEXT_PATH + "/api/shuffleResult",
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify({groupId: this.get("_id"), inputToken: fbInit.accessToken})
             }).done($.proxy(function(response){
                 if(callback){
                     callback();

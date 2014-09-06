@@ -42,6 +42,8 @@
     "main_resultItem_voter": "Voters",
     "main_resultItem_votedCount": "Votes",
     "main_resultItem_visitedCount": "Times visited",
+    "main_resultItem_shuffle_result": "Suffle Result",
+    "main_resultItem_shuffle_result_confirm": "Are you sure that you want to change the today's result?",
 
     "gettingStarted_title": "Lunch Timer! - Getting Started - ",
     "gettingStarted_section_title": "Getting Started",
