@@ -1,14 +1,19 @@
+<div class=<%= isMobile ? "flipsnap" : "flexContainer" %> style="<%= isMobile ? 'width:' + width + 'px' : ''%>">
 <% if(items.length > 0) { %>
     <% _.each(items, function(item){ %>
-        <div class="thumbnail flipsnapItem shopViewItem">	
-        <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=item.shop.name%></span></h4>
-        <img src="<%=item.shop.imageURL%>" class="img-rounded" alt="photo" style="width: 200px; height: 200px;">
-        <hr>
-        <div class="caption shopViewButtons">
-        <p><a href="<%=item.shop.url%>" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button"><span class="glyphicon glyphicon-info-sign"></span> <%=labels.main_resultItem_shopInfo%></a></p> 
-        </div>
+        <div class="flipsnapItem">
+            <div class="thumbnail shopViewItem">	
+                <h4 class="overflow"><span class="fnBtnShopnameExpand"><%=item.shop.name%></span></h4>
+                <img src="<%=item.shop.imageURL%>" class="img-rounded" alt="photo" style="width: 200px; height: 200px;">
+                <hr>
+                <div class="caption shopViewButtons">
+                    <p><a href="<%=item.shop.url%>" class="btn btn-default btn-block btn-sm fnBtnInfo" role="button">
+                        <span class="glyphicon glyphicon-info-sign"></span><%=labels.main_resultItem_shopInfo%></a></p> 
+                </div>
+            </div>
         </div>
   	<% }); %>
 <% } else { %>
     -
 <% }%>
+</div>

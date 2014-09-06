@@ -150,7 +150,7 @@ define(["backbone", "underscore", "jquery.cookie", "teji/lunch/view/ShopView", "
                     $node.addClass("flipsnap").width(w + "px");
                     this.$el.append($node);
                     // activate filesnap 220px seems to be the perfect distance for some reason. Maybe because .flipsnapItem has 200px and 10px padding (220px)
-                    flipsnap('.flipsnap', {distance: 220});
+                    flipsnap('.fnResultViewList .flipsnap', {distance: 220});
                 }else{
                     $node.addClass("flexContainer");
                     this.$el.append($node);

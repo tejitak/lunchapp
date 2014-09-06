@@ -1,4 +1,5 @@
-define(["backbone", "underscore", "jquery", "text!./templates/PopularShopsView.html"], function(Backbone, _, $, tmpl){
+define(["backbone", "underscore", "jquery",  "flipsnap", "teji/lunch/util", "text!./templates/PopularShopsView.html"],
+function(Backbone, _, $, flipsnap, util, tmpl){
     var PopularShopsView = Backbone.View.extend({
         tagName: "div",
         template: _.template(tmpl),
@@ -11,9 +12,17 @@ define(["backbone", "underscore", "jquery", "text!./templates/PopularShopsView.h
                 url: lunch.constants.config.CONTEXT_PATH + "/api/shop/ranking"
             }).done($.proxy(function(data){
                 var randomized = this._randomize(data, 3);
-                this.$el.html(this.template({items: randomized, labels: lunch.constants.labels}));
-                // add class for result view
-                $(".fnPopularList").addClass("flexContainer");
+                var w = (randomized.length * 220/*item width*/) + 95/* padding */;
+                var isMobile = util.isMobileScreen();
+                this.$el.html(this.template({
+                    items: randomized,
+                    labels: lunch.constants.labels,
+                    isMobile: isMobile,
+                    width: w
+                }));
+                if(isMobile){
+                    flipsnap('.fnPopularList .flipsnap', {distance: 220});
+                }
             }, this));
             return this;
         },
