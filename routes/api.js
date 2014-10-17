@@ -99,7 +99,7 @@ router.get('/groups', function(req, res) {
     var callback = function(err, authResponse){
         if (err) {
             res.contentType('application/json');
-            res.send('{"error":' + error.message + '}')
+            res.send('{"error":' + err.message + '}')
             return;
         }
         // filter by FB authenticated user
@@ -201,7 +201,7 @@ router.put('/group', function(req, res) {
     var callback = function(err, authResponse){
         if (err) {
             res.contentType('application/json');
-            res.send('{"error":' + error.message + '}')
+            res.send('{"error":' + err.message + '}')
             return;
         }
         var targetGroup = entry.group;
@@ -236,7 +236,7 @@ router.delete('/group/:id', function(req, res) {
     var callback = function(err, authResponse){
         if (err) {
             res.contentType('application/json');
-            res.send('{"error":' + error.message + '}')
+            res.send('{"error":' + err.message + '}')
             return;
         }
         var userId = authResponse.data.user_id;
@@ -269,7 +269,7 @@ router.post('/vote', function(req, res) {
     var callback = function(err, authResponse){
         if (err) {
             res.contentType('application/json');
-            res.send('{"error":' + error.message + '}')
+            res.send('{"error":' + err.message + '}')
             return;
         }
         var groupId = entry.groupId;
@@ -288,7 +288,7 @@ router.delete('/vote', function(req, res) {
     var callback = function(err, authResponse){
         if (err) {
             res.contentType('application/json');
-            res.send('{"error":' + error.message + '}')
+            res.send('{"error":' + err.message + '}')
             return;
         }
         var groupId = entry.groupId;
@@ -322,7 +322,7 @@ router.post('/shuffleResult', function(req, res) {
     var callback = function(err, authResponse){
         if (err) {
             res.contentType('application/json');
-            res.send('{"error":' + error.message + '}')
+            res.send('{"error":' + err.message + '}')
             return;
         }
         var groupId = entry.groupId;
