@@ -11,16 +11,11 @@ module.exports = function (grunt) {
     grunt.initConfig({
         constants: {
             baseDir: 'public/js',
-            distDir: 'public/dist',
-            namespace: 'teji/lunch'
+            distDir: 'public/dist'
         },
         shell: {
             start: {
                 command: 'npm start'
-            },
-            // used for product task becuase the bower task does not correctly locate fonts dir
-            copyFonts: {
-                command: 'cp -r bower_components/bootstrap/dist/fonts public/js/lib'
             },
             test: {
                 command: 'npm test'
@@ -44,7 +39,7 @@ module.exports = function (grunt) {
                 options: {
                    livereload: true
                 },
-                tasks: ['jshint', 'requirejs:main', 'requirejs:admin'],
+                tasks: ['jshint', 'concat'],
                 files: ['public/**/*.html', 'public/**/*.js']
             }
         },
@@ -57,48 +52,37 @@ module.exports = function (grunt) {
             },
             all: ['Gruntfile.js', 'public/js/{,*/}*.js']
         },
-        requirejs: {
+        concat: {
             main: {
-                options: {
-                    baseUrl: '<%=constants.baseDir%>',
-                    name: '<%=constants.namespace%>/main',
-                    mainConfigFile: '<%=constants.baseDir%>/<%=constants.namespace%>/main.js',
-                    out: '<%=constants.distDir%>/teji.lunch.main.js',
-                    optimize: 'none'
-                }
+                dest: '<%=constants.distDir%>/teji.lunch.main.js',
+                src: [
+                    "<%=constants.baseDir%>/lib/vue/vue.js",
+                    "<%=constants.baseDir%>/lib/director/director.js",
+                    "<%=constants.baseDir%>/lib/jquery/jquery.js",
+                    "<%=constants.baseDir%>/lib/flipsnap/flipsnap.js",
+                    "<%=constants.baseDir%>/lib/moment/moment.js",
+                    "<%=constants.baseDir%>/teji/lunch/getPackage.js",
+                    "<%=constants.baseDir%>/teji/lunch/util.js",
+                    "<%=constants.baseDir%>/teji/lunch/main.js"
+                ]
+            }
+        },
+        uglify: {
+            options: {
+                preserveComments: "some"
             },
-            main_compressed: {
-                options: {
-                    baseUrl: '<%=constants.baseDir%>',
-                    name: '<%=constants.namespace%>/main',
-                    mainConfigFile: '<%=constants.baseDir%>/<%=constants.namespace%>/main.js',
-                    out: '<%=constants.distDir%>/teji.lunch.main.js',
-                }
-            },
-            admin: {
-                options: {
-                    baseUrl: '<%=constants.baseDir%>',
-                    name: '<%=constants.namespace%>/admin',
-                    mainConfigFile: '<%=constants.baseDir%>/<%=constants.namespace%>/admin.js',
-                    out: '<%=constants.distDir%>/teji.lunch.admin.js',
-                    optimize: 'none'
-                }
-            },
-            admin_compressed: {
-                options: {
-                    baseUrl: '<%=constants.baseDir%>',
-                    name: '<%=constants.namespace%>/admin',
-                    mainConfigFile: '<%=constants.baseDir%>/<%=constants.namespace%>/admin.js',
-                    out: '<%=constants.distDir%>/teji.lunch.admin.js',
+            target: {
+                files: {
+                    "<%=constants.distDir%>/min/teji.lunch.main.js": ["<%= concat.main.dest %>"]
                 }
             }
         }
     });
 
     grunt.registerTask('default', [
+        'bower:install',
         'jshint',
-        'requirejs:main',
-        'requirejs:admin',
+        'concat',
         'watch'
     ]);
 
@@ -108,10 +92,9 @@ module.exports = function (grunt) {
 
     grunt.registerTask('product', [
         'bower:install',
-        'shell:copyFonts',
         'jshint',
-        'requirejs:main_compressed',
-        'requirejs:admin_compressed'
+        'concat',
+        'uglify'
     ]);
 
     grunt.registerTask('test', [

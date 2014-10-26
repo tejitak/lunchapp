@@ -1,16 +1,7 @@
-define("teji/lunch/util", ["jquery"], function($){
-    return {
-        _mainPages: [],
+ (function(global, $)  {
+    "use strict";
 
-        showPage: function(pageIndex, mainPages){
-            mainPages = mainPages || this._mainPages;
-            // hide other pages
-            $.each(mainPages, function(i, selector){
-                $(selector).hide().css({opacity: 0});
-            });
-            $(mainPages[pageIndex]).show().velocity({opacity: 1});
-            this._mainPages = mainPages;
-        },
+    teji.getPackage("teji.lunch.util", {
 
         escapeHTML: function(text){
             return text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -19,5 +10,5 @@ define("teji/lunch/util", ["jquery"], function($){
         isMobileScreen: function(){
             return $(window).width() < 768;
         }
-    };
-});
+    });
+})(window, jQuery);

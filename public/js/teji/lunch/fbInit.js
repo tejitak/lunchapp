@@ -1,4 +1,5 @@
-define("teji/lunch/fbInit", ["facebook", "jquery"], function(facebook, $){
+(function(global, $, util) {
+    "use strict";
 
     FB.init({
         appId      : '1437481033176694',
@@ -128,5 +129,5 @@ define("teji/lunch/fbInit", ["facebook", "jquery"], function(facebook, $){
             $resultContainer.append($li);
         }
     };
-    return fbInit;
-});
+    
+})(window, jQuery, teji.lunch.util);

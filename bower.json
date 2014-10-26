@@ -15,24 +15,16 @@
   ],
   "dependencies": {
     "jquery": "~2.1.1",
-    "requirejs": "~2.1.13",
-    "requirejs-text": "~2.0.12",
-    "bootstrap": "~3.1.1",
-    "backbone": "~1.1.2",
-    "flipsnap": "~0.6.2",
-    "jquery.autocomplete": "*",
-    "velocity": "~0.1.0",
-    "bootstrap-sortable": "~1.9.0",
     "jquery.cookie": "~1.4.1",
-    "moment": "~2.7.0",
-    "moment-timezone": "~0.1.0"
+    "flipsnap": "~0.6.2",
+    "moment": "~2.8.3",
+    "moment-timezone": "~0.1.0",
+    "vue": "0.11.0-rc3",
+    "director": "~1.2.2"
   },
   "exportsOverride": {
-    "bootstrap": {
-      "": [
-        "dist/js/bootstrap.js",
-        "dist/css/bootstrap.min.css"
-      ]
+    "director": {
+      "": "build/director.js"
     }
   }
 }
