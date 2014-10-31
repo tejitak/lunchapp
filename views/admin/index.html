@@ -16,7 +16,7 @@
         <div class="fnDefaultContent" style="display: none;">
             <div class="sectionTitle"><%=labels.admin_group_intro_section_title%></div>
             <div><%=labels.admin_group_intro_section_description%></div>
-            <fb:login-button size="large" scope="public_profile,user_friends" onlogin="fbInit.checkLoginState();"></fb:login-button>
+            <fb:login-button size="large" scope="public_profile,user_friends" onlogin="teji.lunch.login.checkLoginState();"></fb:login-button>
         </div>
         <div class="fnAdminGroupList" style="display: none;">
             <div>
@@ -30,6 +30,5 @@
     </div>
     <!-- Add Group View Page -->
     <div class="container fnGroupAddView opacityHide"></div>
-<script src="<%=config.CONTEXT_PATH%>/dist/teji.lunch.main.js"></script>
 </body>
 </html>

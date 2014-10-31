@@ -63,6 +63,8 @@ module.exports = function (grunt) {
                     "<%=constants.baseDir%>/lib/moment/moment.js",
                     "<%=constants.baseDir%>/teji/lunch/getPackage.js",
                     "<%=constants.baseDir%>/teji/lunch/util.js",
+                    "<%=constants.baseDir%>/teji/lunch/listShops.js",
+                    "<%=constants.baseDir%>/teji/lunch/login.js",
                     "<%=constants.baseDir%>/teji/lunch/main.js"
                 ]
             }
