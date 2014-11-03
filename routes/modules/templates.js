@@ -4,15 +4,19 @@ var resourceBundle = require('./resourceBundle');
 var local_settings = require('../../local_settings').settings;
 
 // load templates
+var TMPL_MAP = {
+    "header": "header.html",
+    "footer": "footer.html",
+    "script": "script.html",
+    "templates": "templates.html"
+};
 var _templates = {};
-fs.readFile('./views/_templates/header.html', 'UTF-8', function (err, data) {
-    if (err){ throw err; }
-    _templates.header = data;
-});
 
-fs.readFile('./views/_templates/footer.html', 'UTF-8', function (err, data) {
-    if (err){ throw err; }
-    _templates.footer = data;
+_.each(TMPL_MAP, function(value, key, list){
+    fs.readFile('./views/_templates/' + value, 'UTF-8', function (err, data) {
+        if (err){ throw err; }
+        _templates[key] = data;
+    });        
 });
 
 module.exports = function(req){

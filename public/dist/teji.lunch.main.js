@@ -20936,6 +20936,16 @@ teji.getPackage = function ($packageName, $object, $doOverride) {
     });
 })(window, jQuery);
 /**
+ * Filters
+ */
+(function(global) {
+
+    Vue.filter('fbUserImageFilter', function (id) {
+        return "http://graph.facebook.com/" + id + "/picture?type=square";
+    });
+
+})(window);
+/**
  * Shop list
  */
 (function(global, util) {
@@ -20945,8 +20955,7 @@ teji.getPackage = function ($packageName, $object, $doOverride) {
 
         template: "#lunch-list-shops",
 
-        data: {
-        },
+        data: function(){ return {}},
 
         created: function() {
         }
@@ -20960,40 +20969,36 @@ teji.getPackage = function ($packageName, $object, $doOverride) {
 
     var loginVm = teji.getPackage("teji.lunch.login", Vue.extend({
 
-        template: '<div v-on="click: login">Facebook Login!</div>',
+        template: "#lunch-login-tmpl",
 
-        data: {
-            initialized: false,
-            loggedIn: false
+        data: function(){
+            return {
+                fbParam: {
+                    appId      : '1437481033176694',
+                    xfbml      : true,
+                    version    : 'v2.1'
+                }, 
+                initialized: false,
+                loggedIn: false
+            }
         },
 
         created: function() {
             var that = this;
             this.$on("fbReady", function(){
-                that.init();
-            })
+                FB.init(this.fbParam);
+                FB.getLoginStatus(function(response) {
+                    that.statusChangeCallback(response);
+                    that.initialized = true;
+                });
+            });
         },
 
         methods: {
-            init: function(){
-                FB.init({
-                    appId      : '1437481033176694',
-                    xfbml      : true,
-                    version    : 'v2.1'
-                });
-                this.initialized = true;
-
-                var that = this;
-                FB.getLoginStatus(function(response) {
-                    that.statusChangeCallback(response);
-                });
-            },
-
             login: function(){
                 var that = this;
                 FB.login(function(response){
                     that.statusChangeCallback(response);
-                    this.$dispatch("fbOnLogin", response);
                 }, {scope: 'public_profile,user_friends'});
             },
 
@@ -21001,48 +21006,24 @@ teji.getPackage = function ($packageName, $object, $doOverride) {
                 var that = this;
                 FB.logout(function(response) {
                     that.statusChangeCallback(response);
-                    that.$dispatch("fbOnLogout", response);
                 });
             },
 
             statusChangeCallback: function(response) {
                 var that = this;
                 if(response.status === 'connected'){
-                    console.log("logged In");
-                    // show logged in user name and logout button
-                    // $("#loginBtnMenu").css({display: "none"});
-                    // $("#loginUserMenu").css({display: ""});
-                    var that = this;
                     FB.api('/me', function(res) {
                         that.$parent.me = res;
-                        // $('#dropDownLoginName').html(res.name);
-                        // $('#loginUserImage').html(this.getImageHTML(res.id));
                     });
-                    this.$parent.accessToken = response.authResponse.accessToken;
-                    this.$parent.me = {id: response.authResponse.userID};
-                    // if(this.loginSuccessCallback){
-                    //     this.loginSuccessCallback(response);
-                    // }
+                    that.$parent.accessToken = response.authResponse.accessToken;
+                    that.$parent.me = {id: response.authResponse.userID};
+                    that.loggedIn = true;
+                    that.$dispatch("fbOnLogin", response);                    
                 }else{
-                    console.log("logged fail!");
-                    // show login button
-                    // $("#loginBtnMenu").css({display: ""});
-                    // $("#loginUserMenu").css({display: "none"});
-                    // if(this.loginFailCallback){
-                    //     this.loginFailCallback(response);
-                    // }
+                    that.loggedIn = false;
+                    that.$dispatch("fbOnLogout", response);
                 }
             }
-
-            // checkLoginState: function(onLoadCallback) {
-            //     FB.getLoginStatus($.proxy(function(response) {
-            //         this.statusChangeCallback(response);
-            //         this.$dispatch("fbLogin", response);
-            //         // if(onLoadCallback){
-            //         //     onLoadCallback();
-            //         // }
-            //     }, this));
-            // }
         }
     }));
 
@@ -21053,29 +21034,37 @@ teji.getPackage = function ($packageName, $object, $doOverride) {
 (function(global) {
     "use strict";
 
-    var app = new Vue({
+    teji.getPackage("teji.lunch.main", new Vue({
+
         el: '#app',
+
         data: {
             test: "",
             me: null,
             accessToken: null
         },
+
         components: {
             "lunch-login": teji.lunch.login,
             "lunch-list-shops": teji.lunch.listShops
         },
 
         created: function() {
-            // listen fb auth
-            this.test = "This is a test!";
+            this.$on("fbOnLogin", function(res){
+                console.log("Login! Listen in parent");
+                console.log(res);
+            });
+            this.$on("fbOnLogout", function(res){
+                console.log("Logout! Listen in parent");
+                console.log(res);
+            });
         },
 
         methods: {
-
         }
-    });
+    }));
 
     window.fbAsyncInit = function() {
-        app.$broadcast("fbReady");
+        teji.lunch.main.$broadcast("fbReady");
     };
 })(window);

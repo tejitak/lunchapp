@@ -8,8 +8,7 @@
 
         template: "#lunch-list-shops",
 
-        data: {
-        },
+        data: function(){ return {}},
 
         created: function() {
         }

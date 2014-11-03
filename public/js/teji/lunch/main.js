@@ -4,29 +4,37 @@
 (function(global) {
     "use strict";
 
-    var app = new Vue({
+    teji.getPackage("teji.lunch.main", new Vue({
+
         el: '#app',
+
         data: {
             test: "",
             me: null,
             accessToken: null
         },
+
         components: {
             "lunch-login": teji.lunch.login,
             "lunch-list-shops": teji.lunch.listShops
         },
 
         created: function() {
-            // listen fb auth
-            this.test = "This is a test!";
+            this.$on("fbOnLogin", function(res){
+                console.log("Login! Listen in parent");
+                console.log(res);
+            });
+            this.$on("fbOnLogout", function(res){
+                console.log("Logout! Listen in parent");
+                console.log(res);
+            });
         },
 
         methods: {
-
         }
-    });
+    }));
 
     window.fbAsyncInit = function() {
-        app.$broadcast("fbReady");
+        teji.lunch.main.$broadcast("fbReady");
     };
 })(window);

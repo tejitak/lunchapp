@@ -1,0 +1,12 @@
+<script id="lunch-login-tmpl" type="x-template">
+    <div v-show="initialized">
+        <div v-show="!loggedIn">
+            <button type="button" v-on="click: login()">Facebook Login!</button>
+        </div>
+        <div v-show="loggedIn">
+            <img v-attr="src:$parent.me.id | fbUserImageFilter, width:&quot;40&quot;,height:&quot;40&quot;">
+            <span>{{$parent.me.name}}</span>
+            <button type="button" v-on="click: logout()">Facebook Logout!</button>
+        </div>
+    </div>
+</script>

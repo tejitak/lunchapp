@@ -1,33 +1,21 @@
-<header class="navbar navbar-custom navbar-static-top" role="banner">
-    <div class="container">
-        <div class="navbar-header">
-            <a href="<%=config.CONTEXT_PATH%>/" class="navbar-brand">
-                <img class="headerLogo" src="<%=config.CONTEXT_PATH%>/img/logo/header_logo_64.png" width="32" height="32">
-                <span class="headerProductName"><%=labels.product_name%></span>
-            </a>
-        </div>
-        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-            <ul class="nav navbar-nav">
-                <li>
-                    <a href="<%=config.CONTEXT_PATH%>/getting-started"><%=labels.menu_gettingStarted%></a>
-                </li>
-            </ul>
-            <ul>
-                <li class="fbLoginBtn">
-                    <fb:login-button size="large" scope="public_profile,user_friends" onlogin="fbInit.checkLoginState();"></fb:login-button>
-                <li>
-                <div v-component="lunch-login" v-ref="loginRef"></div>
-            </ul>
-            <ul class="nav navbar-nav navbar-right" id="loginUserMenu" style="display:none;">
-                <li class="dropdown open">
-                <a data-toggle="dropdown" class="dropdown-toggle" role="button" href="#"><span id="loginUserImage" class="loginUserImage"></span><span id="dropDownLoginName"></span><b class="caret"></b></a>
-                    <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="javascript:;" onclick="location.href='<%=config.CONTEXT_PATH%>/admin'"><%=labels.menu_admin_group%></a></li>
-                        <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem" onclick="fbInit.logout();"><%=labels.menu_logout%></a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
+<header class="" role="banner">
+    <div class="navbar-header">
+        <a href="<%=config.CONTEXT_PATH%>/" class="navbar-brand">
+            <img class="headerLogo" src="<%=config.CONTEXT_PATH%>/img/logo/header_logo_64.png" width="32" height="32">
+            <span class="headerProductName"><%=labels.product_name%></span>
+        </a>
     </div>
+    <nav class="" role="navigation">
+        <ul class="">
+            <li>
+                <a href="<%=config.CONTEXT_PATH%>/getting-started"><%=labels.menu_gettingStarted%></a>
+            </li>
+            <li>
+                <a href="javascript:;" onclick="location.href='<%=config.CONTEXT_PATH%>/admin'"><%=labels.menu_admin_group%></a>
+            </li>
+        </ul>
+        <ul>
+            <lunch-login></lunch-login>
+        </ul>
+    </nav>
 </header>
-<div id="fb-root"></div>
