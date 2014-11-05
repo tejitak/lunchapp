@@ -1,10 +1,10 @@
 /**
  * Facebook login on header
  */
-(function(global, util) {
+(function(global) {
     "use strict";
 
-    var loginVm = teji.getPackage("teji.lunch.login", Vue.extend({
+    var loginVm = teji.getPackage("teji.lunch.component.login", Vue.extend({
 
         template: "#lunch-login-tmpl",
 
@@ -64,4 +64,4 @@
         }
     }));
 
-})(window, teji.lunch.util);
+})(window);

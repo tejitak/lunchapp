@@ -9,8 +9,9 @@
     <link rel="apple-touch-icon-precomposed" href="<%=config.CONTEXT_PATH%>/apple-touch-icon-precomposed.png">
     <link rel="stylesheet" href="<%=config.CONTEXT_PATH%>/css/main.css">
 </head>
+<body id="app">
 <%=templates.header%>
-<div class="container gettingStartedContainer">
+<div>
     <div>
         <div class="sectionTitle"><%=labels.gettingStarted_section_title%></div>
     </div>
@@ -57,6 +58,8 @@
     <hr class="clearfix">
 </div>
 <%=templates.footer%>
-<script src="<%=config.CONTEXT_PATH%>/dist/teji.lunch.main.js"></script>
+<%=templates.templates%>
+<%=templates.script%>
+<script src="<%=config.CONTEXT_PATH%>/dist/teji.lunch.gettingStarted.js"></script>
 </body>
 </html>

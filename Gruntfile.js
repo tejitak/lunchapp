@@ -40,7 +40,7 @@ module.exports = function (grunt) {
                    livereload: true
                 },
                 tasks: ['jshint', 'concat'],
-                files: ['public/**/*.html', 'public/**/*.js']
+                files: ['public/**/*.html', 'public/js/**/*.js']
             }
         },
         // Make sure code styles are up to par and there are no obvious mistakes
@@ -57,16 +57,28 @@ module.exports = function (grunt) {
                 dest: '<%=constants.distDir%>/teji.lunch.main.js',
                 src: [
                     "<%=constants.baseDir%>/lib/vue/vue.js",
-                    "<%=constants.baseDir%>/lib/director/director.js",
                     "<%=constants.baseDir%>/lib/jquery/jquery.js",
                     "<%=constants.baseDir%>/lib/flipsnap/flipsnap.js",
                     "<%=constants.baseDir%>/lib/moment/moment.js",
-                    "<%=constants.baseDir%>/teji/lunch/getPackage.js",
-                    "<%=constants.baseDir%>/teji/lunch/util.js",
-                    "<%=constants.baseDir%>/teji/lunch/filters.js",
-                    "<%=constants.baseDir%>/teji/lunch/listShops.js",
-                    "<%=constants.baseDir%>/teji/lunch/login.js",
+                    "<%=constants.baseDir%>/teji/lunch/common/getPackage.js",
+                    "<%=constants.baseDir%>/teji/lunch/common/util.js",
+                    "<%=constants.baseDir%>/teji/lunch/filter/filters.js",
+                    "<%=constants.baseDir%>/teji/lunch/component/lp.js",
+                    "<%=constants.baseDir%>/teji/lunch/component/voting.js",
+                    "<%=constants.baseDir%>/teji/lunch/component/login.js",
                     "<%=constants.baseDir%>/teji/lunch/main.js"
+                ]
+            },
+            gettingStarted: {
+                dest: '<%=constants.distDir%>/teji.lunch.gettingStarted.js',
+                src: [
+                    "<%=constants.baseDir%>/lib/vue/vue.js",
+                    "<%=constants.baseDir%>/lib/jquery/jquery.js",
+                    "<%=constants.baseDir%>/teji/lunch/common/getPackage.js",
+                    "<%=constants.baseDir%>/teji/lunch/common/util.js",
+                    "<%=constants.baseDir%>/teji/lunch/filter/filters.js",
+                    "<%=constants.baseDir%>/teji/lunch/component/login.js",
+                    "<%=constants.baseDir%>/teji/lunch/gettingStarted.js"
                 ]
             }
         },
@@ -76,7 +88,8 @@ module.exports = function (grunt) {
             },
             target: {
                 files: {
-                    "<%=constants.distDir%>/min/teji.lunch.main.js": ["<%= concat.main.dest %>"]
+                    "<%=constants.distDir%>/min/teji.lunch.main.js": ["<%= concat.main.dest %>"],
+                    "<%=constants.distDir%>/min/teji.lunch.gettingStarted.js": ["<%= concat.gettingStarted.dest %>"]
                 }
             }
         }
