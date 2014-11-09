@@ -3,8 +3,15 @@
  */
 (function(global) {
     "use strict";
+    
+    var Vue = require("vue");
+    var vueFilters = require("./filter/filters");
+    var loginComponent = require("./component/login");
+    var lpComponent = require("./component/lp");
+    var votingComponent = require("./component/voting");
+    var util = require("./common/util");
 
-    var app = teji.getPackage("teji.lunch.main", new Vue({
+    var app = module.exports = new Vue({
 
         el: '#app',
 
@@ -15,9 +22,9 @@
         },
 
         components: {
-            "lunch-login": teji.lunch.component.login,
-            "lunch-lp": teji.lunch.component.lp,
-            "lunch-voting": teji.lunch.component.voting
+            "lunch-login": loginComponent,
+            "lunch-lp": lpComponent,
+            "lunch-voting": votingComponent
         },
 
         created: function() {
@@ -35,9 +42,9 @@
 
         methods: {
         }
-    }));
+    });
 
-    window.fbAsyncInit = function() {
+    global.fbAsyncInit = function() {
         app.$broadcast("fbReady");
     };
 })(window);

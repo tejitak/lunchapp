@@ -4,13 +4,15 @@
 (function(global) {
     "use strict";
 
-    teji.getPackage("teji.lunch.component.lp", Vue.extend({
+    var Vue = require("vue");
+
+    module.exports = Vue.extend({
 
         template: "#lunch-lp-tmpl",
 
-        data: function(){ return {}},
+        data: function(){ return {}; },
 
         created: function() {
         }
-    }));
+    });
 })(window);

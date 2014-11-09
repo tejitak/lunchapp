@@ -3,8 +3,12 @@
  */
 (function(global) {
     "use strict";
+    
+    var Vue = require("vue");
+    var vueFilters = require("./filter/filters");
+    var loginComponent = require("./component/login");
 
-    var app = teji.getPackage("teji.lunch.gettingStarted", new Vue({
+    var app = module.exports = new Vue({
 
         el: '#app',
 
@@ -15,7 +19,7 @@
         },
 
         components: {
-            "lunch-login": teji.lunch.component.login
+            "lunch-login": loginComponent
         },
 
         created: function() {
@@ -27,9 +31,9 @@
 
         methods: {
         }
-    }));
+    });
 
-    window.fbAsyncInit = function() {
+    global.fbAsyncInit = function() {
         app.$broadcast("fbReady");
     };
 })(window);

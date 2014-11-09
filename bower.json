@@ -22,9 +22,9 @@
     "vue": "0.11.0-rc3",
     "director": "~1.2.2"
   },
-  "exportsOverride": {
+  "overrides": {
     "director": {
-      "": "build/director.js"
+      "main": "build/director.js"
     }
   }
 }

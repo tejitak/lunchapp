@@ -4,7 +4,9 @@
 (function(global) {
     "use strict";
 
-    var loginVm = teji.getPackage("teji.lunch.component.login", Vue.extend({
+    var Vue = require("vue");
+
+    module.exports = Vue.extend({
 
         template: "#lunch-login-tmpl",
 
@@ -17,7 +19,7 @@
                 }, 
                 initialized: false,
                 loggedIn: false
-            }
+            };
         },
 
         created: function() {
@@ -62,6 +64,6 @@
                 }
             }
         }
-    }));
+    });
 
 })(window);
