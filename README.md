@@ -9,7 +9,7 @@
 ####Prereq
 1. mongodb (see http://www.mongodb.org)
 2. nodejs
-3. grunt
+3. gulp
 
 ####Development setup
 
@@ -42,8 +42,10 @@ e.g. "/private/etc/hosts" for mac
     Note: If you get an EACCES warning, use sudo chown -R <username> ~/.npm
     See https://github.com/npm/npm/issues/3537 and https://github.com/npm/npm/pull/3506.
 
-7. Run "grunt server"
+7. Run "gulp bower" ("bower install")
 
-8. Access to http://dev.tejitak.com:3000/
+8. Run "gulp server" ("npm start") to start server
 
-8. Run "grunt" to run watch task
+9. Access to http://dev.tejitak.com:3000/
+
+10. Run "gulp" to run watch task
