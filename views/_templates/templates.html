@@ -1,84 +1,114 @@
 <!-- Login Button -->
 <script id="lunch-login-tmpl" type="x-template">
-    <div v-show="initialized">
-        <div v-show="!loggedIn">
-            <button type="button" v-on="click: login()">Facebook Login!</button>
-        </div>
-        <div v-show="loggedIn">
-            <img v-attr="src:$parent.me.id | fbUserImageFilter, width:&quot;40&quot;,height:&quot;40&quot;">
-            <span>{{$parent.me.name}}</span>
-            <button type="button" v-on="click: logout()">Facebook Logout!</button>
-        </div>
+<div v-show="initialized">
+    <div v-show="!loggedIn">
+        <button type="button" v-on="click: login()">Facebook Login!</button>
     </div>
+    <div v-show="loggedIn">
+        <img v-attr="src:$parent.me.id | fbUserImageFilter, width:&quot;40&quot;,height:&quot;40&quot;">
+        <span>{{$parent.me.name}}</span>
+        <button type="button" v-on="click: logout()">Facebook Logout!</button>
+    </div>
+</div>
 </script>
 
 
 <!-- Landing Page -->
 <script id="lunch-lp-tmpl" type="x-template">
-    <div>
-        <div class="sectionTitle"><%=labels.main_intro_title%></div>
-        <p class="lead"><%=labels.main_intro_lead%></p>
-        <div class="introDescription"><%=labels.main_intro_description%></div>
-        <div class="sectionTitle"><%=labels.main_popularshops_title%></div>
-        <div class="introDescription"><p><%=labels.main_popularshops_description%></p></div>
-        <div class="viewport fnPopularList"></div>
-        <div class="sectionTitle"><%=labels.main_intro_loginToStart%></div>
-        <div class="fb-like-box" data-href="https://www.facebook.com/lunchtimer" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="true"></div>
-    </div>
+<div>
+    <div class="sectionTitle"><%=labels.main_intro_title%></div>
+    <p class="lead"><%=labels.main_intro_lead%></p>
+    <div class="introDescription"><%=labels.main_intro_description%></div>
+    <div class="sectionTitle"><%=labels.main_popularshops_title%></div>
+    <div class="introDescription"><p><%=labels.main_popularshops_description%></p></div>
+    <div class="viewport fnPopularList"></div>
+    <div class="sectionTitle"><%=labels.main_intro_loginToStart%></div>
+    <div class="fb-like-box" data-href="https://www.facebook.com/lunchtimer" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="true"></div>
+</div>
 </script>
 
 
 <!-- Voting Page -->
 <script id="lunch-voting-tmpl" type="x-template">
-    <div>
-        <div class="mainContent">
-            <div class="sectionTitle"><%=labels.main_section_title%></div>
-            <div class="viewport fnResultViewList">
-                <div class="flipsnapPrevArrow fnPrevShopBtn"></div>
-                <div class="flipsnapNextArrow fnNextShopBtn"></div> 
-            </div>
-            <div class="row fnGroupSelectContainer" style="display: none;">
-                <div class="col-sm-4 col-sm-offset-4">
-                    <h5><%=labels.main_section_input_group%></h5>
-                    <select class="form-control col-sm-5 fnGroupSelect"></select>
-                </div>
-            </div>
-            <div class="row resultViewFilterSection fnResultViewFilterSection" style="display: none;">
-                <div class="col-sm-4 col-sm-offset-4">
-                    <h5><%=labels.main_section_input_category%></h5>
-                    <select class="form-control col-sm-5 fnCategoryFilter"></select>
-                </div>
-            </div>
-            <div style="margin: 32px auto; width: 100%;">
-                <div class="fnEvernoteMain" style="display: none;">
-                    <div>
-                        <p>
-                            <a href="http://www.evernote.com/" target="_blank"><img src="<%=config.CONTEXT_PATH%>/img/evernote/evernote_logo_4c-lrg.png" width="114" height="28"></a>
-                        </p>
-                        <p>
-                            <strong class="fnEvernoteLoginUser"></strong> <%=labels.evernote_main_login_user%>
-                        </p>
+<div>
+    <div class="mainContent">
+        <div class="sectionTitle"><%=labels.main_section_title%></div>
+        <div>
+            <div v-repeat="selectedGroup.shops">
+                <div>
+                    <h4>{{name}}</h4>
+                    <img style="width: 200px; height: 200px;" alt="photo" v-attr="src:imageURL">
+                    <hr>
+                    <div v-show="state == 'vote'">
+                        <p><a href="javascript:;" v-on="click: vote(id)">Vote</a>
+                        <p><a href="javascript:;" v-on="click: unvote(id)">Cancel</a></p>
+                        <p><a href="{{url}}" target="_blank">More information</a></p>
+                        <div>Voters: 
+                            <span v-show="votedBy.length == 0">-</span>
+                            <span v-show="votedBy.length > 0" v-repeat="votedBy">{{this}}</span>
+                        </div>
                     </div>
-                    <div class="fnEvernoteLogContainer" style="display: none; margin-bottom: 16px;">
-                        <button class="btn btn-success btn-default fnEvernoteLogBtn"><%=labels.main_evernote_log_btn%></button>
-                    </div>
-                    <div>
-                        <button class="btn btn-success btn-default fnEvernoteReminderSetupBtn" style="display: none;"><%=labels.evernote_main_setting_reminder_setup_button%></button>
-                        <button class="btn btn-danger btn-default fnEvernoteReminderStopBtn" style="display: none;"><%=labels.evernote_main_setting_reminder_stop_button%></button>
-                    </div>
-                    <div style="margin-top: 8px;">
-                        <a href="<%=config.CONTEXT_PATH%>/evernote/logout"><%=labels.evernote_main_logout%></a>
-                    </div>
-                </div>
-                <div class="fnEvernoteLogin" style="display: none;">
-                    <p>
-                        <%=labels.evernote_main_description%>
-                    </p>
-                    <div>
-                        <a class="fnEvernoteAuthBtn" href="javascript:;"><img src="<%=config.CONTEXT_PATH%>/img/evernote/connect_evernote_button.png" width="179" height="25"></a>
+                    <div v-show="state == 'voted'">
+                        <p><a href="javascript:;">More information</a></p> 
+                        <div>Times visited: {{visitedCount}}</div>
+                        <div>Votes: {{votedBy.length}}</div>
+                        <div>Voters: - </div>
+                        <hr>
+                        <div style="padding-top: 9px;">
+                            <p><a href="javascript:;">Suffle Result</a></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- group selection -->
+        <div style="display: none;">
+            <div>
+                <h5><%=labels.main_section_input_group%></h5>
+                <select></select>
+            </div>
+        </div>
+        <!-- category filter -->
+        <div style="display: none;">
+            <div>
+                <h5><%=labels.main_section_input_category%></h5>
+                <select></select>
+            </div>
+        </div>
     </div>
+</div>
+</script>
+
+<!-- Evernote -->
+<script id="lunch-evernote-tmpl" type="x-template">
+<div style="margin: 32px auto; width: 100%;">
+    <div class="fnEvernoteMain" style="display: none;">
+        <div>
+            <p>
+                <a href="http://www.evernote.com/" target="_blank"><img src="<%=config.CONTEXT_PATH%>/img/evernote/evernote_logo_4c-lrg.png" width="114" height="28"></a>
+            </p>
+            <p>
+                <strong class="fnEvernoteLoginUser"></strong> <%=labels.evernote_main_login_user%>
+            </p>
+        </div>
+        <div class="fnEvernoteLogContainer" style="display: none; margin-bottom: 16px;">
+            <button class="btn btn-success btn-default fnEvernoteLogBtn"><%=labels.main_evernote_log_btn%></button>
+        </div>
+        <div>
+            <button class="btn btn-success btn-default fnEvernoteReminderSetupBtn" style="display: none;"><%=labels.evernote_main_setting_reminder_setup_button%></button>
+            <button class="btn btn-danger btn-default fnEvernoteReminderStopBtn" style="display: none;"><%=labels.evernote_main_setting_reminder_stop_button%></button>
+        </div>
+        <div style="margin-top: 8px;">
+            <a href="<%=config.CONTEXT_PATH%>/evernote/logout"><%=labels.evernote_main_logout%></a>
+        </div>
+    </div>
+    <div class="fnEvernoteLogin" style="display: none;">
+        <p>
+            <%=labels.evernote_main_description%>
+        </p>
+        <div>
+            <a class="fnEvernoteAuthBtn" href="javascript:;"><img src="<%=config.CONTEXT_PATH%>/img/evernote/connect_evernote_button.png" width="179" height="25"></a>
+        </div>
+    </div>
+</div>
 </script>

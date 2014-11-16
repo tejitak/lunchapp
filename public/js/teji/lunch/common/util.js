@@ -1,6 +1,5 @@
- (function(global)  {
+(function() {
     "use strict";
-
     var $ = require("jquery");
 
     module.exports = {
@@ -13,4 +12,4 @@
             return $(window).width() < 768;
         }
     };
-})(window);
+})();

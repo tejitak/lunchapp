@@ -1,18 +1,14 @@
 /**
  * Vote page
  */
-(function(global) {
-    "use strict";
+var Vue = require("vue");
 
-    var Vue = require("vue");
+module.exports = Vue.extend({
 
-    module.exports = Vue.extend({
+    template: "#lunch-lp-tmpl",
 
-        template: "#lunch-lp-tmpl",
+    data: function(){ return {}; },
 
-        data: function(){ return {}; },
-
-        created: function() {
-        }
-    });
-})(window);
+    created: function() {
+    }
+});
