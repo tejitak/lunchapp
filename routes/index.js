@@ -25,4 +25,14 @@ router.get('/getting-started', function(req, res) {
     });
 });
 
+router.get('/groups', function(req, res) {
+    var labels = resourceBundle.getLabels(req);
+    res.render('groups', {
+        title: labels.admin_group_title,
+        templates: templates(req),
+        config: local_settings,
+        labels: labels
+    });
+});
+
 module.exports = router;

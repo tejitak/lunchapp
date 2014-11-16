@@ -42,6 +42,13 @@ gulp.task('browserify', function() {
             debug : !gulp.env.production
         }))
         .pipe(gulp.dest('public/dist'));
+    // groups page
+    gulp.src('public/js/teji/lunch/groups.js')
+        .pipe(browserify({
+            transform: gulp.env.production ? ["debowerify", "uglifyify"] : ["debowerify"],
+            debug : !gulp.env.production
+        }))
+        .pipe(gulp.dest('public/dist'));
 });
 
 gulp.task('default', function(){

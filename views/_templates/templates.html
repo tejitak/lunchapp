@@ -112,3 +112,15 @@
     </div>
 </div>
 </script>
+
+<!-- Voting Page -->
+<script id="lunch-groups-tmpl" type="x-template">
+<div>
+    <div class="sectionTitle"><%=labels.main_section_input_group%></div>
+    <div v-repeat="groups">
+        <h4>{{name}}</h4>
+        <div>Memebers: </div>
+        <span v-repeat="members">{{name}}</span>
+    </div>
+</div>
+</script>
