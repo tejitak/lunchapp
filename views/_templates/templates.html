@@ -36,7 +36,7 @@
         <div>
             <div v-repeat="selectedGroup.shops">
                 <div>
-                    <h4>{{name}}</h4>
+                    <h4 v-text="name"></h4>
                     <img style="width: 200px; height: 200px;" alt="photo" v-attr="src:imageURL">
                     <hr>
                     <div v-show="state == 'vote'">
@@ -118,9 +118,12 @@
 <div>
     <div class="sectionTitle"><%=labels.main_section_input_group%></div>
     <div v-repeat="groups">
-        <h4>{{name}}</h4>
-        <div>Memebers: </div>
-        <span v-repeat="members">{{name}}</span>
+        <h4 v-text="name"></h4>
+        <div>Memebers: 
+        <template v-repeat="members">
+            <span v-text="name"></span>
+        </template>
+        </div>
     </div>
 </div>
 </script>
